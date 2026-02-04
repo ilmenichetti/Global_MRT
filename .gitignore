@@ -1,0 +1,42 @@
+
+HWSD_RASTER/
+
+# R temporary files
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+.RDataTmp*
+
+# Data storage folders
+Global_MRT_code/temp/
+Global_MRT_code/temp_data/
+Global_MRT_code/spatialized_layers/
+Global_MRT_code/soilgrids/
+Global_MRT_code/microbial_data/
+Global_MRT_code/koppen_data/
+Global_MRT_code/hwsd_data/
+Global_MRT_code/GEE/
+Global_MRT_code/outputs/
+Global_MRT_code/plots/02_5_standardization
+Global_MRT_code/plots/02_5_standardization
+#ignore all plots subfolder (intermediates)
+Global_MRT_code/plots/*/
+
+
+# Temporary files
+tmp/
+temp/
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Log files
+*.log
+
+# CDS API configuration (contains your API key!)
+.cdsapirc
