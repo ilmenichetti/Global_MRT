@@ -8,6 +8,9 @@ HWSD_RASTER/
 *.Rproj
 .RDataTmp*
 
+# Datasets zip files
+.Datasets.zip
+
 # Data storage folders
 Global_MRT_code/temp/
 Global_MRT_code/temp_data/
