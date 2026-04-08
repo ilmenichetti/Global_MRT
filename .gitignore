@@ -9,7 +9,10 @@ HWSD_RASTER/
 .RDataTmp*
 
 # Datasets zip files
-.Datasets.zip
+Datasets.zip
+
+# full dataset at the beginning of data analysys
+soil_data.parquet
 
 # Data storage folders
 Global_MRT_code/temp/

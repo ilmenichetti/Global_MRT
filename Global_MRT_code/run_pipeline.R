@@ -27,6 +27,18 @@ source("./Global_MRT_code/11_extract_microbiology.R")
 source("./Global_MRT_code/12_MRT_calculation.R")
 source("./Global_MRT_code/12_1_add_missing_variables.R") #
 
+
+# Last iteration of the dataset is:
+# "./Global_MRT_code/outputs/12b_model_ready.rds"
+# now saving the intermediate in a parquet file for sharing
+soil_data <- readRDS("./Global_MRT_code/outputs/12b_model_ready.rds")
+library(arrow)
+write_parquet(
+  soil_data,
+  "soil_data.parquet",
+  compression = "zstd"   # or "snappy" for widest default compatibility
+)
+
 # --- Data analysis, raster-based ---
 # This pathway works with inferred geographical rasters
 source("./Global_MRT_code/13_model_fitting.R")
@@ -36,4 +48,3 @@ source("./Global_MRT_code/15_map_visualization.R")
 # --- Data analysis, point-based pathway ---
 # This pathway works with as much measured variables as possible, on point clouds
 
-git remote add origin https://github.com/ilmenichetti/Soil_biodiversity_task_force/tree/main/Global_MRT.git

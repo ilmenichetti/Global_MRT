@@ -1,0 +1,123 @@
+\begin{thebibliography}{}
+
+\bibitem[Apley and Zhu, 2020]{Apley2020}
+Apley, D.~W. and Zhu, J. (2020).
+\newblock Visualizing the effects of predictor variables in black box
+  supervised learning models.
+\newblock {\em Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology)}, 82(4):1059--1086.
+
+\bibitem[Barcel{\'o} et~al., 2023]{Barcelo2023}
+Barcel{\'o}, M., van Bodegom, P.~M., and Soudzilovskaia, N.~A. (2023).
+\newblock Fine-resolution global maps of root biomass carbon colonized by
+  arbuscular and ectomycorrhizal fungi.
+\newblock {\em Scientific Data}, 10:56.
+
+\bibitem[Batjes et~al., 2024]{Batjes2024}
+Batjes, N.~H., Calisto, L., and de~Sousa, L.~M. (2024).
+\newblock Providing quality-assessed and standardised soil data to support
+  global mapping and modelling ({WoSIS} snapshot 2023).
+\newblock {\em Earth System Science Data}, 16(10):4735--4765.
+
+\bibitem[Beck et~al., 2023]{Beck2023}
+Beck, H.~E., McVicar, T.~R., Vergopolan, N., Berg, A., Lutsko, N.~J., Dufour,
+  A., Zeng, Z., Jiang, X., van Dijk, A. I. J.~M., and Miralles, D.~G. (2023).
+\newblock High-resolution (1~km) {K{\"o}ppen-Geiger} maps for 1901--2099 based
+  on constrained {CMIP6} projections.
+\newblock {\em Scientific Data}, 10:724.
+
+\bibitem[{European Space Agency and Airbus}, 2022]{CopernicusDEM2022}
+{European Space Agency and Airbus} (2022).
+\newblock {Copernicus DEM} -- global digital elevation model ({GLO-30}).
+\newblock Copernicus Space Component Data Access (PANDA).
+\newblock Accessed: 2025.
+
+\bibitem[Giglio et~al., 2018]{Giglio2018}
+Giglio, L., Boschetti, L., Roy, D.~P., Humber, M.~L., and Justice, C.~O.
+  (2018).
+\newblock The {Collection~6 MODIS} burned area mapping algorithm and product.
+\newblock {\em Remote Sensing of Environment}, 217:72--85.
+
+\bibitem[Hansen et~al., 2013]{Hansen2013}
+Hansen, M.~C., Potapov, P.~V., Moore, R., Hancher, M., Turubanova, S.~A.,
+  Tyukavina, A., Thau, D., Stehman, S.~V., Goetz, S.~J., Loveland, T.~R.,
+  Kommareddy, A., Egorov, A., Chini, L., Justice, C.~O., and Townshend, J.
+  R.~G. (2013).
+\newblock High-resolution global maps of 21st-century forest cover change.
+\newblock {\em Science}, 342(6160):850--853.
+
+\bibitem[Hijmans, 2024]{Hijmans2024}
+Hijmans, R.~J. (2024).
+\newblock {\em terra: Spatial Data Analysis}.
+\newblock R package version 1.7-78.
+
+\bibitem[Litton and Giardina, 2008]{Litton2008}
+Litton, C.~M. and Giardina, C.~P. (2008).
+\newblock Below-ground carbon flux and partitioning: global patterns and
+  response to temperature.
+\newblock {\em Functional Ecology}, 22(6):941--954.
+
+\bibitem[Malhi et~al., 2011]{Malhi2011}
+Malhi, Y., Doughty, C., and Galbraith, D. (2011).
+\newblock The allocation of ecosystem net primary productivity in tropical
+  forests.
+\newblock {\em Philosophical Transactions of the Royal Society B: Biological
+  Sciences}, 366(1582):3225--3245.
+
+\bibitem[Mokany et~al., 2006]{Mokany2006}
+Mokany, K., Raison, R.~J., and Prokushkin, A.~S. (2006).
+\newblock Critical analysis of root:shoot ratios in terrestrial biomes.
+\newblock {\em Global Change Biology}, 12(1):84--96.
+
+\bibitem[Mu{\~n}oz-Sabater et~al., 2021]{MunozSabater2021}
+Mu{\~n}oz-Sabater, J., Dutra, E., Agust{\'\i}-Panareda, A., Albergel, C.,
+  Arduini, G., Balsamo, G., Boussetta, S., Choulga, M., Harrigan, S., Hersbach,
+  H., Martens, B., Miralles, D.~G., Piles, M., Rodr{\'\i}guez-Fern{\'a}ndez,
+  N.~J., Zsoter, E., Buontempo, C., and Th{\'e}paut, J.-N. (2021).
+\newblock {ERA5-Land}: a state-of-the-art global reanalysis dataset for land
+  applications.
+\newblock {\em Earth System Science Data}, 13(9):4349--4383.
+
+\bibitem[Poggio et~al., 2021]{Poggio2021}
+Poggio, L., de~Sousa, L.~M., Batjes, N.~H., Heuvelink, G. B.~M., Kempen, B.,
+  Ribeiro, E., and Rossiter, D. (2021).
+\newblock {SoilGrids} 2.0: producing soil information for the globe with
+  quantified spatial uncertainty.
+\newblock {\em SOIL}, 7(1):217--240.
+
+\bibitem[Running and Zhao, 2021]{Running2015}
+Running, S.~W. and Zhao, M. (2021).
+\newblock {MOD17A3HGF MODIS/Terra} net primary production gap-filled yearly l4
+  global 500m {SIN} grid v061.
+\newblock NASA EOSDIS Land Processes Distributed Active Archive Center.
+
+\bibitem[Van~Nuland et~al., 2025]{VanNuland2025}
+Van~Nuland, M.~E., Averill, C., Stewart, J.~D., Prylutskyi, O., Corrales, A.,
+  van Galen, L.~G., Manley, B.~F., Qin, C., Lauber, T., Mikryukov, V., Dulia,
+  O., Furci, G., Mar{\'\i}n, C., Sheldrake, M., Weedon, J.~T., Peay, K.~G.,
+  Cornwallis, C.~K., V{\v{e}}trovsk{\'y}, T., Kohout, P., Baldrian, P.,
+  Tedersoo, L., West, S.~A., Crowther, T.~W., Kiers, E.~T., {SPUN Mapping
+  Consortium}, and van~den Hoogen, J. (2025).
+\newblock Global hotspots of mycorrhizal fungal richness are poorly protected.
+\newblock {\em Nature}.
+
+\bibitem[Wright and Ziegler, 2017]{Wright2017}
+Wright, M.~N. and Ziegler, A. (2017).
+\newblock ranger: A fast implementation of random forests for high dimensional
+  data in {C++} and {R}.
+\newblock {\em Journal of Statistical Software}, 77(1):1--17.
+
+\bibitem[Yu et~al., 2022]{Yu2022}
+Yu, H., Deng, Y., He, Z., Pendall, E., Carrillo, Y., Wang, S., Jin, D., Wu, L.,
+  Wang, A., Luo, Y., Schuur, E. A.~G., Konstantinidis, K.~T., Luo, G., Tiedje,
+  J.~M., and Zhou, J. (2022).
+\newblock Global mapping of soil bacterial and fungal biomass carbon.
+\newblock {\em Earth System Science Data}, 14(9):4339--4350.
+
+\bibitem[Zanaga et~al., 2022]{Zanaga2022}
+Zanaga, D., Van De~Kerchove, R., Daems, D., De~Keersmaecker, W., Brockmann, C.,
+  Kirches, G., Wevers, J., Cartus, O., Santoro, M., Fritz, S., Lesiv, M.,
+  Herold, M., Tsendbazar, N.-E., Xu, P., Ramoino, F., and Arino, O. (2022).
+\newblock {ESA WorldCover} 10~m 2021 v200.
+
+\end{thebibliography}
