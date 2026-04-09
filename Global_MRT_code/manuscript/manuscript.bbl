@@ -26,6 +26,14 @@ Beck, H.~E., McVicar, T.~R., Vergopolan, N., Berg, A., Lutsko, N.~J., Dufour,
   on constrained {CMIP6} projections.
 \newblock {\em Scientific Data}, 10:724.
 
+\bibitem[Carvalhais et~al., 2014]{Carvalhais2014}
+Carvalhais, N., Forkel, M., Khomik, M., Bellarby, J., Jung, M., Migliavacca,
+  M., Mu, M., Saatchi, S., Santoro, M., Thurner, M., Weber, U., Ahrens, B.,
+  Beer, C., Cescatti, A., Randerson, J.~T., and Reichstein, M. (2014).
+\newblock Global covariation of carbon turnover times with climate in
+  terrestrial ecosystems.
+\newblock {\em Nature}, 514:213--217.
+
 \bibitem[{European Space Agency and Airbus}, 2022]{CopernicusDEM2022}
 {European Space Agency and Airbus} (2022).
 \newblock {Copernicus DEM} -- global digital elevation model ({GLO-30}).
@@ -90,6 +98,25 @@ Running, S.~W. and Zhao, M. (2021).
 \newblock {MOD17A3HGF MODIS/Terra} net primary production gap-filled yearly l4
   global 500m {SIN} grid v061.
 \newblock NASA EOSDIS Land Processes Distributed Active Archive Center.
+
+\bibitem[Schmidt et~al., 2011]{Schmidt2011}
+Schmidt, M. W.~I., Torn, M.~S., Abiven, S., Dold, T., Flenley, J., Manning, D.
+  A.~C., and Trumbore, S.~E. (2011).
+\newblock Persistence of soil organic matter as an ecosystem property.
+\newblock {\em Nature}, 478:49--56.
+
+\bibitem[Sierra et~al., 2018]{Sierra2018}
+Sierra, C.~A., Hoyt, A.~M., He, Y., and Trumbore, S.~E. (2018).
+\newblock Soil organic matter persistence as a stochastic process: age and
+  transit time distributions of carbon in soils.
+\newblock {\em Global Biogeochemical Cycles}, 32(10):1574--1588.
+
+\bibitem[Sierra et~al., 2017]{Sierra2017}
+Sierra, C.~A., M{\"u}ller, M., Metzler, H., Manzoni, S., and Trumbore, S.~E.
+  (2017).
+\newblock The muddle of ages, turnover, transit, and residence times in the
+  carbon cycle.
+\newblock {\em Global Change Biology}, 23(5):1763--1773.
 
 \bibitem[Van~Nuland et~al., 2025]{VanNuland2025}
 Van~Nuland, M.~E., Averill, C., Stewart, J.~D., Prylutskyi, O., Corrales, A.,

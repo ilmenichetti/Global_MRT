@@ -1,6 +1,5 @@
 % =============================================================================
-% Global Soil Organic Carbon Mean Residence Time
-% Manuscript — Methods fully specified from pipeline code
+% Global SOC Mean Transit Time — Manuscript
 % =============================================================================
 
 \documentclass[12pt, a4paper]{article}
@@ -33,12 +32,8 @@
 \doublespacing
 \linenumbers
 
-% =============================================================================
-% TITLE PAGE
-% =============================================================================
-
 \title{%
-  Global mapping of soil organic carbon mean residence time reveals
+  Global mapping of soil organic carbon mean transit time reveals
   controls beyond climate
 }
 
@@ -50,50 +45,128 @@
 
 \date{}
 
-% =============================================================================
 \begin{document}
-% =============================================================================
 
 \maketitle
 
-% =============================================================================
 \begin{abstract}
-% =============================================================================
-
-% ~250 words
-% Context: SOC turnover and its global importance
-% Gap: climate-centric ESM parameterisations
-% Approach: nested RF framework, global soil data, 0.1° global predictions
-% Key findings: variable importance, ALE responses, ESM divergence patterns
-% Implications: for carbon cycle modelling
-
+% ~250 words — to be written
 \end{abstract}
 
 \bigskip
-\noindent\textbf{Keywords:} soil organic carbon; mean residence time; random forest;
-accumulated local effects; Earth system models; soil biogeochemistry
+\noindent\textbf{Keywords:} soil organic carbon; mean transit time;
+decomposition kinetics; random forest; accumulated local effects;
+Earth system models
 
 \newpage
 
 % =============================================================================
 \section{Introduction}
+\label{sec:intro}
 % =============================================================================
 
-% Paragraph 1: Importance of SOC and its turnover for the global carbon cycle
+\paragraph{SOC turnover governs the climate feedback.}
 
-% Paragraph 2: Current understanding — climate as the dominant control;
-%              temperature sensitivity, moisture
+Soils store approximately twice as much carbon as the atmosphere, and the
+rate at which this carbon cycles through the soil system is a primary
+determinant of the land carbon--climate feedback. Whether soils act as a
+net source or sink under changing conditions depends not on stocks alone
+but on turnover --- specifically, on the mean transit time ($\tau$) of
+carbon through the soil, defined as the average time elapsed between a
+carbon atom entering and leaving the system
+\citep{Sierra2017,Sierra2018}. Even modest shifts in transit times
+across large areas can alter the global carbon balance substantially.
 
-% Paragraph 3: What ESMs assume — first-order kinetics, climate-driven
-%              parameterisations, spatial uniformity of turnover constants
+\paragraph{The classical paradigm: chemistry and constants.}
 
-% Paragraph 4: The gap — edaphic, biological, and land-use controls on SOC
-%              turnover are underrepresented; observation-constrained global
-%              estimates are lacking
+Since the foundational models of the 1970s--1990s
+% [CITE: Jenkinson, Parton/CENTURY, RothC lineage]
+, soil organic carbon (SOC) decomposition has been represented as a
+first-order process: the rate of loss from each pool is proportional to
+its mass, scaled by functions of temperature and moisture. The rate
+constant~$k$ --- and thus the transit time $\tau = 1/k$ --- is treated as
+an intrinsic property of the pool, spatially invariant once the
+environmental scalars are applied. This framework descends from the
+chemical recalcitrance paradigm, in which substrate chemistry determines
+decomposability, and the chemistry of soil organic matter is assumed
+broadly similar across environments. Earth system models (ESMs) still
+largely rely on this architecture.
+% [CITE: Todd-Brown et al. 2013; Wieder et al. 2013]
 
-% Paragraph 5: Objectives and approach — nested RF framework to partition
-%              variance across process classes; ALE to quantify marginal effects;
-%              benchmarking against ESM outputs
+\paragraph{The paradigm shift: persistence as an ecosystem property.}
+
+Over the past two decades, this view has been increasingly challenged.
+\citet{Schmidt2011} argued that SOC persistence is not a molecular
+property but an ecosystem property, emerging from interactions between
+organic matter, mineral surfaces, microbial communities, and the
+physical structure of the soil matrix. Subsequent work has reinforced
+this perspective: organo-mineral associations and reactive mineral
+surfaces stabilise organic matter independently of its chemistry
+% [CITE: Kleber et al. 2007, 2021; Lehmann \& Kleber 2015]
+; microbial carbon use efficiency varies with community composition
+% [CITE: Kallenbach et al. 2016; Cotrufo et al. MEMS]
+; priming effects modulate the decomposition of existing stocks in
+response to fresh inputs; and mycorrhizal pathways influence both the
+quantity and chemical nature of belowground carbon transfers
+% [CITE: Averill et al. 2014]
+. The implication is that decomposition kinetics are not constant ---
+they arise from a web of interacting ecological, edaphic, and
+biological processes operating locally.
+
+\paragraph{The zonality hypothesis.}
+
+If transit times are emergent properties of local ecology, they should
+exhibit spatial structure --- a ``zonality'' analogous to the classical
+pedogenic zonality where soil types co-vary with climate, parent
+material, organisms, topography, and time. Under this view, SOC transit
+times would not be universal constants scaled by temperature and
+moisture alone, but would carry a residual spatial signal reflecting
+edaphic, biological, and land-use context. This residual represents the
+variance that current ESMs do not capture.
+
+\paragraph{The modelling dilemma.}
+
+One could attempt to represent these interactions mechanistically, but
+doing so introduces a different class of risk. Any mechanistic model
+imposes a simplified structure on a complex, potentially nonlinear
+system. Processes may be omitted not because data are lacking but
+because they are not yet recognised, or because they operate through
+interactions invisible at the chosen scale of simplification. The model
+then risks encoding our current biases about which processes matter: a
+detailed mechanistic representation that is wrong about the structure
+of interactions may describe calibration data well --- SOC models are
+already overparameterised relative to available observations --- yet
+fail to extrapolate spatially and, more critically, temporally. Working
+instead at the level of the emergent kinetic property --- the
+observable, bulk transit time --- and exploring its spatial covariance
+with environmental covariates may introduce less structural error when
+extrapolating, precisely because it does not commit to a specific
+internal process architecture that may be incomplete or wrong.
+Introducing the zonality of SOC dynamics directly into models ---
+parameterising transit times as spatially varying quantities that
+reflect local ecological context --- could be a way to capture this
+missing variance without the risks of mechanistic overspecification.
+
+\paragraph{This study.}
+
+As an exploratory step in that direction, we compile a global dataset of
+soil profiles, calculate apparent mean transit times under steady-state
+first-order assumptions \citep[sensu][]{Sierra2017,Sierra2018}, and ask:
+how much of the spatial variation in transit times can be attributed to
+processes beyond climate, and which process classes matter where? We use
+a nested Random Forest framework to partition variance across four
+groups --- climate, edaphic, land use, and biological --- where the
+change in performance between the climate-only baseline (M1) and the
+full model (M7) directly quantifies the ``missing zonality'' that
+current ESMs do not represent. The steady-state assumption is a known
+simplification; over a dataset of this size and geographic scope, errors
+from non-equilibrium sites are expected to partially cancel. Accumulated
+Local Effects analysis identifies the marginal response of transit times
+to individual predictors, revealing the functional shape of the
+relationships --- information that could inform how zonality might
+eventually be parameterised. The resulting observation-constrained maps
+provide a benchmark for identifying where and why ESMs systematically
+diverge from data-driven estimates.
 
 
 % =============================================================================
@@ -101,40 +174,47 @@ accumulated local effects; Earth system models; soil biogeochemistry
 \label{sec:methods}
 % =============================================================================
 
-
 % -----------------------------------------------------------------------------
 \subsection{Conceptual framework}
 \label{sec:framework}
 % -----------------------------------------------------------------------------
 
-We treat soil organic carbon (SOC) mean residence time (MRT) as an emergent
-property of local ecological context rather than a function of climate alone.
-Under steady-state assumptions (constant SOC stock and input flux), MRT equals
-the ratio of the SOC stock to the annual carbon input flux and is the inverse
-of the apparent first-order decomposition rate constant~$k$:
+We define the mean transit time ($\tau$) of SOC as the average time a
+carbon atom spends in the soil from entry to exit
+\citep{Sierra2017,Sierra2018}. Under steady-state assumptions (constant
+SOC stock and input flux) and a single homogeneous pool, $\tau$ equals
+the ratio of the SOC stock to the annual carbon input flux and is the
+inverse of the apparent first-order decomposition rate constant~$k$:
 
 \begin{equation}
-  \text{MRT} \;=\; \frac{\text{SOC}_\text{stock}}{C_\text{input}}
+  \tau \;=\; \frac{\text{SOC}_\text{stock}}{C_\text{input}}
   \;=\; \frac{1}{k}
-  \label{eq:mrt}
+  \label{eq:mtt}
 \end{equation}
 
 \noindent
-To separate the contributions of different process classes to spatial variation
-in MRT, we designed a nested Random Forest (RF) modelling framework in which
-predictor variables are organised into four mechanistically distinct groups:
-Climate, Edaphic, Land~Use, and Biological (Table~\ref{tab:predictors}).
-Seven model configurations (M1--M7) progressively combine these groups
+We acknowledge that for multi-pool systems, $\tau$ as computed here
+represents a bulk diagnostic that conflates pools with different
+turnover rates \citep{Sierra2018}. Nevertheless, this metric is widely
+used as a first-order characterisation of SOC dynamics and is directly
+comparable to the transit time diagnostics computed from ESM output
+\citep{Carvalhais2014,Sierra2017}.
+
+To separate the contributions of different process classes to spatial
+variation in $\tau$, we designed a nested Random Forest (RF) modelling
+framework in which predictor variables are organised into four
+mechanistically distinct groups: Climate, Edaphic, Land~Use, and
+Biological (Table~\ref{tab:predictors}). Seven model configurations
+(M1--M7) progressively combine these groups
 (Table~\ref{tab:model_comparison}), so that the change in cross-validated
-performance between successive models isolates the additional explanatory power
-of each process class while holding the climate baseline constant.
+performance between successive models isolates the additional explanatory
+power of each process class while holding the climate baseline constant.
 
-A key design constraint is the exclusion of productivity-related variables
-(net primary productivity, leaf area index) from the predictor set. Because
-MRT is calculated as SOC stock divided by an NPP-derived input flux
-(Eq.~\ref{eq:mrt}), including productivity as a predictor would introduce a
-circular dependency.
-
+A key design constraint is the exclusion of productivity-related
+variables (net primary productivity, leaf area index) from the predictor
+set. Because $\tau$ is calculated as SOC stock divided by an NPP-derived
+input flux (Eq.~\ref{eq:mtt}), including productivity as a predictor
+would introduce a circular dependency.
 
 % -----------------------------------------------------------------------------
 \subsection{Soil data compilation}
@@ -142,45 +222,44 @@ circular dependency.
 % -----------------------------------------------------------------------------
 
 We compiled soil profile data from the World Soil Information Service
-\citep[WoSIS;][]{Batjes2024} point dataset (\texttt{sol\_chem.pnts\_horizons}),
-which integrates observations from multiple national and regional soil surveys
-worldwide. From the full dataset of horizon-level records, we retained only
-mineral soils by removing all records with organic carbon (OC)
-$\geq$~120~g~kg$^{-1}$ (the conventional threshold separating
-mineral from organic soil horizons). Records with missing OC were retained.
+\citep[WoSIS;][]{Batjes2024} point dataset
+(\texttt{sol\_chem.pnts\_horizons}), which integrates observations from
+multiple national and regional soil surveys worldwide. From the full
+dataset of horizon-level records, we retained only mineral soils by
+removing all records with organic carbon (OC)
+$\geq$~120~g~kg$^{-1}$ (the conventional threshold separating mineral
+from organic soil horizons). Records with missing OC were retained.
 
 Horizon-level data were standardised to a 0--20~cm depth interval by
-depth-weighted averaging. For each unique soil profile (identified by site~ID),
-we computed the overlap of each recorded horizon with the 0--20~cm target
-interval and calculated a thickness-weighted mean for seven soil variables:
-organic carbon, total nitrogen, pH (H$_2$O), clay content, silt content,
-sand content, and oven-dry bulk density. Site-level metadata (coordinates,
-observation date, source database) were carried forward as the most common
-value across horizons.
-
+depth-weighted averaging. For each unique soil profile (identified by
+site~ID), we computed the overlap of each recorded horizon with the
+0--20~cm target interval and calculated a thickness-weighted mean for
+seven soil variables: organic carbon, total nitrogen, pH~(H$_2$O), clay
+content, silt content, sand content, and oven-dry bulk density.
+Site-level metadata (coordinates, observation date, source database)
+were carried forward as the most common value across horizons.
 
 % -----------------------------------------------------------------------------
 \subsection{Bulk density gap-filling}
 \label{sec:bd}
 % -----------------------------------------------------------------------------
 
-Bulk density (BD) is required to convert OC concentration to SOC stock but
-is frequently unreported. We gap-filled missing BD values using a three-tier
-approach. First, a Random Forest model (\texttt{randomForest} R package;
-200~trees) was trained on the subset of profiles with measured BD, using
-terrain metrics, K\"oppen zone, land cover fractions, SoilGrids soil
-properties (excluding BD), MODIS NPP, WRB functional group, and MODIS burn
-count as predictors. Ten-fold cross-validation confirmed that the RF model
-outperformed the SoilGrids BD product for sites with measured BD. Second,
-profiles lacking measured BD but with complete RF predictors received
-RF-predicted values. Third, remaining gaps were filled with SoilGrids BD
-as a fallback. Each profile was flagged with its BD source (measured, RF,
-or SoilGrids).
-
+Bulk density (BD) is required to convert OC concentration to SOC stock
+but is frequently unreported. We gap-filled missing BD values using a
+three-tier approach. First, a Random Forest model
+(\texttt{randomForest} R~package; 200~trees) was trained on the subset
+of profiles with measured BD, using terrain metrics, K\"oppen zone, land
+cover fractions, SoilGrids soil properties (excluding BD), MODIS NPP,
+WRB functional group, and MODIS burn count as predictors. Ten-fold
+cross-validation confirmed that the RF model outperformed the SoilGrids
+BD product for sites with measured BD. Second, profiles lacking measured
+BD but with complete RF predictors received RF-predicted values. Third,
+remaining gaps were filled with SoilGrids BD as a fallback. Each profile
+was flagged with its BD source (measured, RF, or SoilGrids).
 
 % -----------------------------------------------------------------------------
-\subsection{MRT calculation}
-\label{sec:mrt_calc}
+\subsection{Mean transit time calculation}
+\label{sec:mtt_calc}
 % -----------------------------------------------------------------------------
 
 SOC stock for the 0--20~cm layer was calculated as:
@@ -192,25 +271,26 @@ SOC stock for the 0--20~cm layer was calculated as:
 \end{equation}
 
 \noindent
-where OC is in g~kg$^{-1}$, BD in g~cm$^{-3}$,
-depth is 20~cm, and the factor~10 converts units.
+where OC is in g~kg$^{-1}$, BD in g~cm$^{-3}$, depth is 20~cm, and the
+factor~10 converts units.
 
-Carbon input to soil was estimated as the belowground fraction of net primary
-productivity (BNPP). We used MODIS MOD17A3 annual NPP
+Carbon input to soil was estimated as the belowground fraction of net
+primary productivity (BNPP). We used MODIS MOD17A3 annual NPP
 \citep[2001--2020;][]{Running2015} extracted at each profile location,
-applying the MODIS scale factor ($\text{NPP}_\text{true} = \text{NPP}_\text{raw} / 10$;
-g~C~m$^{-2}$~yr$^{-1}$). To maintain temporal consistency
-with the equilibrium assumption, only NPP values from years preceding each
-site's sampling date were used. Sites sampled before the MODIS era (pre-2001)
-or with fewer than three pre-sampling NPP years were excluded from the
-temporal statistics.
+applying the MODIS scale factor
+($\text{NPP}_\text{true} = \text{NPP}_\text{raw} / 10$;
+g~C~m$^{-2}$~yr$^{-1}$). To maintain temporal consistency with the
+equilibrium assumption, only NPP values from years preceding each
+site's sampling date were used. Sites sampled before the MODIS era
+(pre-2001) or with fewer than three pre-sampling NPP years were
+excluded from the temporal statistics.
 
-Belowground allocation fractions (BNPP/NPP) were assigned by dominant land
-cover class following \citet{Mokany2006}, \citet{Malhi2011}, and
+Belowground allocation fractions (BNPP/NPP) were assigned by dominant
+land cover class following \citet{Mokany2006}, \citet{Malhi2011}, and
 \citet{Litton2008}: tree cover 0.35, shrubland 0.45, grassland 0.55,
-cropland 0.30, herbaceous wetland 0.50, mangroves 0.40, moss/lichen 0.60.
-Sites lacking land cover information received a global average of 0.40.
-Soil carbon input was then:
+cropland 0.30, herbaceous wetland 0.50, mangroves 0.40, moss/lichen
+0.60. Sites lacking land cover information received a global average of
+0.40. Soil carbon input was then:
 
 \begin{equation}
   C_\text{input}\;[\text{g\,C\,m}^{-2}\text{\,yr}^{-1}]
@@ -219,12 +299,11 @@ Soil carbon input was then:
 \end{equation}
 
 \noindent
-and MRT was computed as the ratio of SOC stock to $C_\text{input}$
-(Eq.~\ref{eq:mrt}). Quality control flags were assigned: values with
-MRT~$<$~1~year or~$>$~1000~years, or with missing, negative, or infinite
-values were excluded. The upper and lower 1\% tails of the remaining
-distribution were removed prior to model fitting.
-
+and $\tau$ was computed as the ratio of SOC stock to $C_\text{input}$
+(Eq.~\ref{eq:mtt}). Quality control flags were assigned: values with
+$\tau < 1$~year or $> 1000$~years, or with missing, negative, or
+infinite values were excluded. The upper and lower 1\% tails of the
+remaining distribution were removed prior to model fitting.
 
 % -----------------------------------------------------------------------------
 \subsection{Predictor variables}
@@ -236,88 +315,91 @@ mechanisms influencing SOC turnover (Table~\ref{tab:predictors}).
 
 \subsubsection{Climate}
 
-Climate variables were derived from the ERA5-Land reanalysis monthly means
-\citep[2001--2020;][]{MunozSabater2021}. From the original monthly fields
-of 2-m air temperature (\texttt{t2m}), soil temperature at layers~1
-(0--7~cm; \texttt{stl1}) and~2 (7--28~cm; \texttt{stl2}), volumetric soil
-water at layers~1 (\texttt{swvl1}) and~2 (\texttt{swvl2}), snow cover
-fraction (\texttt{snowc}), and potential evaporation (\texttt{pev}), we
-calculated the following annual statistics: mean 2-m temperature, temperature
-seasonality (monthly standard deviation), depth-weighted mean soil temperature
-for 0--20~cm (weights 0.35 for layer~1 and 0.65 for layer~2, proportional to
-the overlap with the 0--20~cm interval), depth-weighted mean soil moisture
-(same weights), mean snow cover fraction, and mean potential evaporation.
-Climate zone was represented by the K\"oppen-Geiger classification of
-\citet{Beck2023} at 30-class resolution (numeric codes 1--30), based on the
-1991--2020 climatological period at ${\sim}$1~km native resolution,
-resampled to 0.1\textdegree{} by modal aggregation.
+Climate variables were derived from the ERA5-Land reanalysis monthly
+means \citep[2001--2020;][]{MunozSabater2021}. From the original monthly
+fields of 2-m air temperature (\texttt{t2m}), soil temperature at
+layers~1 (0--7~cm; \texttt{stl1}) and~2 (7--28~cm; \texttt{stl2}),
+volumetric soil water at layers~1 (\texttt{swvl1}) and~2
+(\texttt{swvl2}), snow cover fraction (\texttt{snowc}), and potential
+evaporation (\texttt{pev}), we calculated the following annual
+statistics: mean 2-m temperature, temperature seasonality (monthly
+standard deviation), depth-weighted mean soil temperature for 0--20~cm
+(weights 0.35 for layer~1 and 0.65 for layer~2, proportional to the
+overlap with the 0--20~cm interval), depth-weighted mean soil moisture
+(same weights), mean snow cover fraction, and mean potential
+evaporation. Climate zone was represented by the K\"oppen-Geiger
+classification of \citet{Beck2023} at 30-class resolution (numeric
+codes 1--30), based on the 1991--2020 climatological period at
+${\sim}$1~km native resolution, resampled to 0.1\textdegree{} by modal
+aggregation.
 
 \subsubsection{Edaphic}
 
 Soil properties were obtained from SoilGrids 250\,m v2.0
-\citep{Poggio2021}, depth-weighted to 0--20~cm:
-clay content, sand content, bulk density, coarse fragment volume,
-pH~(H$_2$O), cation exchange capacity, and total nitrogen.
-All values were converted from SoilGrids integer encoding to standard units
-using published scale factors.
+\citep{Poggio2021}, depth-weighted to 0--20~cm: clay content, sand
+content, bulk density, coarse fragment volume, pH~(H$_2$O), cation
+exchange capacity, and total nitrogen. All values were converted from
+SoilGrids integer encoding to standard units using published scale
+factors.
 
-Terrain metrics were derived from the Copernicus GLO-30 Digital Elevation
-Model \citep{CopernicusDEM2022}, aggregated to 0.1\textdegree{}: mean
-elevation, mean slope, northness and eastness (sine and cosine of aspect),
-and terrain ruggedness (focal standard deviation of elevation in a
-$3 \times 3$ cell window, $\sim$30~km).
+Terrain metrics were derived from the Copernicus GLO-30 Digital
+Elevation Model \citep{CopernicusDEM2022}, aggregated to
+0.1\textdegree{}: mean elevation, mean slope, northness and eastness
+(sine and cosine of aspect), and terrain ruggedness (focal standard
+deviation of elevation in a $3 \times 3$ cell window, $\sim$30~km).
 
 Soil classification was based on the SoilGrids WRB Most Probable class
-\citep[250\,m;][]{Poggio2021}, aggregated to 0.1\textdegree{} by mode and
-reclassified into eight mechanistically defined functional groups: sandy/coarse
-(Arenosols, Podzols, Regosols), temperate agricultural (Luvisols, Cambisols,
-Phaeozems, Chernozems, Kastanozems, Albeluvisols), high-clay tropical
-(Acrisols, Ferralsols, Lixisols, Plinthosols, Nitisols, Alisols, Vertisols),
-arid/chemical (Calcisols, Gypsisols, Solonchaks, Solonetz, Durisols), poorly
-drained (Gleysols, Histosols, Fluvisols, Stagnosols, Planosols), volcanic
-(Andosols), shallow/young (Leptosols, Umbrisols), and cold/permafrost
-(Cryosols). These groups were encoded as integer codes for the RF models.
+\citep[250\,m;][]{Poggio2021}, aggregated to 0.1\textdegree{} by mode
+and reclassified into eight mechanistically defined functional groups:
+sandy/coarse (Arenosols, Podzols, Regosols), temperate agricultural
+(Luvisols, Cambisols, Phaeozems, Chernozems, Kastanozems,
+Albeluvisols), high-clay tropical (Acrisols, Ferralsols, Lixisols,
+Plinthosols, Nitisols, Alisols, Vertisols), arid/chemical (Calcisols,
+Gypsisols, Solonchaks, Solonetz, Durisols), poorly drained (Gleysols,
+Histosols, Fluvisols, Stagnosols, Planosols), volcanic (Andosols),
+shallow/young (Leptosols, Umbrisols), and cold/permafrost (Cryosols).
+These groups were encoded as integer codes for the RF models.
 
 \subsubsection{Land use and disturbance}
 
 Current land cover was characterised using ESA WorldCover 2021
-\citep{Zanaga2022}, downloaded via the \texttt{geodata} R~package. Eleven
-class-specific fractional cover layers (trees, grassland, shrubland, cropland,
-built-up, bare, snow/ice, water, wetland, mangroves, moss/lichen) were
-aggregated from native ${\sim}$10~m to 0.1\textdegree{} by mean.
-Six of these fractions (trees, grassland, shrubland, cropland, bare, wetland)
-were included as continuous predictors.
+\citep{Zanaga2022}, downloaded via the \texttt{geodata} R~package.
+Eleven class-specific fractional cover layers (trees, grassland,
+shrubland, cropland, built-up, bare, snow/ice, water, wetland,
+mangroves, moss/lichen) were aggregated from native ${\sim}$10~m to
+0.1\textdegree{} by mean. Six of these fractions (trees, grassland,
+shrubland, cropland, bare, wetland) were included as continuous
+predictors.
 
 Disturbance history was captured by two date-aware products. Forest loss
 year was extracted from the Hansen Global Forest Change v1.10 dataset
-\citep{Hansen2013}; a binary flag indicated whether loss occurred before each
-site's sampling date. Fire history was derived from the MODIS MCD64A1
-burned area product \citep[2001--2020;][]{Giglio2018}, with cumulative burn
-count before sampling used as a continuous predictor.
+\citep{Hansen2013}; a binary flag indicated whether loss occurred before
+each site's sampling date. Fire history was derived from the MODIS
+MCD64A1 burned area product \citep[2001--2020;][]{Giglio2018}, with
+cumulative burn count before sampling used as a continuous predictor.
 
 \subsubsection{Biological}
 
 Microbial community structure was represented by three independent,
-spatially explicit datasets. Global soil fungal proportion (fungal biomass
-as a fraction of total microbial biomass) was obtained from
-\citet{Yu2022} at ${\sim}$1~km resolution. Root colonisation
-rates by arbuscular mycorrhizal (AM) and ectomycorrhizal (EcM) fungi were
-taken from the global maps of \citet{Barcelo2023}, along with a derived
-EcM:AM root colonisation ratio. Mycorrhizal richness and endemism (rarity-weighted
-richness) for both AM and EcM fungi were sourced from the SPUN Global
-Underground Atlas \citep{VanNuland2025}, together with a derived EcM:AM
-richness ratio. All biological layers were aggregated to 0.1\textdegree{}
-by bilinear resampling.
+spatially explicit datasets. Global soil fungal proportion (fungal
+biomass as a fraction of total microbial biomass) was obtained from
+\citet{Yu2022} at ${\sim}$1~km resolution. Root colonisation rates by
+arbuscular mycorrhizal (AM) and ectomycorrhizal (EcM) fungi were taken
+from the global maps of \citet{Barcelo2023}, along with a derived
+EcM:AM root colonisation ratio. Mycorrhizal richness and endemism
+(rarity-weighted richness) for both AM and EcM fungi were sourced from
+the SPUN Global Underground Atlas \citep{VanNuland2025}, together with
+a derived EcM:AM richness ratio. All biological layers were aggregated
+to 0.1\textdegree{} by bilinear resampling.
 
 \subsubsection{Spatial alignment}
 
 All raster covariates were resampled to a common 0.1\textdegree{}
-($\sim$11~km) global grid in WGS84 (EPSG:4326).
-Continuous variables were resampled using bilinear interpolation;
-categorical variables (K\"oppen zone, WRB class) used modal aggregation.
-Point-level extraction was performed at native resolution where available and
-from the 0.1\textdegree{} layers otherwise.
-
+($\sim$11~km) global grid in WGS84 (EPSG:4326). Continuous variables
+were resampled using bilinear interpolation; categorical variables
+(K\"oppen zone, WRB class) used modal aggregation. Point-level
+extraction was performed at native resolution where available and from
+the 0.1\textdegree{} layers otherwise.
 
 % -----------------------------------------------------------------------------
 \subsection{Random Forest modelling}
@@ -326,45 +408,44 @@ from the 0.1\textdegree{} layers otherwise.
 
 All RF models were fitted using the \texttt{ranger} R~package
 \citep{Wright2017} with 500~trees, a minimum node size of~5, and the
-default~$m_\text{try}$ ($= \lfloor\sqrt{p}\rfloor$, where~$p$ is the number
-of predictors). The response variable was log-transformed MRT
-($\ln\,\text{MRT}$); predictions were back-transformed via exponentiation.
-Parallel computation used all available cores minus one.
+default~$m_\text{try}$ ($= \lfloor\sqrt{p}\rfloor$, where~$p$ is the
+number of predictors). The response variable was log-transformed transit
+time ($\ln\,\tau$); predictions were back-transformed via
+exponentiation. Parallel computation used all available cores minus one.
 
 Seven nested model configurations were fitted
-(Table~\ref{tab:model_comparison}):
-M1~(Climate only), M2~(Climate + Edaphic), M3~(Climate + Land~Use),
+(Table~\ref{tab:model_comparison}): M1~(Climate only),
+M2~(Climate + Edaphic), M3~(Climate + Land~Use),
 M4~(Climate + Biological), M5~(Climate + Edaphic + Land~Use),
 M6~(Climate + Edaphic + Biological), and M7~(Full: all four groups).
-This design holds the climate baseline constant across all models, so that
-the change in performance between M1 and each subsequent model directly
-quantifies the additional variance explained by each process class.
+This design holds the climate baseline constant across all models, so
+that the change in performance between M1 and each subsequent model
+directly quantifies the additional variance explained by each process
+class.
 
 Model accuracy was assessed by spatial block cross-validation to avoid
 spatial autocorrelation-driven overfitting. The global domain was divided
-into 2\textdegree{}~$\times$~2\textdegree{} grid cells
-($\sim$200~km at the equator); grid cells were randomly
-assigned to one of ten folds (stratified by cell, not by individual
-observation). For each fold, the model was trained on the remaining nine
-folds and predictions were collected for the held-out block.
-Cross-validated $R^2$, RMSE, and MAE were computed on the log-scale
-predictions pooled across all folds. Out-of-bag (OOB) statistics from a
-final model fitted on all data served as an additional reference.
-Permutation-based variable importance was extracted from the final M7 model.
-
+into 2\textdegree{}~$\times$~2\textdegree{} grid cells ($\sim$200~km at
+the equator); grid cells were randomly assigned to one of ten folds
+(stratified by cell, not by individual observation). For each fold, the
+model was trained on the remaining nine folds and predictions were
+collected for the held-out block. Cross-validated $R^2$, RMSE, and MAE
+were computed on the log-scale predictions pooled across all folds.
+Out-of-bag (OOB) statistics from a final model fitted on all data served
+as an additional reference. Permutation-based variable importance was
+extracted from the final M7 model.
 
 % -----------------------------------------------------------------------------
 \subsection{Global prediction}
 \label{sec:prediction}
 % -----------------------------------------------------------------------------
 
-Each of the seven trained models was applied to the aligned 0.1\textdegree{}
-global raster stack to produce a spatially continuous MRT prediction map.
-Predictions were generated in log space and back-transformed to years.
-Difference maps between successive model configurations
-(e.g., M2~$-$~M1, M7~$-$~M1) were computed to visualise the spatial
-signature of each process class on predicted MRT.
-
+Each of the seven trained models was applied to the aligned
+0.1\textdegree{} global raster stack to produce a spatially continuous
+transit time prediction map. Predictions were generated in log space and
+back-transformed to years. Difference maps between successive model
+configurations (e.g., M2~$-$~M1, M7~$-$~M1) were computed to visualise
+the spatial signature of each process class on predicted $\tau$.
 
 % -----------------------------------------------------------------------------
 \subsection{Sensitivity analysis}
@@ -372,41 +453,37 @@ signature of each process class on predicted MRT.
 % -----------------------------------------------------------------------------
 
 We used Accumulated Local Effects \citep[ALE;][]{Apley2020} rather than
-partial dependence plots to characterise the marginal response of MRT to
-each continuous predictor. ALE avoids the extrapolation artefacts inherent
-in partial dependence by evaluating prediction differences only within narrow
-quantile-based bins of the focal variable, so that correlated predictors
-retain their naturally co-occurring values.
+partial dependence plots to characterise the marginal response of
+$\tau$ to each continuous predictor. ALE avoids the extrapolation
+artefacts inherent in partial dependence by evaluating prediction
+differences only within narrow quantile-based bins of the focal
+variable, so that correlated predictors retain their naturally
+co-occurring values.
 
-The ALE analysis was conducted on a spatially stratified random subsample
-of 100\,000 pixels drawn from the global 0.1\textdegree{} prediction grid
-(stratified by 5\textdegree{} latitude--longitude cells to ensure
-geographic representativeness). Each continuous predictor was divided into
-40~quantile-based bins. Within each bin, the focal variable was nudged to
-the bin's upper and lower edge while all other variables were held at their
-observed values; the local prediction difference was accumulated across bins
-and centred to zero at the distribution's lower edge to produce a response
-curve in native MRT units (years). Categorical predictors (K\"oppen zone,
-WRB functional group code) were excluded from ALE.
+The ALE analysis was conducted on a spatially stratified random
+subsample of 100\,000 pixels drawn from the global 0.1\textdegree{}
+prediction grid (stratified by 5\textdegree{} latitude--longitude cells
+to ensure geographic representativeness). Each continuous predictor was
+divided into 40~quantile-based bins. Within each bin, the focal variable
+was nudged to the bin's upper and lower edge while all other variables
+were held at their observed values; the local prediction difference was
+accumulated across bins and centred to zero at the distribution's lower
+edge to produce a response curve in native transit time units (years).
+Categorical predictors (K\"oppen zone, WRB functional group code) were
+excluded from ALE.
 
 To examine latitudinal variation in predictor responses, ALE curves were
 additionally computed within four latitude bands: southern extratropics
-($<$$-$23.5\textdegree{}), tropics ($-$23.5\textdegree{} to 23.5\textdegree{}),
-northern temperate (23.5\textdegree{} to 66.5\textdegree{}), and boreal/Arctic
-($>$66.5\textdegree{}).
-
+($<$$-$23.5\textdegree{}), tropics ($-$23.5\textdegree{} to
+23.5\textdegree{}), northern temperate (23.5\textdegree{} to
+66.5\textdegree{}), and boreal/Arctic ($>$66.5\textdegree{}).
 
 % -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
 \label{sec:esm}
 % -----------------------------------------------------------------------------
 
-% CMIP model outputs — models used, variables extracted
-% Difference maps: M1 vs M7, and group-specific contributions
-% Spatial decomposition of process-class divergence
-
 [To be completed once CMIP comparison analysis is finalised.]
-
 
 % -----------------------------------------------------------------------------
 \subsection{Software and reproducibility}
@@ -415,94 +492,61 @@ northern temperate (23.5\textdegree{} to 66.5\textdegree{}), and boreal/Arctic
 
 All analyses were conducted in R~($\geq$~4.3) using the following key
 packages: \texttt{terra} \citep{Hijmans2024} for raster and vector
-operations, \texttt{sf} for spatial data, \texttt{ranger} \citep{Wright2017}
-for Random Forest modelling, \texttt{randomForest} for bulk density
-gap-filling, \texttt{geodata} for ESA WorldCover download,
-\texttt{ggplot2} for visualisation, and \texttt{dplyr}/\texttt{tidyr} for
-data manipulation. ERA5-Land data were downloaded from the Copernicus
-Climate Data Store; SoilGrids layers were accessed via ISRIC's cloud-optimised
-GeoTIFF service. The analysis pipeline consists of 18~numbered R~scripts
-executing sequentially from data loading through global prediction and
-sensitivity analysis. Code and intermediate outputs are archived at [DOI].
+operations, \texttt{sf} for spatial data, \texttt{ranger}
+\citep{Wright2017} for Random Forest modelling, \texttt{randomForest}
+for bulk density gap-filling, \texttt{geodata} for ESA WorldCover
+download, \texttt{ggplot2} for visualisation, and
+\texttt{dplyr}/\texttt{tidyr} for data manipulation. ERA5-Land data
+were downloaded from the Copernicus Climate Data Store; SoilGrids layers
+were accessed via ISRIC's cloud-optimised GeoTIFF service. The analysis
+pipeline consists of 18~numbered R~scripts executing sequentially from
+data loading through global prediction and sensitivity analysis. Code
+and intermediate outputs are archived at [DOI].
 
 
 % =============================================================================
 \section{Results}
 % =============================================================================
 
-% -----------------------------------------------------------------------------
-\subsection{Global distribution of SOC MRT}
-% -----------------------------------------------------------------------------
+\subsection{Global distribution of SOC transit times}
+% Global map of predicted τ; latitudinal and biome-level patterns
 
-% Global map of predicted MRT
-% Latitudinal and biome-level patterns
-% Comparison with prior estimates
-
-% -----------------------------------------------------------------------------
 \subsection{Model performance}
-% -----------------------------------------------------------------------------
+% Cross-validated R² and RMSE across M1--M7; incremental improvement
 
-% Cross-validated R² and RMSE across M1--M7
-% Incremental improvement by variable group
-% Spatial patterns in residuals
-
-% -----------------------------------------------------------------------------
 \subsection{Variable importance}
-% -----------------------------------------------------------------------------
+% Permutation importance ranking for M7; group-level contributions
 
-% Permutation importance ranking for M7
-% Dominant variables across groups
-% Group-level contributions
+\subsection{Marginal effects on transit times}
+% ALE curves; top-10 most responsive; nonlinearities; latitude bands
 
-% -----------------------------------------------------------------------------
-\subsection{Marginal effects on MRT}
-% -----------------------------------------------------------------------------
-
-% ALE curves for all continuous predictors
-% Top-10 most responsive variables
-% Nonlinearities and threshold responses
-% Latitude-band stratification of ALE responses
-
-% -----------------------------------------------------------------------------
-\subsection{ESM benchmarking}  % if included
-% -----------------------------------------------------------------------------
-
+\subsection{ESM benchmarking}
 % Spatial patterns of ESM--observation divergence
-% Which process classes explain divergence and where
-% Geographic hotspots of model disagreement
 
 
 % =============================================================================
 \section{Discussion}
 % =============================================================================
 
-% Paragraph 1: Dominant role of climate — confirmation and nuance
-
-% Paragraph 2: Edaphic controls — pH, texture, terrain;
-%              implications for mineral-organic associations
-
-% Paragraph 3: Biological controls — mycorrhizal and fungal community effects;
-%              mechanisms linking microbial community to SOC turnover
-
-% Paragraph 4: Land use and disturbance — direction and magnitude of effects
-
-% Paragraph 5: ESM implications — which processes are missing or
-%              misrepresented; recommendations for parameterisation
-
-% Paragraph 6: Limitations — equilibrium assumption, data density bias,
-%              covariate correlation, temporal representativeness
+% ¶1: Climate dominance — confirmation and nuance
+% ¶2: Edaphic controls — pH, texture, terrain; mineral-organic associations
+% ¶3: Biological controls — mycorrhizal and fungal community effects
+% ¶4: Land use and disturbance — direction and magnitude
+% ¶5: The missing zonality — ESM implications; recommendations
+% ¶6: Limitations — equilibrium assumption (cancellation over large N),
+%     single-pool simplification (Sierra 2018), data density bias,
+%     covariate correlation, temporal representativeness
 
 
 % =============================================================================
 \section{Conclusions}
 % =============================================================================
 
-% 4--6 concise conclusions:
-% 1. SOC MRT varies widely globally and is not explained by climate alone
-% 2. Edaphic/biological/land-use variables together explain X% additional variance
+% 1. SOC transit times vary widely and are not explained by climate alone
+% 2. Edaphic/biological/land-use variables explain X% additional variance
 % 3. ALE reveals distinct marginal responses; key nonlinearities
-% 4. ESMs systematically diverge in X regions due to Y missing processes
-% 5. Observation-constrained MRT maps provide benchmark for model improvement
+% 4. Transit times exhibit spatial zonality analogous to pedogenic zonality
+% 5. Observation-constrained τ maps provide benchmark for ESM improvement
 
 
 % =============================================================================
@@ -512,37 +556,25 @@ sensitivity analysis. Code and intermediate outputs are archived at [DOI].
 Soil profile data are from WoSIS (\url{https://www.isric.org/explore/wosis}).
 ERA5-Land data are available from the Copernicus Climate Data Store
 (\url{https://cds.climate.copernicus.eu}).
-SoilGrids data are available from ISRIC
-(\url{https://soilgrids.org}).
-ESA WorldCover is available at
-\url{https://worldcover2021.esa.int}.
+SoilGrids data are available from ISRIC (\url{https://soilgrids.org}).
+ESA WorldCover is available at \url{https://worldcover2021.esa.int}.
 Hansen forest change data are available at
 \url{https://earthenginepartners.appspot.com/science-2013-global-forest}.
 MODIS products are available from the LP~DAAC.
 Microbial datasets are available from their respective repositories as
 cited in the text.
 
-% =============================================================================
 \section*{Code availability}
-% =============================================================================
 
-The complete R analysis pipeline (18~scripts) is archived at [DOI/repository].
+The complete R analysis pipeline (18~scripts) is archived at
+[DOI/repository].
 
-% =============================================================================
 \section*{Acknowledgements}
-% =============================================================================
 
-
-
-% =============================================================================
 \section*{Author contributions}
-% =============================================================================
-
 % CRediT taxonomy
 
-% =============================================================================
 \section*{Competing interests}
-% =============================================================================
 
 The authors declare no competing interests.
 
@@ -552,104 +584,85 @@ The authors declare no competing interests.
 % =============================================================================
 
 
-% =============================================================================
-% FIGURES (end of manuscript, journal style)
-% =============================================================================
-
 \newpage
 \section*{Figures}
 
-% Fig 1 — Global MRT map (main result, log-scale palette)
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/step_17_visualizations/MRT_M7_full_map_log.png}
   \caption{%
-    \textbf{Global distribution of predicted soil organic carbon mean residence
-    time (MRT).}
+    \textbf{Global distribution of predicted soil organic carbon mean transit
+    time ($\tau$).}
     Predictions from the full model (M7) at 0.1\textdegree{} resolution,
     displayed on a log-scale colour palette to resolve spatial structure
     within the dominant 10--50~year range. Legend tick marks are in years.
   }
-  \label{fig:global_mrt}
+  \label{fig:global_mtt}
 \end{figure}
 
-% Fig 2 — MRT distribution colored by latitude
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/step_17_visualizations/MRT_histogram_by_latitude.png}
   \caption{%
-    \textbf{Distribution of predicted SOC mean residence time, coloured by
+    \textbf{Distribution of predicted SOC mean transit time, coloured by
     mean distance from the equator.}
-    Each histogram bin is coloured by the mean absolute latitude of the pixels
-    it contains (red = equatorial, green = polar). The bimodal structure
-    reflects a tropical/subtropical mode ($\sim$15--20~years) and a
-    boreal/temperate mode ($\sim$25--35~years).
+    Each histogram bin is coloured by the mean absolute latitude of the
+    pixels it contains (red = equatorial, green = polar). The bimodal
+    structure reflects a tropical/subtropical mode ($\sim$15--20~years)
+    and a boreal/temperate mode ($\sim$25--35~years).
   }
-  \label{fig:mrt_histogram}
+  \label{fig:mtt_histogram}
 \end{figure}
 
-% Fig 3 — Model performance and nested comparison
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/13_model_comparison.png}
   \caption{%
-    \textbf{Cross-validated model performance across nested configurations (M1--M7).}
-    % Caption text
+    \textbf{Cross-validated model performance across nested configurations
+    (M1--M7).}
   }
   \label{fig:model_performance}
 \end{figure}
 
-% Fig 4 — Variable importance
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/13_variable_importance.png}
   \caption{%
     \textbf{Permutation variable importance for the full model (M7).}
-    % Caption text
   }
   \label{fig:importance}
 \end{figure}
 
-% Fig 5 — Process dominance map
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/MRT_process_dominance_combined.png}
   \caption{%
-    \textbf{Spatial dominance of process classes driving SOC mean residence
+    \textbf{Spatial dominance of process classes driving SOC mean transit
     time beyond the climate baseline.}
-    % Caption text
   }
   \label{fig:process_dominance}
 \end{figure}
 
-% Fig 6 — ALE top 10
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/step_18_sensitivity/18D_ALE_top10_MRT.png}
   \caption{%
-    \textbf{Accumulated Local Effects (ALE) response curves for the ten most
-    responsive predictors of SOC mean residence time.}
-    % Caption text
+    \textbf{Accumulated Local Effects (ALE) response curves for the ten
+    most responsive predictors of SOC mean transit time.}
   }
   \label{fig:ale_top10}
 \end{figure}
 
-% Fig 7 — ALE by latitude band
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/step_18_sensitivity/18C_ALE_by_latband.png}
   \caption{%
-    \textbf{Latitude-band stratification of ALE response curves for the ten
-    most responsive predictors.}
-    % Caption text
+    \textbf{Latitude-band stratification of ALE response curves for the
+    ten most responsive predictors.}
   }
   \label{fig:ale_latband}
 \end{figure}
 
-
-% =============================================================================
-% TABLES
-% =============================================================================
 
 \newpage
 \section*{Tables}
@@ -659,10 +672,10 @@ The authors declare no competing interests.
   \caption{%
     \textbf{Model configurations and cross-validated performance metrics.}
     All models were fitted using \texttt{ranger} (500~trees, min.~node
-    size~5) with log-transformed MRT as the response variable. Spatial
-    block cross-validation used 2\textdegree{} grid cells assigned to
-    ten~folds. $\Delta R^2$ is relative to M1~(Climate only). Performance
-    metrics are on the log scale.
+    size~5) with log-transformed mean transit time as the response
+    variable. Spatial block cross-validation used 2\textdegree{} grid
+    cells assigned to ten~folds. $\Delta R^2$ is relative to
+    M1~(Climate only). Performance metrics are on the log scale.
   }
   \label{tab:model_comparison}
   \begin{tabular}{llccccc}
@@ -681,16 +694,13 @@ The authors declare no competing interests.
   \end{tabular}
 \end{table}
 
-
 \begin{table}[h!]
   \centering
   \small
   \caption{%
     \textbf{Predictor variables in the full model (M7), organised by
     mechanistic group.}
-    Native resolution refers to the original data product; all variables
-    were extracted at native resolution where possible and resampled to
-    0.1\textdegree{} for global prediction.
+    All variables were resampled to 0.1\textdegree{} for global prediction.
   }
   \label{tab:predictors}
   \begin{tabularx}{\textwidth}{lllX}
@@ -763,9 +773,8 @@ The authors declare no competing interests.
   \centering
   \includegraphics[width=\textwidth]{../plots/step_17_visualizations/global_SOC_density_heatmap.png}
   \caption{%
-    \textbf{Global distribution and density of soil organic carbon observations
-    used for model training.}
-    % Caption text
+    \textbf{Global distribution and density of soil organic carbon
+    observations used for model training.}
   }
   \label{fig:sampling}
 \end{figure}
@@ -774,15 +783,14 @@ The authors declare no competing interests.
   \centering
   \includegraphics[width=\textwidth]{../plots/step_17_visualizations/MRT_all_models_comparison_log.png}
   \caption{%
-    \textbf{Multi-panel comparison of predicted MRT across all seven model
-    configurations (M1--M7).}
-    Log-scale colour palette as in Fig.~\ref{fig:global_mrt}. Progressive
-    addition of variable groups visually resolves spatial structure that the
-    climate-only baseline (M1) cannot capture.
+    \textbf{Multi-panel comparison of predicted mean transit time across
+    all seven model configurations (M1--M7).}
+    Log-scale colour palette as in Fig.~\ref{fig:global_mtt}. Progressive
+    addition of variable groups visually resolves spatial structure that
+    the climate-only baseline (M1) cannot capture.
   }
   \label{fig:model_maps}
 \end{figure}
-
 
 \subsection*{Supplementary tables}
 
@@ -792,8 +800,6 @@ The authors declare no competing interests.
   \caption{%
     \textbf{Belowground NPP allocation fractions ($f_\text{BNPP}$) by
     dominant land cover class used to estimate soil carbon input.}
-    Values represent the fraction of total NPP entering the soil as
-    belowground carbon (roots, exudates, mycorrhizal transfer).
   }
   \label{tab:allocation}
   \begin{tabular}{lcc}
@@ -815,7 +821,4 @@ The authors declare no competing interests.
   \end{tabular}
 \end{table}
 
-
-% =============================================================================
 \end{document}
-% =============================================================================
