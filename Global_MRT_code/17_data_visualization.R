@@ -1,6 +1,10 @@
 ################################################################################
 # Step 17: Global Visualization Plots
 # Creates publication-quality visualizations of the SOC dataset
+#
+# Updates:
+#   - MRT maps with log-scale palette (better use of color range)
+#   - log(MRT) histogram colored by mean latitude per bin
 ################################################################################
 
 library(terra)
@@ -11,6 +15,7 @@ library(rnaturalearthdata)
 library(viridis)
 library(scales)
 library(dplyr)  
+library(paletteer)
 
 # Set up paths
 output_dir <- "./Global_MRT_code/plots/step_17_visualizations"
@@ -524,5 +529,281 @@ if ("Database" %in% names(soc_data)) {
   cat("! Database field not found - skipping data source plots\n")
 }
 
+
+################################################################################
+# PLOT 8: MRT prediction maps with log-scale palette
+################################################################################
+
+cat("\n")
+cat("═══════════════════════════════════════════════════════════════\n")
+cat("  MRT PREDICTION MAPS (log-scale palette)\n")
+cat("═══════════════════════════════════════════════════════════════\n\n")
+
+PRED_DIR <- "./Global_MRT_code/outputs/MRT_predictions"
+VIS_RES  <- 0.5  # aggregation for faster plotting
+
+# Load borders
+sf_use_s2(FALSE)
+world_borders <- ne_countries(scale = 50, returnclass = "sf")
+world_borders_geom <- st_geometry(world_borders)
+
+# Helper: aggregate raster for visualization
+prep_raster <- function(r, agg_res = VIS_RES) {
+  agg_factor <- round(agg_res / res(r)[1])
+  if (agg_factor > 1) {
+    r_agg <- aggregate(r, fact = agg_factor, fun = "mean", na.rm = TRUE)
+  } else {
+    r_agg <- r
+  }
+  return(r_agg)
+}
+
+# Find prediction TIFs
+tif_files <- list.files(PRED_DIR, pattern = "^MRT_M[0-9].*\\.tif$", full.names = TRUE)
+cat("Found", length(tif_files), "prediction maps\n")
+
+if (length(tif_files) > 0) {
+  
+  # Determine global range from the M7 (full model) raster
+  m7_file <- grep("M7_full", tif_files, value = TRUE)
+  if (length(m7_file) > 0) {
+    m7_vals <- values(rast(m7_file[1]), na.rm = TRUE)
+    q01 <- quantile(m7_vals, 0.01)
+    q99 <- quantile(m7_vals, 0.99)
+    cat(sprintf("  M7 value range: %.1f - %.1f years\n", min(m7_vals), max(m7_vals)))
+    cat(sprintf("  Using p1-p99 for color scale: %.1f - %.1f years\n", q01, q99))
+    rm(m7_vals)
+  } else {
+    q01 <- 5; q99 <- 80
+  }
+  
+  # Log-scale breaks: evenly spaced in log, labeled in years
+  log_min <- log(max(q01, 1))
+  log_max <- log(q99)
+  n_cols  <- 100
+  log_breaks <- seq(log_min, log_max, length.out = n_cols + 1)
+  mrt_breaks <- exp(log_breaks)
+  
+  # Color palette
+  cols_mrt <- hcl.colors(n_cols, "Spectral", rev = TRUE)
+  
+  # Legend tick marks at nice round numbers
+  legend_vals <- c(5, 10, 15, 20, 30, 50, 75, 100, 150, 200)
+  legend_vals <- legend_vals[legend_vals >= exp(log_min) & legend_vals <= exp(log_max)]
+  legend_at   <- log(legend_vals)
+  
+  # --- Individual maps (log-scale) ---
+  cat("\nCreating individual MRT maps (log-scale)...\n")
+  
+  for (tif_file in tif_files) {
+    
+    model_name <- gsub("\\.tif$", "", basename(tif_file))
+    cat("  Processing", model_name, "...\n")
+    
+    r <- rast(tif_file)
+    r_agg <- prep_raster(r)
+    
+    # Clamp and log-transform
+    r_clamped <- clamp(r_agg, lower = exp(log_min), upper = exp(log_max))
+    r_log <- log(r_clamped)
+    
+    out_png <- file.path(output_dir, paste0(model_name, "_map_log.png"))
+    
+    png(out_png, width = 2000, height = 1000, res = 150)
+    
+    plot(r_log,
+         main = paste0(model_name, " — Mean Residence Time"),
+         col = cols_mrt,
+         range = c(log_min, log_max),
+         mar = c(2, 2, 2, 5),
+         axes = TRUE,
+         legend = FALSE)
+    
+    plot(world_borders_geom, add = TRUE, col = NA, border = "grey30", lwd = 0.3)
+    
+    # Custom legend with years labels
+    legend_y <- seq(-50, 60, length.out = n_cols)
+    for (i in seq_len(n_cols)) {
+      rect(175, legend_y[i], 180, legend_y[min(i + 1, n_cols)],
+           col = cols_mrt[i], border = NA, xpd = TRUE)
+    }
+    # Tick labels
+    for (j in seq_along(legend_vals)) {
+      y_pos <- -50 + (legend_at[j] - log_min) / (log_max - log_min) * 110
+      text(184, y_pos, labels = legend_vals[j], cex = 0.65, xpd = TRUE, adj = 0)
+      segments(180, y_pos, 181.5, y_pos, xpd = TRUE, lwd = 0.5)
+    }
+    text(182, 68, "MRT (yr)", cex = 0.7, xpd = TRUE, font = 2)
+    
+    dev.off()
+    cat("    ✓", basename(out_png), "\n")
+  }
+  
+  # --- Multi-panel comparison (log-scale) ---
+  cat("\n  Creating multi-panel comparison (log-scale)...\n")
+  
+  png(file.path(output_dir, "MRT_all_models_comparison_log.png"),
+      width = 2800, height = 1400, res = 150)
+  
+  n_models <- length(tif_files)
+  n_cols_panel <- 4
+  n_rows_panel <- ceiling(n_models / n_cols_panel)
+  
+  par(mfrow = c(n_rows_panel, n_cols_panel),
+      mar = c(0.2, 0.2, 1.5, 0.2), oma = c(0, 0, 2, 0))
+  
+  for (tif_file in tif_files) {
+    model_label <- gsub("^MRT_", "", gsub("\\.tif$", "", basename(tif_file)))
+    
+    r <- rast(tif_file)
+    r_agg <- prep_raster(r)
+    r_clamped <- clamp(r_agg, lower = exp(log_min), upper = exp(log_max))
+    r_log <- log(r_clamped)
+    
+    plot(r_log,
+         main = model_label,
+         col = cols_mrt,
+         range = c(log_min, log_max),
+         axes = FALSE,
+         legend = FALSE,
+         mar = c(0.1, 0.1, 1, 0.1))
+    
+    plot(world_borders_geom, add = TRUE, col = NA, border = "grey40", lwd = 0.3)
+  }
+  
+  mtext("MRT Predictions — Log-scale Comparison", outer = TRUE,
+        cex = 1.2, font = 2, line = 0.3)
+  
+  dev.off()
+  cat("  ✓ MRT_all_models_comparison_log.png\n")
+  
+  cat("\n✓ All MRT maps saved\n")
+  
+} else {
+  cat("! No MRT prediction files found in ", PRED_DIR, "\n")
+}
+
+
+################################################################################
+# PLOT 9: log(MRT) histogram colored by mean latitude per bin
+################################################################################
+
+cat("\n")
+cat("═══════════════════════════════════════════════════════════════\n")
+cat("  log(MRT) HISTOGRAM COLORED BY LATITUDE\n")
+cat("═══════════════════════════════════════════════════════════════\n\n")
+
+# Use M7 full model raster
+m7_file <- list.files(PRED_DIR, pattern = "MRT_M7_full\\.tif$", full.names = TRUE)
+
+if (length(m7_file) > 0) {
+  
+  cat("Loading M7 raster and extracting values + coordinates...\n")
+  r <- rast(m7_file[1])
+  
+  # Extract all values and their coordinates
+  vals_all <- values(r, na.rm = FALSE)[, 1]
+  coords_all <- xyFromCell(r, 1:ncell(r))
+  
+  # Keep non-NA
+  keep <- !is.na(vals_all) & vals_all > 0
+  df_hist <- data.frame(
+    mrt     = vals_all[keep],
+    log_mrt = log(vals_all[keep]),
+    lat     = coords_all[keep, 2]
+  )
+  cat(sprintf("  Non-NA pixels: %s\n", format(nrow(df_hist), big.mark = ",")))
+  
+  # Compute bin statistics
+  n_bins <- 120
+  df_hist$bin <- cut(df_hist$log_mrt, breaks = n_bins)
+  
+  bin_stats <- df_hist %>%
+    group_by(bin) %>%
+    summarise(
+      mean_lat = mean(abs(lat)),
+      count    = n(),
+      .groups  = "drop"
+    ) %>%
+    filter(!is.na(bin))
+  
+  # Extract bin midpoints from factor labels
+  bin_stats$mid <- sapply(as.character(bin_stats$bin), function(b) {
+    nums <- as.numeric(regmatches(b, gregexpr("-?[0-9.]+", b))[[1]])
+    mean(nums)
+  })
+  
+  # MRT in years for the secondary x-axis labels
+  mrt_ticks <- c(5, 10, 15, 20, 30, 50, 75, 100, 150)
+  log_ticks <- log(mrt_ticks)
+  
+  # Build the plot
+  p_lat_hist <- ggplot(bin_stats, aes(x = mid, y = count, fill = mean_lat)) +
+    geom_col(width = diff(range(bin_stats$mid)) / n_bins * 0.95, color = NA) +
+    scale_fill_gradientn(
+      colours = rev(paletteer::paletteer_c("ggthemes::Temperature Diverging", n = 256)),
+      name    = "Mean distance\nfrom equator (°)",
+      limits  = c(0, 65),
+      oob     = scales::squish
+    ) +
+    scale_x_continuous(
+      name   = "MRT (years)",
+      breaks = log_ticks,
+      labels = mrt_ticks,
+      sec.axis = sec_axis(~ ., name = "log(MRT)", labels = function(x) round(x, 1))
+    ) +
+    scale_y_continuous(
+      labels = label_comma(),
+      expand = expansion(mult = c(0, 0.05))
+    ) +
+    theme_minimal(base_size = 12) +
+    theme(
+      panel.grid.minor   = element_blank(),
+      panel.grid.major.x = element_line(colour = "grey90", linewidth = 0.3),
+      plot.title          = element_text(size = 14, face = "bold"),
+      plot.subtitle       = element_text(size = 10, colour = "grey40"),
+      legend.position     = "right",
+      axis.title          = element_text(size = 11),
+      axis.text           = element_text(size = 9)
+    ) +
+    labs(
+      title    = "Global Distribution of Predicted SOC Mean Residence Time",
+      subtitle = sprintf(
+        "Bin colour = mean latitude of pixels in each bin · n = %s pixels",
+        format(nrow(df_hist), big.mark = ",")),
+      y = "Number of pixels"
+    )
+  
+  print(p_lat_hist)
+  
+  ggsave(
+    filename = file.path(output_dir, "MRT_histogram_by_latitude.png"),
+    plot = p_lat_hist,
+    width = 12,
+    height = 6,
+    dpi = 300,
+    bg = "white"
+  )
+  
+  cat("✓ MRT_histogram_by_latitude.png saved\n")
+  
+  # --- Also save a summary table ---
+  cat("\n  MRT distribution summary:\n")
+  cat(sprintf("    Median: %.1f years\n", median(df_hist$mrt)))
+  cat(sprintf("    Mean:   %.1f years\n", mean(df_hist$mrt)))
+  cat(sprintf("    p5-p95: %.1f - %.1f years\n",
+              quantile(df_hist$mrt, 0.05),
+              quantile(df_hist$mrt, 0.95)))
+  cat(sprintf("    p1-p99: %.1f - %.1f years\n",
+              quantile(df_hist$mrt, 0.01),
+              quantile(df_hist$mrt, 0.99)))
+  
+} else {
+  cat("! M7 prediction raster not found — skipping latitude histogram\n")
+}
+
+
+################################################################################
 cat("\n✓ Step 17 complete - all visualizations saved to:\n")
 cat(sprintf("  %s\n", output_dir))
+################################################################################

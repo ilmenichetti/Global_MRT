@@ -559,19 +559,36 @@ The authors declare no competing interests.
 \newpage
 \section*{Figures}
 
-% Fig 1 — Global MRT map (main result)
+% Fig 1 — Global MRT map (main result, log-scale palette)
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{../plots/MRT_M7_full_map.png}
+  \includegraphics[width=\textwidth]{../plots/step_17_visualizations/MRT_M7_full_map_log.png}
   \caption{%
     \textbf{Global distribution of predicted soil organic carbon mean residence
     time (MRT).}
-    % Caption text
+    Predictions from the full model (M7) at 0.1\textdegree{} resolution,
+    displayed on a log-scale colour palette to resolve spatial structure
+    within the dominant 10--50~year range. Legend tick marks are in years.
   }
   \label{fig:global_mrt}
 \end{figure}
 
-% Fig 2 — Model performance and nested comparison
+% Fig 2 — MRT distribution colored by latitude
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{../plots/step_17_visualizations/MRT_histogram_by_latitude.png}
+  \caption{%
+    \textbf{Distribution of predicted SOC mean residence time, coloured by
+    mean distance from the equator.}
+    Each histogram bin is coloured by the mean absolute latitude of the pixels
+    it contains (red = equatorial, green = polar). The bimodal structure
+    reflects a tropical/subtropical mode ($\sim$15--20~years) and a
+    boreal/temperate mode ($\sim$25--35~years).
+  }
+  \label{fig:mrt_histogram}
+\end{figure}
+
+% Fig 3 — Model performance and nested comparison
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/13_model_comparison.png}
@@ -582,7 +599,7 @@ The authors declare no competing interests.
   \label{fig:model_performance}
 \end{figure}
 
-% Fig 3 — Variable importance
+% Fig 4 — Variable importance
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/13_variable_importance.png}
@@ -593,7 +610,7 @@ The authors declare no competing interests.
   \label{fig:importance}
 \end{figure}
 
-% Fig 4 — Process dominance map
+% Fig 5 — Process dominance map
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/MRT_process_dominance_combined.png}
@@ -605,7 +622,7 @@ The authors declare no competing interests.
   \label{fig:process_dominance}
 \end{figure}
 
-% Fig 5 — ALE top 10
+% Fig 6 — ALE top 10
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/step_18_sensitivity/18D_ALE_top10_MRT.png}
@@ -617,7 +634,7 @@ The authors declare no competing interests.
   \label{fig:ale_top10}
 \end{figure}
 
-% Fig 6 — ALE by latitude band
+% Fig 7 — ALE by latitude band
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/step_18_sensitivity/18C_ALE_by_latband.png}
@@ -729,13 +746,18 @@ The authors declare no competing interests.
 
 
 % =============================================================================
-% APPENDIX
+% SUPPLEMENTARY MATERIAL
 % =============================================================================
 
 \newpage
-\appendix
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\setcounter{table}{0}
+\renewcommand{\thetable}{S\arabic{table}}
 
-\section{Supplementary figures}
+\section*{Supplementary Material}
+
+\subsection*{Supplementary figures}
 
 \begin{figure}[h!]
   \centering
@@ -748,8 +770,21 @@ The authors declare no competing interests.
   \label{fig:sampling}
 \end{figure}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{../plots/step_17_visualizations/MRT_all_models_comparison_log.png}
+  \caption{%
+    \textbf{Multi-panel comparison of predicted MRT across all seven model
+    configurations (M1--M7).}
+    Log-scale colour palette as in Fig.~\ref{fig:global_mrt}. Progressive
+    addition of variable groups visually resolves spatial structure that the
+    climate-only baseline (M1) cannot capture.
+  }
+  \label{fig:model_maps}
+\end{figure}
 
-\section{Supplementary tables}
+
+\subsection*{Supplementary tables}
 
 \begin{table}[h!]
   \centering
