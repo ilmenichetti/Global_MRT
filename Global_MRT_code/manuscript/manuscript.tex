@@ -238,6 +238,26 @@ Site-level metadata (coordinates, observation date, source database)
 were carried forward as the most common value across horizons.
 
 % -----------------------------------------------------------------------------
+\subsection{Data quality control}
+\label{sec:qc}
+% -----------------------------------------------------------------------------
+ 
+After depth standardisation, the dataset contained 381\,541 profiles from
+47~source databases spanning 78\textdegree S to 78\textdegree N. We applied
+a series of quality-control filters to remove records likely to introduce
+systematic bias into the MRT calculation. First, 83\,206 profiles
+(21.8\,\%) reported OC~$=$~0~g\,kg$^{-1}$, which in WoSIS typically
+encodes missing data rather than a true measurement; these values were set
+to \texttt{NA} and the affected profiles were removed when no valid OC
+remained. Second, 102\,379 exact duplicates (matching coordinates and OC)
+were removed (26.8\,\% of all records). Third, bulk-density values outside
+the physically plausible range ($<$~0.1 or $>$~2.5~g\,cm$^{-3}$) were set
+to \texttt{NA}. After filtering, 198\,382 profiles remained (52.0\,\% of
+the pre-QC total). Profiles with low-precision (integer-only) coordinates
+($n = 208$) and unusually high OC ($>$~100~g\,kg$^{-1}$; $n = 3\,252$)
+were flagged but retained.
+
+% -----------------------------------------------------------------------------
 \subsection{Bulk density gap-filling}
 \label{sec:bd}
 % -----------------------------------------------------------------------------
@@ -508,137 +528,168 @@ and intermediate outputs are archived at [DOI].
 
 % -----------------------------------------------------------------------------
 \subsection{Data compilation and quality control}
+\label{sec:results_data}
 % -----------------------------------------------------------------------------
-
-The initial WoSIS dataset contained 1,459,728 horizon-level records.
-After filtering to mineral soils (OC $< 120$~g~kg$^{-1}$) and
-depth-standardising to 0--20~cm, 381,541 unique soil profiles remained.
-Of these, 86,372 (22.6\%) had measured bulk density, 229,225 (60.1\%)
-received RF-predicted BD, 46,490 (12.2\%) were gap-filled with
-SoilGrids, and 19,454 (5.1\%) had no BD estimate. After computing mean
-transit times and applying quality control filters, 188,192 profiles
-(49.3\%) were classified as valid ($1 < \tau < 1000$~years); the
-remainder were excluded due to missing input data (159,654), extreme
-low values ($\tau < 1$~yr; 31,775), extreme high values
-($\tau > 1000$~yr; 1,200), or infinite values (720).
-
+ 
+The initial WoSIS extraction yielded 1\,459\,728 mineral-soil horizon
+records, which depth standardisation collapsed to 381\,541 unique profiles
+(0--20~cm). Quality-control filtering (Sect.~\ref{sec:qc}) reduced the
+dataset to 198\,382 profiles drawn from 47~source databases, with
+GLanCE.points contributing the largest share (21.1\,\%), followed by
+USDA\_NCSS (14.2\,\%), LandPKS (8.4\,\%), SISLAC (7.7\,\%), and
+Netherlands.BIS (7.4\,\%). Observation dates ranged from 1900 to~2024,
+with the majority (79\,\%) falling between~1980 and~2020. Of the
+198\,382 profiles, 38\,292 (19.3\,\%) had measured bulk density, 133\,557
+(67.3\,\%) received RF-predicted values, and 21\,830 (11.0\,\%) were
+gap-filled with SoilGrids. The steady-state MRT calculation
+(Sect.~\ref{sec:mrt}) produced valid estimates for 185\,601 profiles
+(93.6\,\%), with the remainder flagged as infinite ($n = 719$), missing
+input data ($n = 9\,486$), or outside the plausible range
+($<$~1~or~$>$~1\,000~yr; $n = 2\,576$). For model fitting, we removed
+the 1st and 99th MRT percentiles, retaining 181\,887 profiles
+(MRT range 1.9--143.9~yr). Spatial coverage spanned
+78\textdegree S--78\textdegree N and 172\textdegree W--176\textdegree E
+(Fig.~S1).
+ 
 % -----------------------------------------------------------------------------
-\subsection{Global distribution of SOC transit times}
+\subsection{Model performance}
+\label{sec:results_models}
 % -----------------------------------------------------------------------------
-
-Predicted transit times from the full model (M7) ranged from 12.6 to
-40.6~years across 631,252 land pixels at 0.1\textdegree{} resolution
-(Fig.~\ref{fig:global_mtt}), with a global mean of 21.8~years
-(SD = 4.8), a median of 20.7~years, and a 5th--95th percentile range
-of 16.0--31.3~years. The distribution was log-normal and bimodal in log
-space (Fig.~\ref{fig:mtt_histogram}): a tropical/subtropical mode
-centred near 15--20~years (dominated by low-latitude pixels) and a
-boreal/temperate mode near 25--35~years (dominated by high-latitude
-pixels). The shortest transit times occurred in tropical lowland forests
-and intensively managed croplands, while the longest were found in
-boreal and montane regions.
-
+ 
+The climate-only baseline (M1; 6~predictors) explained 28.0\,\% of the
+spatially cross-validated variance in log-transformed MRT
+($R^2_\text{CV} = 0.280$, $\text{RMSE}_\text{CV} = 0.696$;
+Table~\ref{tab:model_comparison}). Adding edaphic variables (M2)
+yielded the largest single-group improvement
+($\Delta R^2 = +0.076$), followed by biological variables (M4;
+$\Delta R^2 = +0.057$) and land-use variables (M3;
+$\Delta R^2 = +0.030$). Combining edaphic and biological variables
+with climate (M6; 28~predictors) produced the highest cross-validated
+performance ($R^2_\text{CV} = 0.380$, $\text{RMSE}_\text{CV} = 0.648$),
+with no additional gain from adding land-use variables in the full model
+(M7; $R^2_\text{CV} = 0.379$). The difference between M6 and M7
+indicates that the information carried by land-use covariates is
+largely redundant once edaphic and biological context is included.
+Across all models, out-of-bag $R^2$ was substantially higher than
+cross-validated $R^2$ (e.g.\ M7: $R^2_\text{OOB} = 0.596$ vs.\
+$R^2_\text{CV} = 0.379$), reflecting the expected penalty of
+spatially blocked validation relative to random hold-out.
+ 
+Note that sample sizes vary across models because each model requires
+complete cases for its predictor set: M1 and M3 use the near-complete
+climate and land-cover layers ($n \approx 178\,000$), whereas M4, M6,
+and M7 require microbial covariates that restrict the sample to
+$n \approx 101\,000$--$110\,000$.
+ 
+ 
 % -----------------------------------------------------------------------------
-\subsection{Model performance and nested comparison}
+\subsection{Global distribution of predicted MRT}
+\label{sec:results_map}
 % -----------------------------------------------------------------------------
-
-The climate-only baseline (M1; 6~predictors) explained 27.9\% of
-spatial variance in $\ln\,\tau$ under spatial block cross-validation
-(Table~\ref{tab:model_comparison}; Fig.~\ref{fig:model_performance}).
-Adding edaphic variables (M2; 19~predictors) raised $R^2_\text{CV}$ to
-0.355 ($\Delta R^2 = +0.076$), the largest single-group improvement.
-Adding biological variables to the climate baseline (M4; 15~predictors)
-yielded $R^2_\text{CV} = 0.336$ ($\Delta R^2 = +0.057$), while land
-use variables alone (M3; 14~predictors) contributed a smaller increment
-($R^2_\text{CV} = 0.309$, $\Delta R^2 = +0.030$). The full model (M7;
-36~predictors) achieved $R^2_\text{CV} = 0.378$
-(RMSE = 0.649 on the log scale), representing a total improvement of
-$\Delta R^2 = +0.099$ over climate alone. Notably, M6
-(Climate + Edaphic + Biological; $R^2_\text{CV} = 0.377$) performed
-nearly identically to M7, suggesting that land use variables add little
-explanatory power once edaphic and biological context is accounted for.
-
-Sample sizes varied across model configurations due to covariate
-completeness: M1 and M3 used $\sim$181,000 profiles, M2 and M5
-$\sim$161,000, and the biological models (M4, M6, M7) $\sim$102,000--112,000,
-reflecting the more limited spatial coverage of microbial datasets.
-Out-of-bag $R^2$ values were systematically higher than cross-validated
-estimates (0.53--0.60), as expected given that OOB statistics do not
-account for spatial autocorrelation.
-
+ 
+The full-model (M7) prediction, generated at 0.1\textdegree{} resolution,
+covers 631\,252 land pixels and yields a global mean MRT of
+21.6~yr (median 20.9~yr, SD~5.2~yr; Fig.~\ref{fig:global_mrt}). The
+central 90\,\% of predicted values falls between 15.0 and 31.4~yr.
+These predictions are constrained relative to the raw profile-level
+observations (profile median 18.1~yr, IQR 10.2--31.4~yr) because the
+Random Forest ensemble shrinks extreme predictions toward the sample mean.
+ 
+A clear latitudinal gradient emerged, consistent with temperature control
+on decomposition kinetics: tropical soils (K\"oppen group A) had the
+shortest median MRT (11.5~yr), followed by temperate (C, 17.2~yr),
+arid (B, 23.1~yr), continental (D, 27.0~yr), and polar soils (E,
+35.4~yr). However, within each zone, substantial variability persisted,
+indicating that climate alone does not fully determine turnover kinetics
+--- a pattern quantified by the nested model structure.
+ 
+ 
 % -----------------------------------------------------------------------------
-\subsection{Variable importance}
+\subsection{Variable importance and group contributions}
+\label{sec:results_importance}
 % -----------------------------------------------------------------------------
-
-Permutation importance from the final M7 model
-(Fig.~\ref{fig:importance}) revealed that the three most influential
-predictors were all climate variables: temperature seasonality (0.368),
-mean snow cover (0.268), and soil temperature (0.195). The fourth-ranked
-variable, however, was soil pH (0.160, Edaphic group), followed by AM
-fungal endemism (0.135, Biological). Among the top~20 predictors, 10
-belonged to the Edaphic group, 4 to Climate, 4 to Biological, and 2 to
-Land~Use.
-
-At the group level, Climate variables (6~predictors) had the highest
-mean importance (0.183) and total importance (1.100). Edaphic variables
-(13~predictors) contributed the largest total importance of any
-non-climate group (1.263), with a mean of 0.097. Biological variables
-(9~predictors) had total importance of 0.701 (mean 0.078), driven
-primarily by AM endemism, AM richness, and EcM endemism. Land~Use
-variables (8~predictors) had the lowest total (0.408) and mean (0.051)
-importance, with tree cover fraction (0.101) and shrubland fraction
-(0.081) as the only members in the top~20.
-
+ 
+Permutation importance in the full model (M7; Fig.~\ref{fig:importance})
+was dominated by three climate variables: temperature seasonality (0.361),
+mean snow cover (0.272), and soil temperature (0.179). The highest-ranked
+non-climate variables were soil pH (0.156, Edaphic) and AM fungal
+endemism (0.134, Biological). Aggregated by group, Edaphic variables
+contributed the largest total importance (1.239 across 13~variables,
+mean~0.095 per variable), followed by Climate (1.083, 6~variables,
+mean~0.180), Biological (0.687, 9~variables, mean~0.076), and
+Land Use (0.409, 8~variables, mean~0.051). Climate thus contributed
+the highest importance per predictor, while Edaphic variables dominated
+in aggregate owing to their larger number.
+ 
+Spatially, the process-dominance analysis
+(Fig.~\ref{fig:process_dominance}) reveals that edaphic factors are
+the dominant non-climate control on MRT across 44.0\,\% of the
+modelled land surface (mean absolute contribution 8.2~yr), followed by
+land-use factors (42.7\,\% of area, 7.6~yr) and biological factors
+(13.3\,\%, 5.1~yr). The spatial patterns show clear geographic
+structuring: edaphic dominance clusters in mountainous terrain and
+regions with strong soil-property gradients, land-use dominance prevails
+in the agricultural belts of the Northern Hemisphere and deforested
+tropical margins, and biological dominance is concentrated in the
+boreal zone and high-latitude ecosystems where mycorrhizal community
+composition varies sharply.
+ 
+ 
 % -----------------------------------------------------------------------------
-\subsection{Marginal effects on transit times}
+\subsection{Marginal effects on MRT}
+\label{sec:results_ale}
 % -----------------------------------------------------------------------------
-
-ALE response curves for the ten most responsive predictors
-(Fig.~\ref{fig:ale_top10}) revealed both the direction and functional
-shape of each variable's marginal effect on $\tau$. Temperature
-seasonality showed the strongest ALE range, with transit times
-increasing by $\sim$2.5~years from low- to high-seasonality
-environments. Snow cover displayed a similarly strong positive
-relationship: transit times increased monotonically with snow cover
-fraction, consistent with cold-climate suppression of decomposition.
-Soil temperature showed the expected negative relationship --- warmer
-soils had shorter transit times --- but the response saturated above
-$\sim$15\textdegree{}C.
-
-Among non-climate variables, soil pH exhibited a strong nonlinear
-response, with transit times peaking near pH~5 and declining sharply
-toward both acidic and alkaline extremes. Elevation showed a positive,
-roughly linear relationship. AM endemism displayed a negative
-relationship: higher endemism was associated with shorter transit times.
-
-Latitude-band stratification of ALE curves
-(Fig.~\ref{fig:ale_latband}) revealed that the functional responses
-of several predictors varied across climate zones. Snow cover and
-temperature seasonality effects were concentrated in northern
-temperate and boreal bands, while land cover fractions (cropland,
-grassland, trees) showed their strongest effects in the tropics.
-Biological variables (AM endemism in particular) displayed relatively
-consistent responses across latitude bands, suggesting that mycorrhizal
-community effects on transit times operate somewhat independently of
-the macroclimatic gradient.
-
-% --- Process dominance (Fig 5) ---
-
-The spatial decomposition of process-class contributions
-(Fig.~\ref{fig:process_dominance}) showed that edaphic properties
-dominated the non-climate signal across most of the global land
-surface, particularly in Europe, central Asia, and eastern Australia.
-Biological variables were the dominant non-climate contributor across
-much of the boreal zone and parts of South America. Land use effects
-were most prominent in tropical and subtropical agricultural regions.
-In many areas, two or all three process classes contributed
-simultaneously, visible as mixed colours in the CMY composite.
-
+ 
+Accumulated Local Effects (ALE) analysis quantified the marginal response
+of MRT to each continuous predictor across its observed range
+(Fig.~\ref{fig:ale_top10}). The three largest ALE effect ranges belonged
+to climate variables: temperature seasonality (8.4~yr), snow cover
+(6.0~yr), and soil temperature (3.7~yr). Among non-climate predictors,
+the strongest ALE responses were terrain elevation (1.7~yr), grassland
+fraction (1.6~yr), AM endemism (1.5~yr), fungal proportion (1.4~yr),
+cropland fraction (1.1~yr), soil moisture (1.0~yr), and AM richness
+(0.9~yr).
+ 
+Several ecologically interpretable nonlinearities emerged. Temperature
+seasonality displayed an inverted-U response, with MRT peaking at
+intermediate seasonality ($\sim$6~K) and declining at both extremes.
+Snow cover showed a step-like increase: MRT rises sharply below
+$\sim$5\,\% mean annual snow cover, consistent with a cryoprotection
+threshold effect. The fungal-proportion response was monotonically
+negative --- higher fungal dominance was associated with shorter MRT,
+suggesting that fungal-dominated decomposer communities accelerate
+turnover. AM endemism showed the opposite pattern: higher endemism
+(lower community connectivity) was associated with longer MRT,
+potentially reflecting less efficient decomposition in isolated fungal
+communities.
+ 
+Latitude-band stratification (Fig.~\ref{fig:ale_latband}) revealed
+that the ALE response to temperature seasonality is strongest in the
+Boreal/Arctic zone, where the effect range exceeds 10~yr, while in the
+Tropics the same variable has a near-zero marginal effect. Conversely,
+biological variables (AM endemism, fungal proportion) show their
+strongest ALE responses in the Northern Temperate and Boreal zones,
+consistent with the hypothesis that mycorrhizal community composition
+exerts its greatest leverage on C cycling in high-latitude ecosystems.
+ 
+Six SoilGrids-derived variables (clay, sand, bulk density, CEC,
+nitrogen, pH) showed zero ALE range despite exhibiting high permutation
+importance, owing to a known layer-selection artefact in the
+raster-based ALE computation that does not affect the model training
+or variable importance estimates (which use point-extracted values).
+ 
+ 
 % -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
+\label{sec:results_esm}
 % -----------------------------------------------------------------------------
-
+ 
+\emph{[Placeholder --- to be completed with CMIP6 comparison.]}
+ 
 % [To be completed once CMIP comparison analysis is finalised.]
+
+
+
 % =============================================================================
 \section{Discussion}
 % =============================================================================
@@ -751,11 +802,27 @@ The authors declare no competing interests.
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{../plots/MRT_process_dominance_combined.png}
-  \caption{%
-    \textbf{Spatial dominance of process classes driving SOC mean transit
-    time beyond the climate baseline.}
-  }
-  \label{fig:process_dominance}
+\caption{%
+  \textbf{Spatial dominance of non-climate process classes controlling SOC mean transit time.}
+  (a)~Climate dominance (complement of total non-climate contribution): pixels where non-climate processes add little to the M1 prediction appear purple; where they substantially alter it, orange.
+  (b)~CMY subtractive colour composite of non-climate process contributions:
+  cyan~=∣= |
+=∣M2−-
+−M1∣|
+∣ (Edaphic),
+  magenta~=∣= |
+=∣M3−-
+−M1∣|
+∣ (Land Use),
+  yellow~=∣= |
+=∣M4−-
+−M1∣|
+∣ (Biological).
+  Channels are normalised to the 98th percentile (29.0~yr) and mapped to 0--255. Mixed hues indicate co-dominance; a luminance modulation layer (blend~0.9) desaturates pixels toward white where climate dominates.
+  Predictions at 0.1\textdegree{} aggregated to 0.5\textdegree{}; borders from Natural Earth 1
+:50,m.
+}
+\label{fig:process_dominance}
 \end{figure}
 
 \begin{figure}[h!]
