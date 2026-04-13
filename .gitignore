@@ -24,11 +24,11 @@ Global_MRT_code/koppen_data/
 Global_MRT_code/hwsd_data/
 Global_MRT_code/GEE/
 Global_MRT_code/outputs/
-Global_MRT_code/plots/02_5_standardization
-Global_MRT_code/plots/02_5_standardization
 #ignore all plots subfolder (intermediates)
 Global_MRT_code/plots/*/
-
+# But keep these two
+!Global_MRT_code/plots/step_17_visualizations/
+!Global_MRT_code/plots/step_18_sensitivity/
 
 # Temporary files
 tmp/
