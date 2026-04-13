@@ -35,7 +35,8 @@ library(readr)
 PIPELINE_DIR <- "./Global_MRT_code"
 OUTPUT_DIR   <- file.path(PIPELINE_DIR, "outputs")
 
-INPUT_FILE  <- file.path(OUTPUT_DIR, "11_with_microbial.rds")
+#INPUT_FILE  <- file.path(OUTPUT_DIR, "11_with_microbial.rds")
+INPUT_FILE  <- file.path(OUTPUT_DIR, "11_5_quality_controlled.rds")
 OUTPUT_FILE <- file.path(OUTPUT_DIR, "12_with_MRT.rds")
 
 cat("═══════════════════════════════════════════════════════════════\n")

@@ -510,22 +510,139 @@ and intermediate outputs are archived at [DOI].
 \section{Results}
 % =============================================================================
 
+% -----------------------------------------------------------------------------
+\subsection{Data compilation and quality control}
+% -----------------------------------------------------------------------------
+
+The initial WoSIS dataset contained 1,459,728 horizon-level records.
+After filtering to mineral soils (OC $< 120$~g~kg$^{-1}$) and
+depth-standardising to 0--20~cm, 381,541 unique soil profiles remained.
+Of these, 86,372 (22.6\%) had measured bulk density, 229,225 (60.1\%)
+received RF-predicted BD, 46,490 (12.2\%) were gap-filled with
+SoilGrids, and 19,454 (5.1\%) had no BD estimate. After computing mean
+transit times and applying quality control filters, 188,192 profiles
+(49.3\%) were classified as valid ($1 < \tau < 1000$~years); the
+remainder were excluded due to missing input data (159,654), extreme
+low values ($\tau < 1$~yr; 31,775), extreme high values
+($\tau > 1000$~yr; 1,200), or infinite values (720).
+
+% -----------------------------------------------------------------------------
 \subsection{Global distribution of SOC transit times}
-% Global map of predicted τ; latitudinal and biome-level patterns
+% -----------------------------------------------------------------------------
 
-\subsection{Model performance}
-% Cross-validated R² and RMSE across M1--M7; incremental improvement
+Predicted transit times from the full model (M7) ranged from 12.6 to
+40.6~years across 631,252 land pixels at 0.1\textdegree{} resolution
+(Fig.~\ref{fig:global_mtt}), with a global mean of 21.8~years
+(SD = 4.8), a median of 20.7~years, and a 5th--95th percentile range
+of 16.0--31.3~years. The distribution was log-normal and bimodal in log
+space (Fig.~\ref{fig:mtt_histogram}): a tropical/subtropical mode
+centred near 15--20~years (dominated by low-latitude pixels) and a
+boreal/temperate mode near 25--35~years (dominated by high-latitude
+pixels). The shortest transit times occurred in tropical lowland forests
+and intensively managed croplands, while the longest were found in
+boreal and montane regions.
 
+% -----------------------------------------------------------------------------
+\subsection{Model performance and nested comparison}
+% -----------------------------------------------------------------------------
+
+The climate-only baseline (M1; 6~predictors) explained 27.9\% of
+spatial variance in $\ln\,\tau$ under spatial block cross-validation
+(Table~\ref{tab:model_comparison}; Fig.~\ref{fig:model_performance}).
+Adding edaphic variables (M2; 19~predictors) raised $R^2_\text{CV}$ to
+0.355 ($\Delta R^2 = +0.076$), the largest single-group improvement.
+Adding biological variables to the climate baseline (M4; 15~predictors)
+yielded $R^2_\text{CV} = 0.336$ ($\Delta R^2 = +0.057$), while land
+use variables alone (M3; 14~predictors) contributed a smaller increment
+($R^2_\text{CV} = 0.309$, $\Delta R^2 = +0.030$). The full model (M7;
+36~predictors) achieved $R^2_\text{CV} = 0.378$
+(RMSE = 0.649 on the log scale), representing a total improvement of
+$\Delta R^2 = +0.099$ over climate alone. Notably, M6
+(Climate + Edaphic + Biological; $R^2_\text{CV} = 0.377$) performed
+nearly identically to M7, suggesting that land use variables add little
+explanatory power once edaphic and biological context is accounted for.
+
+Sample sizes varied across model configurations due to covariate
+completeness: M1 and M3 used $\sim$181,000 profiles, M2 and M5
+$\sim$161,000, and the biological models (M4, M6, M7) $\sim$102,000--112,000,
+reflecting the more limited spatial coverage of microbial datasets.
+Out-of-bag $R^2$ values were systematically higher than cross-validated
+estimates (0.53--0.60), as expected given that OOB statistics do not
+account for spatial autocorrelation.
+
+% -----------------------------------------------------------------------------
 \subsection{Variable importance}
-% Permutation importance ranking for M7; group-level contributions
+% -----------------------------------------------------------------------------
 
+Permutation importance from the final M7 model
+(Fig.~\ref{fig:importance}) revealed that the three most influential
+predictors were all climate variables: temperature seasonality (0.368),
+mean snow cover (0.268), and soil temperature (0.195). The fourth-ranked
+variable, however, was soil pH (0.160, Edaphic group), followed by AM
+fungal endemism (0.135, Biological). Among the top~20 predictors, 10
+belonged to the Edaphic group, 4 to Climate, 4 to Biological, and 2 to
+Land~Use.
+
+At the group level, Climate variables (6~predictors) had the highest
+mean importance (0.183) and total importance (1.100). Edaphic variables
+(13~predictors) contributed the largest total importance of any
+non-climate group (1.263), with a mean of 0.097. Biological variables
+(9~predictors) had total importance of 0.701 (mean 0.078), driven
+primarily by AM endemism, AM richness, and EcM endemism. Land~Use
+variables (8~predictors) had the lowest total (0.408) and mean (0.051)
+importance, with tree cover fraction (0.101) and shrubland fraction
+(0.081) as the only members in the top~20.
+
+% -----------------------------------------------------------------------------
 \subsection{Marginal effects on transit times}
-% ALE curves; top-10 most responsive; nonlinearities; latitude bands
+% -----------------------------------------------------------------------------
 
+ALE response curves for the ten most responsive predictors
+(Fig.~\ref{fig:ale_top10}) revealed both the direction and functional
+shape of each variable's marginal effect on $\tau$. Temperature
+seasonality showed the strongest ALE range, with transit times
+increasing by $\sim$2.5~years from low- to high-seasonality
+environments. Snow cover displayed a similarly strong positive
+relationship: transit times increased monotonically with snow cover
+fraction, consistent with cold-climate suppression of decomposition.
+Soil temperature showed the expected negative relationship --- warmer
+soils had shorter transit times --- but the response saturated above
+$\sim$15\textdegree{}C.
+
+Among non-climate variables, soil pH exhibited a strong nonlinear
+response, with transit times peaking near pH~5 and declining sharply
+toward both acidic and alkaline extremes. Elevation showed a positive,
+roughly linear relationship. AM endemism displayed a negative
+relationship: higher endemism was associated with shorter transit times.
+
+Latitude-band stratification of ALE curves
+(Fig.~\ref{fig:ale_latband}) revealed that the functional responses
+of several predictors varied across climate zones. Snow cover and
+temperature seasonality effects were concentrated in northern
+temperate and boreal bands, while land cover fractions (cropland,
+grassland, trees) showed their strongest effects in the tropics.
+Biological variables (AM endemism in particular) displayed relatively
+consistent responses across latitude bands, suggesting that mycorrhizal
+community effects on transit times operate somewhat independently of
+the macroclimatic gradient.
+
+% --- Process dominance (Fig 5) ---
+
+The spatial decomposition of process-class contributions
+(Fig.~\ref{fig:process_dominance}) showed that edaphic properties
+dominated the non-climate signal across most of the global land
+surface, particularly in Europe, central Asia, and eastern Australia.
+Biological variables were the dominant non-climate contributor across
+much of the boreal zone and parts of South America. Land use effects
+were most prominent in tropical and subtropical agricultural regions.
+In many areas, two or all three process classes contributed
+simultaneously, visible as mixed colours in the CMY composite.
+
+% -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
-% Spatial patterns of ESM--observation divergence
+% -----------------------------------------------------------------------------
 
-
+% [To be completed once CMIP comparison analysis is finalised.]
 % =============================================================================
 \section{Discussion}
 % =============================================================================
