@@ -23,12 +23,14 @@ Global_MRT_code/microbial_data/
 Global_MRT_code/koppen_data/
 Global_MRT_code/hwsd_data/
 Global_MRT_code/GEE/
+Global_MRT_code/cmip6/
 Global_MRT_code/outputs/
 #ignore all plots subfolder (intermediates)
 Global_MRT_code/plots/*/
 # But keep these two
 !Global_MRT_code/plots/step_17_visualizations/
 !Global_MRT_code/plots/step_18_sensitivity/
+!Global_MRT_code/plots/step_20/
 
 # Temporary files
 tmp/
