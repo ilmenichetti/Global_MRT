@@ -1,5 +1,5 @@
 % =============================================================================
-% Global SOC Mean Transit Time — Manuscript
+% Global SOC Mean Transit Time --- Manuscript
 % =============================================================================
 
 \documentclass[12pt, a4paper]{article}
@@ -43,7 +43,7 @@
 
 \affil[1]{Natural Resources Institute Finland (Luke), Helsinki, Finland}
 \affil[2]{Affiliation 2}
-\affil[2]{Affiliation 3}
+\affil[3]{Affiliation 3}
 
 \date{}
 
@@ -52,7 +52,7 @@
 \maketitle
 
 \begin{abstract}
-% ~250 words — to be written
+% ~250 words --- to be written
 \end{abstract}
 
 \bigskip
@@ -144,8 +144,8 @@ observable, bulk transit time) and exploring its spatial covariance
 with environmental covariates may introduce less structural error when
 extrapolating, precisely because it does not commit to a specific
 internal process architecture that may be incomplete or wrong.
-Introducing the zonality of SOC dynamics directly into models (
-parameterising transit times as spatially varying,
+Introducing the zonality of SOC dynamics directly into models
+(parameterising transit times as spatially varying,
 reflecting local ecological context) could be a way to capture this
 missing variance without the risks of mechanistic overspecification.
 
@@ -161,10 +161,15 @@ groups (climate, edaphic, land use, and biological) where the
 change in performance between the climate-only baseline (M1) and the
 full model (M7) directly quantifies the ``missing zonality'' that
 current ESMs do not represent. The steady-state assumption is a known
-simplification done under the expectations that over a dataset of this size and geographic scope, errors from non-equilibrium sites are expected to partially cancel. Accumulated
-Local Effects analysis identifies the marginal response of transit times
-to individual predictors, revealing the functional shape of the
-relationships, information that could inform how zonality might eventually be parameterised. The resulting observation-constrained maps provide a benchmark for identifying where and why ESMs might systematically diverge from data-driven estimates.
+simplification done under the expectations that over a dataset of this
+size and geographic scope, errors from non-equilibrium sites are
+expected to partially cancel. Accumulated Local Effects analysis
+identifies the marginal response of transit times to individual
+predictors, revealing the functional shape of the relationships,
+information that could inform how zonality might eventually be
+parameterised. The resulting observation-constrained maps provide a
+benchmark for identifying where and why ESMs might systematically
+diverge from data-driven estimates.
 
 
 % =============================================================================
@@ -241,7 +246,7 @@ were carried forward as the most common value across horizons.
 \subsection{Data quality control}
 \label{sec:qc}
 % -----------------------------------------------------------------------------
- 
+
 After depth standardisation, the dataset contained 381\,541 profiles from
 47~source databases spanning 78\textdegree S to 78\textdegree N. We applied
 a series of quality-control filters to remove records likely to introduce
@@ -357,8 +362,12 @@ Soil properties were obtained from SoilGrids 250\,m v2.0
 \citep{Poggio2021}, depth-weighted to 0--20~cm: clay content, sand
 content, bulk density, coarse fragment volume, pH~(H$_2$O), cation
 exchange capacity, and total nitrogen. All values were converted from
-SoilGrids integer encoding to standard units using published scale
-factors.
+SoilGrids integer encoding to standard units using published
+\texttt{d\_factor} scale factors (divisor~10 for texture, pH, CEC, and
+coarse fragment volume; divisor~100 for bulk density and nitrogen).
+Scale conversion was applied consistently to both point-extracted
+training data and raster layers used for global prediction and
+sensitivity analysis.
 
 Terrain metrics were derived from the Copernicus GLO-30 Digital
 Elevation Model \citep{CopernicusDEM2022}, aggregated to
@@ -499,7 +508,8 @@ additionally computed within four latitude bands: southern extratropics
 % -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
 \label{sec:esm}
- 
+% -----------------------------------------------------------------------------
+
 To place our observation-constrained $\tau$ estimates in the context of
 current Earth system model (ESM) behaviour, we compiled and harmonised
 soil carbon turnover diagnostics from six CMIP6 models, each
@@ -508,19 +518,19 @@ following the model-selection strategy of \citet{Varney2022}: CESM2
 (CLM5; NCAR), UKESM1-0-LL (JULES; MOHC), IPSL-CM6A-LR (ORCHIDEE;
 IPSL), MPI-ESM1-2-LR (JSBACH; MPI-M), CanESM5 (CLASS-CTEM; CCCma),
 and MIROC-ES2L (VISIT-e; MIROC).
- 
+
 For each model we extracted monthly \texttt{cSoil} (total soil carbon
 stock) and \texttt{rh} (heterotrophic respiration) from the
 \texttt{r1i1p1f1} historical ensemble member and computed the
 climatological mean over 1980--2014. Effective soil carbon turnover time
 was calculated as the quasi-equilibrium ratio
 \citep{Koven2017,Carvalhais2014}:
- 
+
 \begin{equation}
   \tau_\text{ESM} \;=\; \frac{\text{cSoil}}{\text{rh}}
   \label{eq:tau_esm}
 \end{equation}
- 
+
 \noindent
 with \texttt{rh} converted from kg\,C\,m$^{-2}$\,s$^{-1}$ to an annual
 flux (kg\,C\,m$^{-2}$\,yr$^{-1}$). Because CESM2 reports \texttt{cSoil}
@@ -533,7 +543,7 @@ across the ensemble; these are unavoidable in cross-ESM $\tau$
 comparisons and are the reason we emphasise relative spatial structure
 rather than absolute values in our analysis
 \citep[see also][]{Varney2022}.
- 
+
 All model outputs were bilinearly regridded onto a common
 1\textdegree{} global grid (WGS84). Pixels with
 $\tau_\text{ESM} < 1$~yr or $> 10\,000$~yr were masked as physically
@@ -541,7 +551,7 @@ implausible. We then computed the six-member ensemble mean and the
 across-model standard deviation as a measure of structural disagreement
 among LSMs. For comparison with the RF~M7 prediction, we reprojected
 the RF map to the same 1\textdegree{} grid.
- 
+
 To compare spatial structure on a common basis across products with
 different absolute magnitudes, we computed area-weighted zonal means of
 $\tau$ in 1\textdegree{} latitude bands for each product and applied two
@@ -559,9 +569,7 @@ product the coefficient of variation across land pixels, the
 95th-to-5th percentile ratio, and the standard deviation of
 $\ln \tau$ (Appendix Table~\ref{tab:esm_dispersion}).
 
-
-
------------------------------------------------------------------------------
+% -----------------------------------------------------------------------------
 \subsection{Software and reproducibility}
 \label{sec:software}
 % -----------------------------------------------------------------------------
@@ -575,9 +583,9 @@ download, \texttt{ggplot2} for visualisation, and
 \texttt{dplyr}/\texttt{tidyr} for data manipulation. ERA5-Land data
 were downloaded from the Copernicus Climate Data Store; SoilGrids layers
 were accessed via ISRIC's cloud-optimised GeoTIFF service. The analysis
-pipeline consists of 18~numbered R~scripts executing sequentially from
-data loading through global prediction and sensitivity analysis. Code
-and intermediate outputs are archived at [DOI].
+pipeline consists of 20~numbered R~scripts executing sequentially from
+data loading through global prediction, sensitivity analysis, and ESM
+benchmarking. Code and intermediate outputs are archived at [DOI].
 
 
 % =============================================================================
@@ -588,7 +596,7 @@ and intermediate outputs are archived at [DOI].
 \subsection{Data compilation and quality control}
 \label{sec:results_data}
 % -----------------------------------------------------------------------------
- 
+
 The initial WoSIS extraction yielded 1\,459\,728 mineral-soil horizon
 records, which depth standardisation collapsed to 381\,541 unique profiles
 (0--20~cm). Quality-control filtering (Sect.~\ref{sec:qc}) reduced the
@@ -600,20 +608,20 @@ with the majority (79\,\%) falling between~1980 and~2020. Of the
 198\,382 profiles, 38\,292 (19.3\,\%) had measured bulk density, 133\,557
 (67.3\,\%) received RF-predicted values, and 21\,830 (11.0\,\%) were
 gap-filled with SoilGrids. The steady-state MRT calculation
-(Sect.~\ref{sec:mrt}) produced valid estimates for 185\,601 profiles
+(Sect.~\ref{sec:mtt_calc}) produced valid estimates for 185\,601 profiles
 (93.6\,\%), with the remainder flagged as infinite ($n = 719$), missing
 input data ($n = 9\,486$), or outside the plausible range
 ($<$~1~or~$>$~1\,000~yr; $n = 2\,576$). For model fitting, we removed
 the 1st and 99th MRT percentiles, retaining 181\,887 profiles
 (MRT range 1.9--143.9~yr). Spatial coverage spanned
 78\textdegree S--78\textdegree N and 172\textdegree W--176\textdegree E
-(Fig.~S1).
- 
+(Fig.~\ref{fig:sampling}).
+
 % -----------------------------------------------------------------------------
 \subsection{Model performance}
 \label{sec:results_models}
 % -----------------------------------------------------------------------------
- 
+
 The climate-only baseline (M1; 6~predictors) explained 28.0\,\% of the
 spatially cross-validated variance in log-transformed MRT
 ($R^2_\text{CV} = 0.280$, $\text{RMSE}_\text{CV} = 0.696$;
@@ -623,7 +631,7 @@ yielded the largest single-group improvement
 $\Delta R^2 = +0.057$) and land-use variables (M3;
 $\Delta R^2 = +0.030$). Combining edaphic and biological variables
 with climate (M6; 28~predictors) produced the highest cross-validated
-performance ($R^2_\text{CV} = 0.380$, $\text{RMSE}_\text{CV} = 0.648$),
+performance ($R^2_\text{CV} = 0.379$, $\text{RMSE}_\text{CV} = 0.648$),
 with no additional gain from adding land-use variables in the full model
 (M7; $R^2_\text{CV} = 0.379$). The difference between M6 and M7
 indicates that the information carried by land-use covariates is
@@ -632,119 +640,140 @@ Across all models, out-of-bag $R^2$ was substantially higher than
 cross-validated $R^2$ (e.g.\ M7: $R^2_\text{OOB} = 0.596$ vs.\
 $R^2_\text{CV} = 0.379$), reflecting the expected penalty of
 spatially blocked validation relative to random hold-out.
- 
+
 Note that sample sizes vary across models because each model requires
 complete cases for its predictor set: M1 and M3 use the near-complete
 climate and land-cover layers ($n \approx 178\,000$), whereas M4, M6,
 and M7 require microbial covariates that restrict the sample to
 $n \approx 101\,000$--$110\,000$.
- 
- 
+
 % -----------------------------------------------------------------------------
 \subsection{Global distribution of predicted MRT}
 \label{sec:results_map}
 % -----------------------------------------------------------------------------
- 
+
 The full-model (M7) prediction, generated at 0.1\textdegree{} resolution,
-covers 631\,252 land pixels and yields a global mean MRT of
-21.6~yr (median 20.9~yr, SD~5.2~yr; Fig.~\ref{fig:global_mrt}). The
-central 90\,\% of predicted values falls between 15.0 and 31.4~yr.
-These predictions are constrained relative to the raw profile-level
-observations (profile median 18.1~yr, IQR 10.2--31.4~yr) because the
-Random Forest ensemble shrinks extreme predictions toward the sample mean.
- 
-A clear latitudinal gradient emerged, consistent with temperature control
-on decomposition kinetics: tropical soils (K\"oppen group A) had the
-shortest median MRT (11.5~yr), followed by temperate (C, 17.2~yr),
-arid (B, 23.1~yr), continental (D, 27.0~yr), and polar soils (E,
-35.4~yr). However, within each zone, substantial variability persisted,
-indicating that climate alone does not fully determine turnover kinetics
---- a pattern quantified by the nested model structure.
- 
- 
+covers 631\,252 land pixels and yields a global mean MRT of 22.3~yr
+(median 21.4~yr; Fig.~\ref{fig:global_mrt}). Predicted values span
+3.7--67.0~yr across the global domain. A clear latitudinal gradient
+emerged, consistent with temperature control on decomposition kinetics:
+the shortest MRT values (below 15~yr) are concentrated in tropical
+lowland forests and intensively managed croplands, while the longest
+(above 35~yr) occur in boreal forests, montane terrain, and cold
+continental interiors. Within each latitudinal band, substantial
+regional structure persists --- notably the Pampas--Patagonia
+transition, the Tibetan Plateau, the Sahel, and the central-Asian
+drylands --- indicating that climate alone does not determine turnover
+kinetics and that non-climatic processes modulate the climate baseline
+in spatially organised ways, a pattern quantified by the nested model
+structure below.
+
 % -----------------------------------------------------------------------------
-\subsection{Variable importance and group contributions}
+\subsection{Variable importance and process contribution}
 \label{sec:results_importance}
 % -----------------------------------------------------------------------------
- 
+
 Permutation importance in the full model (M7; Fig.~\ref{fig:importance})
-was dominated by three climate variables: temperature seasonality (0.361),
-mean snow cover (0.272), and soil temperature (0.179). The highest-ranked
-non-climate variables were soil pH (0.156, Edaphic) and AM fungal
-endemism (0.134, Biological). Aggregated by group, Edaphic variables
-contributed the largest total importance (1.239 across 13~variables,
-mean~0.095 per variable), followed by Climate (1.083, 6~variables,
-mean~0.180), Biological (0.687, 9~variables, mean~0.076), and
-Land Use (0.409, 8~variables, mean~0.051). Climate thus contributed
-the highest importance per predictor, while Edaphic variables dominated
-in aggregate owing to their larger number.
- 
-Spatially, the process-dominance analysis
-(Fig.~\ref{fig:process_dominance}) reveals that edaphic factors are
-the dominant non-climate control on MRT across 44.0\,\% of the
-modelled land surface (mean absolute contribution 8.2~yr), followed by
-land-use factors (42.7\,\% of area, 7.6~yr) and biological factors
-(13.3\,\%, 5.1~yr). The spatial patterns show clear geographic
-structuring: edaphic dominance clusters in mountainous terrain and
-regions with strong soil-property gradients, land-use dominance prevails
-in the agricultural belts of the Northern Hemisphere and deforested
-tropical margins, and biological dominance is concentrated in the
-boreal zone and high-latitude ecosystems where mycorrhizal community
-composition varies sharply.
- 
- 
+was dominated by three climate variables: temperature seasonality
+(0.361), mean snow cover (0.272), and soil temperature (0.179). The
+highest-ranked non-climate variables were soil pH (0.156, Edaphic),
+AM fungal endemism (0.134, Biological), terrain elevation (0.130,
+Edaphic), and sand content (0.128, Edaphic). Aggregated by process
+group, Edaphic variables contributed the largest total importance
+(1.24 across 13 variables, mean 0.095 per variable), followed by
+Climate (1.08 across 6 variables, mean 0.180), Biological (0.69
+across 9 variables, mean 0.076), and Land Use (0.41 across 8
+variables, mean 0.051). Climate thus contributed the highest
+importance per predictor, while Edaphic variables dominated in
+aggregate owing to their larger number.
+
+Spatially, the per-pixel magnitude of prediction adjustment
+($|M_i - M_1|$) introduced by each non-climate process group
+(Fig.~\ref{fig:process_contribution}) provides a complementary view.
+Mean absolute adjustments were 4.6~yr for Edaphic, 7.6~yr for Land Use,
+and 5.1~yr for Biological, with maxima reaching 69~yr (Edaphic),
+93~yr (Land Use), and 75~yr (Biological). The two metrics --- permutation
+importance and per-pixel adjustment magnitude --- give consistent but
+not identical pictures: Edaphic modulation is spatially pervasive and
+moderate in magnitude, clustering in regions with strong soil-property
+gradients (mountainous terrain, the Mediterranean basin, Central Asian
+drylands, the Pampas--Patagonia transition); Land-Use modulation
+produces the largest per-pixel shifts but concentrates at
+categorical land-cover boundaries (agricultural belts, deforestation
+fronts, high-latitude fire/forest-disturbance mosaics); Biological
+modulation is subtler in magnitude but geographically organised,
+emerging most strongly in boreal and temperate ecosystems where
+mycorrhizal community composition varies sharply. This distinction is
+itself informative: Edaphic variables refine $\tau$ through
+spatially pervasive but locally modest modulation, whereas Land Use
+produces fewer but larger categorical offsets. Consistent with this,
+Land Use contributes relatively little unique variance (M6 vs.\ M7
+$\Delta R^2 \approx 0$) once Edaphic and Biological context are
+included, despite producing the largest local prediction shifts ---
+indicating that much of the Land-Use signal is redundant with
+Edaphic and Climate information when assessed at the
+variance-explained level.
+
 % -----------------------------------------------------------------------------
 \subsection{Marginal effects on MRT}
 \label{sec:results_ale}
 % -----------------------------------------------------------------------------
- 
-Accumulated Local Effects (ALE) analysis quantified the marginal response
-of MRT to each continuous predictor across its observed range
-(Fig.~\ref{fig:ale_top10}). The three largest ALE effect ranges belonged
-to climate variables: temperature seasonality (8.4~yr), snow cover
-(6.0~yr), and soil temperature (3.7~yr). Among non-climate predictors,
-the strongest ALE responses were terrain elevation (1.7~yr), grassland
-fraction (1.6~yr), AM endemism (1.5~yr), fungal proportion (1.4~yr),
-cropland fraction (1.1~yr), soil moisture (1.0~yr), and AM richness
-(0.9~yr).
- 
+
+Accumulated Local Effects (ALE) analysis quantified the marginal
+response of MRT to each continuous predictor across its observed range
+(Fig.~\ref{fig:ale_top10}). The three largest ALE effect ranges again
+belonged to climate variables --- temperature seasonality (10.0~yr),
+snow cover (8.0~yr), and soil temperature (4.9~yr). Among non-climate
+predictors, four edaphic variables entered the top ten: sand content
+(4.8~yr), terrain elevation (2.7~yr), soil pH (2.4~yr), and bulk
+density (2.2~yr). Fungal proportion (2.3~yr) and AM endemism (1.8~yr)
+were the leading biological responses. Potential evaporation (1.8~yr)
+closed the top ten.
+
 Several ecologically interpretable nonlinearities emerged. Temperature
-seasonality displayed an inverted-U response, with MRT peaking at
-intermediate seasonality ($\sim$6~K) and declining at both extremes.
-Snow cover showed a step-like increase: MRT rises sharply below
-$\sim$5\,\% mean annual snow cover, consistent with a cryoprotection
-threshold effect. The fungal-proportion response was monotonically
-negative --- higher fungal dominance was associated with shorter MRT,
-suggesting that fungal-dominated decomposer communities accelerate
-turnover. AM endemism showed the opposite pattern: higher endemism
-(lower community connectivity) was associated with longer MRT,
-potentially reflecting less efficient decomposition in isolated fungal
-communities.
- 
-Latitude-band stratification (Fig.~\ref{fig:ale_latband}) revealed
-that the ALE response to temperature seasonality is strongest in the
-Boreal/Arctic zone, where the effect range exceeds 10~yr, while in the
-Tropics the same variable has a near-zero marginal effect. Conversely,
-biological variables (AM endemism, fungal proportion) show their
-strongest ALE responses in the Northern Temperate and Boreal zones,
-consistent with the hypothesis that mycorrhizal community composition
-exerts its greatest leverage on C cycling in high-latitude ecosystems.
- 
-Six SoilGrids-derived variables (clay, sand, bulk density, CEC,
-nitrogen, pH) showed zero ALE range despite exhibiting high permutation
-importance, owing to a known layer-selection artefact in the
-raster-based ALE computation that does not affect the model training
-or variable importance estimates (which use point-extracted values).
- 
- 
+seasonality displayed a saturating positive response, with MRT
+rising sharply between 1 and 6~K and plateauing above $\sim$10~K. Snow
+cover showed a step-like increase near $\sim$50\,\% mean annual cover,
+consistent with a cryoprotection threshold. Soil temperature
+exhibited a U-shaped response: MRT declined from cold to mesic
+conditions (0--20\textdegree{}C) and rose again at very warm soil
+temperatures, likely reflecting moisture limitation in warm arid
+environments. Sand content displayed a strongly monotonic negative
+response: a shift from clay-rich (20\,\%) to sand-rich (80\,\%) soils
+reduced predicted MRT by nearly 5 years, consistent with the loss of
+mineral-surface stabilisation capacity in coarse-textured soils. Bulk
+density showed a threshold response: low-density soils
+($<$~1~g\,cm$^{-3}$) had substantially longer MRT, declining sharply
+above this threshold and plateauing in typical mineral soil densities
+(1.1--1.6~g\,cm$^{-3}$). Soil pH exhibited a rising inverted-U: MRT
+increased from acidic soils (pH 4--5) to a peak near pH 7.5--8,
+declining at more alkaline values. Fungal proportion had a distinct
+threshold: MRT was near-neutral below a fungal biomass fraction of
+$\sim$0.2, then dropped sharply by $\sim$2~yr above that threshold,
+indicating that fungal-dominated decomposer communities are associated
+with substantially faster bulk SOC turnover. AM endemism showed an
+inverted-U, with longest MRT at intermediate endemism values.
+
+Latitude-band stratification (Fig.~\ref{fig:ale_latband}) revealed that
+the ALE response to temperature seasonality is strongest in the
+Boreal/Arctic zone, while in the Tropics the same variable has a
+near-zero marginal effect --- a zonal pattern also visible in the soil
+pH response, which has its steepest rise in boreal and northern
+temperate bands. Biological responses (AM endemism, fungal proportion)
+are comparatively consistent across latitude bands, consistent with
+mycorrhizal community composition exerting a pervasive influence on
+SOC cycling that operates largely independently of the macroclimatic
+gradient.
+
 % -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
 \label{sec:results_esm}
- 
+% -----------------------------------------------------------------------------
+
 Comparison of our observation-constrained $\tau$ map with the six-member
 CMIP6 ensemble reveals substantial divergence in both absolute magnitude
 and the spatial organisation of turnover time.
- 
+
 In absolute terms, the ESMs predict a much wider dynamic range of
 zonal-mean $\tau$ than RF~M7 (Appendix Fig.~\ref{fig:esm_profile}).
 The CMIP6 ensemble mean spans roughly 5--10~yr in tropical latitudes to
@@ -754,10 +783,10 @@ models (notably CESM2, IPSL-CM6A-LR, MPI-ESM1-2-LR) exceeding
 zonal means, by contrast, vary only between approximately 15 and
 50~yr across the same latitudinal domain, a 3--5-fold range. The
 pixel-level dispersion statistics
-(Appendix Table~\ref{tab:esm_dispersion}) confirm that ESMs have larger
-absolute spatial variance in $\tau$ than our observation-constrained
+(Appendix Table~\ref{tab:esm_dispersion}) confirm that ESMs have
+larger absolute spatial variance in $\tau$ than our observation-constrained
 estimate, but that this variance is highly skewed toward a polar tail.
- 
+
 When each product is rescaled to its own range to isolate spatial
 structure from absolute magnitude (Fig.~\ref{fig:esm_heatmap}), a
 qualitatively different picture emerges. The CMIP6 ensemble mean and
@@ -775,57 +804,189 @@ distributed across all latitudes, with identifiable signals in the
 subtropics, northern temperate zone, boreal zone, and southern mid-
 to high-latitudes --- features that are compressed or absent in the
 ESM columns.
- 
+
 Taken together, these results indicate that ESMs and the
 observation-constrained estimate disagree not only on the magnitude of
 $\tau$ but, more diagnostically, on how its spatial variation is
 \emph{organised}: ESMs concentrate variation in a high-latitude
 extremum, whereas the observation-constrained estimate distributes it
 across biomes.
- 
-
 
 
 % =============================================================================
 \section{Discussion}
 % =============================================================================
 
-% ¶1: Climate dominance — confirmation and nuance
-% ¶2: Edaphic controls — pH, texture, terrain; mineral-organic associations
-% ¶3: Biological controls — mycorrhizal and fungal community effects
-% ¶4: Land use and disturbance — direction and magnitude
-% ¶5: The missing zonality — ESM implications; recommendations
-% ¶6: Limitations — equilibrium assumption (cancellation over large N),
-%     single-pool simplification (Sierra 2018), data density bias,
-%     covariate correlation, temporal representativeness
+\paragraph{Climate dominates, but not alone.}
+The nested analysis confirms climate as the single most important
+control on SOC transit times globally: temperature seasonality, snow
+cover, and soil temperature occupy the top three slots by both
+permutation importance and ALE effect range. Yet climate explains only
+28\,\% of the spatially cross-validated variance in $\ln \tau$, leaving
+a further 10~percentage points captured by non-climatic process
+classes. The residual is not statistical noise; it has a geographically
+organised structure identified by the ALE analysis and visible in the
+spatial pattern of non-climate prediction adjustments
+(Fig.~\ref{fig:process_contribution}).
 
+\paragraph{Edaphic context is the largest non-climate signal.}
+Adding edaphic variables produces the single largest $\Delta R^2$ and
+the largest aggregate permutation importance of any non-climate group.
+Sand content, soil pH, bulk density, and CEC all appear in the top 10
+ALE responses, each with an interpretable ecological mechanism.
+Sand-rich soils turn over faster because coarse texture limits
+organo-mineral stabilisation; low bulk density is associated with
+longer $\tau$, consistent with porous, structured, aggregated soils
+protecting carbon from decomposers; CEC rises with $\tau$, reflecting
+the role of exchangeable cation saturation in stabilising organic
+matter on mineral surfaces.
 
-\paragraph{ESM benchmarking and the missing zonality.}
- 
-The comparison with the CMIP6 ensemble highlights a systematic
-structural difference consistent with the zonality hypothesis advanced
-in this study. Current ESMs express nearly all of their spatial
-variation in soil carbon turnover time as a polar extremum set against
-a broadly uniform lower-latitude background, whereas the
-observation-constrained estimate shows structured variation distributed
-across climate zones. This is the pattern expected if ESMs capture the
-dominant first-order temperature sensitivity of decomposition but miss
-the edaphic, biological, and land-use controls identified by the
-nested RF analysis as meaningful secondary structure. The polar
-$\tau$ extremum in ESMs is driven by cold-extrapolated Q$_{10}$
-kinetics acting on large permafrost carbon pools
-\citep{Varney2022,Koven2017}; while this extremum is not necessarily
-wrong in magnitude, its dominance of the ESM ensemble's apparent spatial
-structure masks the absence of the mid-latitude and sub-tropical
-zonality that the observations reveal. The concrete implication for
-ESM development is that reproducing the global-mean $\tau$ or the
-polar tail is insufficient: a model consistent with observations must
-also reproduce the moderate but organised $\tau$ contrasts that arise
-in temperate and tropical biomes from non-climatic controls. The fact
-that CanESM5 and MIROC-ES2L, alone among the six LSMs, show a
-continuously distributed latitudinal gradient hints that structural
-choices at the LSM level --- not just parameter values --- may govern
-whether models can in principle represent this zonality.
+\paragraph{pH as a microbial--edaphic bridge.}
+The pH response peaking near 7.5--8 and declining at extremes is
+noteworthy because pH is conventionally considered an edaphic variable
+but in practice acts as a strong control on microbial community
+composition, particularly the fungi-to-bacteria biomass ratio. Our
+permutation-importance ranking places pH at position~4 globally, and
+in the latitude-band ALE it is most responsive in northern temperate
+and boreal soils --- zones where acidic, fungi-dominated forest soils
+co-occur with the short MRT values our model predicts there. This is
+consistent with an alternative interpretation in which pH, fungal
+proportion, and MRT form a single coupled axis of variation:
+lower-pH ecosystems sustain higher fungal dominance and, at the bulk
+soil scale, faster turnover. The inverse relationship between fungal
+proportion and MRT visible in Fig.~\ref{fig:ale_top10} reinforces this
+reading. A parallel mineral-phase interpretation is also plausible ---
+near-neutral to mildly alkaline soils often coincide with
+carbonate-rich parent material and calcium-bridging stabilisation ---
+but the microbial route is the more parsimonious explanation given the
+independent fungal signal.
+
+\paragraph{Biological context through mycorrhizal structure.}
+Biological variables contribute the second largest $\Delta R^2$
+despite the group having only 9 predictors, indicating high information
+per variable. AM endemism and AM richness are the strongest
+contributors; root colonisation rates (AM and EcM) are not in the top
+ranks despite their mechanistic prominence in the literature.
+This suggests that the biogeographic \emph{composition} and
+diversity-structure of mycorrhizal communities --- rather than the
+quantity of root colonisation --- modulate bulk SOC turnover, in line
+with recent work emphasising fungal community diversity over standing
+stock.
+
+\paragraph{Land use: large local shifts, redundant information.}
+The M6 vs.~M7 comparison shows essentially no additional variance
+explained by Land Use once Edaphic and Biological context are
+included ($\Delta R^2 < 0.001$). Yet at the pixel level, Land Use
+produces the largest magnitude of prediction adjustment
+(mean~7.6~yr). These two findings are not contradictory but
+complementary: Land Use variables shift $\tau$ substantially in
+specific places (cropland mosaics, deforestation fronts, high-latitude
+burn scars), but that shift is largely predictable from soil-property
+and microbial-community signatures that accompany land-use
+transitions. Interpretively, this opens a causal ambiguity that the
+observational design cannot resolve: does land use \emph{cause}
+edaphic and biological change (agricultural conversion alters pH,
+texture, mycorrhizal communities), do both respond jointly to shared
+drivers (climate, topography), or do both operate independently and
+simply co-vary? At the 0.1\textdegree{} resolution and with
+contemporary snapshot covariates, the three readings are
+observationally equivalent. What we can say is that, for the purpose
+of predicting $\tau$, land use adds little that is not already carried
+by other variables.
+
+\paragraph{Process contribution is geographically organised.}
+The per-pixel prediction-adjustment map
+(Fig.~\ref{fig:process_contribution}) shows that non-climate
+contributions are not scattered randomly but organised into
+recognisable regional patterns: edaphic modulation clusters in
+mountainous and arid-gradient regions, land-use modulation in
+agricultural and disturbance mosaics, biological modulation in the
+boreal zone and parts of the southern temperate belt. This is the
+spatial signature anticipated by the zonality hypothesis: the residual
+of climate-only prediction is geographically structured, and different
+process classes express themselves preferentially in different biomes.
+
+\paragraph{SOC zonality as an underutilised framework.}
+Across all these results, a common thread emerges: the spatial
+structure of SOC turnover time is an emergent property of local
+ecological context, not a universal kinetic constant modulated by
+climate scalars alone. We suggest that treating SOC decay
+\emph{zonality} as a working conceptual framework --- analogous to the
+pedogenic zonality that has long organised soil classification --- may
+help unify the mechanistic findings of the past two decades into a
+more predictive synthesis. Unlike a single corrective multiplier on
+climate-driven $\tau$, a zonal framework would represent different
+regions as having distinct combinations of climate, edaphic,
+biological, and land-use modulation, each with its own functional
+shape. The fact that each process class peaks in a different
+biogeographic zone implies that such a framework cannot be collapsed
+into a global average; it must be spatially explicit.
+
+\paragraph{ALE and the shape of zonality.}
+Permutation importance tells us \emph{whether} a variable matters,
+but not how. ALE analysis provides the functional form of each
+predictor's marginal effect on $\tau$, which is the information a
+future parameterisation would need. The specific nonlinearities we
+identify --- threshold effects (snow cover, bulk density, fungal
+proportion), saturating positive responses (temperature seasonality),
+monotonic declines (sand), and rising inverted-U shapes (pH, AM
+endemism) --- each correspond to recognisable mechanistic classes:
+phase transitions, rate-limiting saturation, single-process dominance,
+and two-competing-process balances. These shapes are directly
+translatable into mathematical functional forms, and provide a concrete
+target for how zonality might eventually be parameterised in
+mechanistic SOC models.
+
+\paragraph{Zonality of zonality: latitude-band stratification.}
+A subtler but equally important finding is that the functional shapes
+themselves vary across biomes. The temperature-seasonality response is
+steep in the boreal zone and flat in the tropics; soil pH has its
+strongest marginal effect in temperate and boreal soils; biological
+responses are more uniform across latitudes. This means that a single
+global ALE curve per predictor would still underspecify the zonality
+we identify: parameterisations informed by these results would need to
+be latitude- or biome-dependent, not merely spatially varying in
+predictor values.
+
+\paragraph{ESM benchmarking and the missing mid-latitude structure.}
+The comparison with the CMIP6 ensemble highlights a structural
+difference consistent with the zonality framework. Current ESMs
+express nearly all of their spatial $\tau$ variation as a polar
+extremum set against a broadly uniform lower-latitude background,
+whereas the observation-constrained estimate shows structured
+variation distributed across climate zones. ESMs appear to capture
+the first-order temperature sensitivity of decomposition but miss the
+mid-latitude and sub-tropical structure our ALE analysis attributes to
+edaphic, biological, and land-use controls. We note this as a
+diagnostic observation rather than a critique: the zonality framework
+may offer a useful target against which to evaluate and improve
+soil-carbon representations, with the specific functional shapes
+identified here as one possible entry point.
+
+\paragraph{Limitations.}
+Several caveats apply. The steady-state assumption underlying our
+$\tau$ calculation is a simplification, not strictly true for
+individual sites; we rely on the assumption that non-equilibrium
+errors partially cancel across the $\sim$180\,000-profile dataset and
+that the resulting bulk diagnostic remains directly comparable to ESM
+$\tau$ output. The single-pool formulation conflates pools with
+different turnover rates \citep{Sierra2018}. The BNPP allocation
+fractions used to estimate carbon input are literature-based constants
+that do not capture site-specific root allocation dynamics. Training
+data is spatially uneven, with dense sampling in North America and
+Europe and sparser coverage in tropical Africa and high-latitude Asia,
+so predictions in data-poor regions should be interpreted with
+caution. Predictor correlations --- particularly among climate,
+edaphic, and land-use variables --- are an inherent feature of the
+observational design and cannot be fully disentangled without
+experimental or temporal replication. Finally, the CMIP6 comparison
+is complicated by residual depth and pool-definition differences
+between the 0--20\,cm observational estimate and the effective soil
+depths represented by different ESMs, which is why we focus on
+relative spatial structure rather than absolute magnitude. These
+limitations motivate future work focused on time-resolved transit
+times, experimental manipulations that could disentangle correlated
+drivers, and targeted sampling in the most undersampled regions.
 
 
 % =============================================================================
@@ -833,10 +994,14 @@ whether models can in principle represent this zonality.
 % =============================================================================
 
 % 1. SOC transit times vary widely and are not explained by climate alone
-% 2. Edaphic/biological/land-use variables explain X% additional variance
-% 3. ALE reveals distinct marginal responses; key nonlinearities
+% 2. Edaphic/biological/land-use variables explain ~10 percentage points
+%    additional variance; process contributions are geographically organised
+% 3. ALE reveals ecologically interpretable nonlinearities (threshold,
+%    saturating, monotonic, inverted-U responses)
 % 4. Transit times exhibit spatial zonality analogous to pedogenic zonality
-% 5. Observation-constrained τ maps provide benchmark for ESM improvement
+%    --- an underutilised framework with concrete parameterisation targets
+% 5. Observation-constrained $\tau$ maps provide a structural benchmark for
+%    evaluating and improving ESM representations of soil carbon cycling
 
 
 % =============================================================================
@@ -856,7 +1021,7 @@ cited in the text.
 
 \section*{Code availability}
 
-The complete R analysis pipeline (18~scripts) is archived at
+The complete R analysis pipeline (20~scripts) is archived at
 [DOI/repository].
 
 \section*{Acknowledgements}
@@ -887,7 +1052,7 @@ The authors declare no competing interests.
     displayed on a log-scale colour palette to resolve spatial structure
     within the dominant 10--50~year range. Legend tick marks are in years.
   }
-  \label{fig:global_mtt}
+  \label{fig:global_mrt}
 \end{figure}
 
 \begin{figure}[h!]
@@ -925,28 +1090,31 @@ The authors declare no competing interests.
 
 \begin{figure}[h!]
   \centering
-  \includegraphics[width=\textwidth]{../plots/MRT_process_dominance_combined.png}
-\caption{%
-  \textbf{Spatial dominance of non-climate process classes controlling SOC mean transit time.}
-  (a)~Climate dominance (complement of total non-climate contribution): pixels where non-climate processes add little to the M1 prediction appear purple; where they substantially alter it, orange.
-  (b)~CMY subtractive colour composite of non-climate process contributions:
-  cyan~=∣= |
-=∣M2−-
-−M1∣|
-∣ (Edaphic),
-  magenta~=∣= |
-=∣M3−-
-−M1∣|
-∣ (Land Use),
-  yellow~=∣= |
-=∣M4−-
-−M1∣|
-∣ (Biological).
-  Channels are normalised to the 98th percentile (29.0~yr) and mapped to 0--255. Mixed hues indicate co-dominance; a luminance modulation layer (blend~0.9) desaturates pixels toward white where climate dominates.
-  Predictions at 0.1\textdegree{} aggregated to 0.5\textdegree{}; borders from Natural Earth 1
-:50,m.
-}
-\label{fig:process_dominance}
+  \includegraphics[width=\textwidth]{../plots/MRT_process_contribution_CMY.png}
+  \caption{%
+    \textbf{Magnitude of non-climate prediction adjustments to SOC mean
+    transit time.}
+    Per-pixel absolute difference between each process-group model and the
+    climate-only baseline ($|M_i - M_1|$, in years), rendered as a CMY
+    subtractive colour composite: cyan~$= |M_2 - M_1|$ (Edaphic),
+    magenta~$= |M_3 - M_1|$ (Land Use), yellow~$= |M_4 - M_1|$ (Biological).
+    Channel intensities are normalised to the 98th percentile of the pooled
+    three-group distribution (29.0~yr) and mapped to 0--255. White indicates
+    regions where climate alone explains most of the prediction (little
+    non-climate adjustment in any channel); mixed hues indicate co-modulation
+    (blue~$=$~Edaphic+LandUse, red~$=$~LandUse+Biological,
+    green~$=$~Edaphic+Biological); saturated/black indicates strong
+    simultaneous modulation by all three groups. A luminance modulation
+    (blend strength~0.6) additionally washes regions toward white where
+    total non-climate adjustment is small, emphasising regions with
+    substantive non-climate signal. This figure shows the \emph{magnitude}
+    of local prediction adjustment, not statistical dominance or variance
+    explained; for variance partitioning see
+    Table~\ref{tab:model_comparison} and Fig.~\ref{fig:importance}.
+    Predictions at 0.1\textdegree{} aggregated to 0.5\textdegree{}; borders
+    from Natural Earth 1:50\,m.
+  }
+  \label{fig:process_contribution}
 \end{figure}
 
 \begin{figure}[h!]
@@ -992,7 +1160,6 @@ The authors declare no competing interests.
   }
   \label{fig:esm_heatmap}
 \end{figure}
- 
 
 
 \newpage
@@ -1014,13 +1181,13 @@ The authors declare no competing interests.
     Model & Variable groups & $n_\text{pred}$ & $R^2_\text{CV}$ &
     RMSE$_\text{CV}$ & $R^2_\text{OOB}$ & $\Delta R^2$ \\
     \midrule
-    M1 & Climate                            &  6 & & & & --- \\
-    M2 & Climate + Edaphic                  & 19 & & & & \\
-    M3 & Climate + Land Use                 & 14 & & & & \\
-    M4 & Climate + Biological               & 15 & & & & \\
-    M5 & Climate + Edaphic + Land Use       & 27 & & & & \\
-    M6 & Climate + Edaphic + Biological     & 28 & & & & \\
-    M7 & Full model                         & 36 & & & & \\
+    M1 & Climate                            &  6 & 0.280 & 0.696 & 0.532 & ---    \\
+    M2 & Climate + Edaphic                  & 19 & 0.356 & 0.660 & 0.574 & +0.076 \\
+    M3 & Climate + Land Use                 & 14 & 0.310 & 0.683 & 0.548 & +0.030 \\
+    M4 & Climate + Biological               & 15 & 0.337 & 0.670 & 0.565 & +0.057 \\
+    M5 & Climate + Edaphic + Land Use       & 27 & 0.362 & 0.657 & 0.580 & +0.082 \\
+    M6 & Climate + Edaphic + Biological     & 28 & 0.379 & 0.648 & 0.594 & +0.099 \\
+    M7 & Full model                         & 36 & 0.379 & 0.649 & 0.596 & +0.099 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1116,13 +1283,12 @@ The authors declare no competing interests.
   \caption{%
     \textbf{Multi-panel comparison of predicted mean transit time across
     all seven model configurations (M1--M7).}
-    Log-scale colour palette as in Fig.~\ref{fig:global_mtt}. Progressive
+    Log-scale colour palette as in Fig.~\ref{fig:global_mrt}. Progressive
     addition of variable groups visually resolves spatial structure that
     the climate-only baseline (M1) cannot capture.
   }
   \label{fig:model_maps}
 \end{figure}
-
 
 \begin{figure}[h!]
   \centering
@@ -1136,13 +1302,12 @@ The authors declare no competing interests.
     (solid red). Light blue shading denotes the inter-model spread
     (minimum to maximum across the six CMIP6 members in each latitude
     band). CMIP6 outputs are historical climatological means
-    1980--2014. The much wider dynamic range of CMIP6 models relative to
-    RF~M7 is the magnitude counterpart to the structural comparison
+    1980--2014. The much wider dynamic range of CMIP6 models relative
+    to RF~M7 is the magnitude counterpart to the structural comparison
     shown in Fig.~\ref{fig:esm_heatmap}.
   }
   \label{fig:esm_profile}
 \end{figure}
-
 
 \subsection*{Supplementary tables}
 
@@ -1169,6 +1334,38 @@ The authors declare no competing interests.
     Moss/lichen           & 100 & 0.60 \\
     \midrule
     \textit{Default (missing)}  & --- & 0.40 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h!]
+  \centering
+  \small
+  \caption{%
+    \textbf{Magnitude-free measures of spatial dispersion in $\tau$
+    across products.}
+    Computed over all valid land pixels on the common 1\textdegree{}
+    grid for each product. CV~=~coefficient of variation (SD/mean);
+    $\tau_{95}/\tau_{5}$~=~ratio of 95th to 5th percentile;
+    SD$_{\ln \tau}$~=~standard deviation of natural-log-transformed $\tau$,
+    the dispersion measure most insensitive to extreme tails. Values to
+    be inserted from \texttt{outputs/cmip6/cmip6\_dispersion\_stats.csv}.
+  }
+  \label{tab:esm_dispersion}
+  \begin{tabular}{llcccc}
+    \toprule
+    Product & LSM & Mean $\tau$ (yr) & CV & $\tau_{95}/\tau_{5}$ &
+    SD$_{\ln \tau}$ \\
+    \midrule
+    CESM2          & CLM5         & \ldots & \ldots & \ldots & \ldots \\
+    UKESM1-0-LL    & JULES        & \ldots & \ldots & \ldots & \ldots \\
+    IPSL-CM6A-LR   & ORCHIDEE     & \ldots & \ldots & \ldots & \ldots \\
+    MPI-ESM1-2-LR  & JSBACH       & \ldots & \ldots & \ldots & \ldots \\
+    CanESM5        & CLASS-CTEM   & \ldots & \ldots & \ldots & \ldots \\
+    MIROC-ES2L     & VISIT-e      & \ldots & \ldots & \ldots & \ldots \\
+    \midrule
+    CMIP6 ensemble & ---          & \ldots & \ldots & \ldots & \ldots \\
+    RF~M7 (this study) & ---      & \ldots & \ldots & \ldots & \ldots \\
     \bottomrule
   \end{tabular}
 \end{table}

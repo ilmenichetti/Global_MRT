@@ -1,0 +1,68 @@
+This is BibTeX, Version 0.99d (TeX Live 2023)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: manuscript.aux
+The style file: apalike.bst
+Database file #1: references.bib
+You're missing a field name---line 314 of file references.bib
+ : 
+ : %   author  = {Varney, Rebecca M. and Chadburn, Sarah E. and
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+You're missing a field name---line 327 of file references.bib
+ : 
+ : %   author  = {Koven, C. D. and Hugelius, G. and Lawrence, D. M. and
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--to sort, need author or key in Varney2022
+Warning--to sort, need author or key in Koven2017
+Warning--empty author in Varney2022
+Warning--empty year in Varney2022
+Warning--empty title in Varney2022
+Warning--empty journal in Varney2022
+Warning--empty author in Koven2017
+Warning--empty year in Koven2017
+Warning--empty title in Koven2017
+Warning--empty journal in Koven2017
+Warning--empty journal in Zanaga2022
+You've used 24 entries,
+            1935 wiz_defined-function locations,
+            630 strings with 10012 characters,
+and the built_in function-call counts, 12380 in all, are:
+= -- 1107
+> -- 889
+< -- 6
++ -- 336
+- -- 330
+* -- 1244
+:= -- 2218
+add.period$ -- 68
+call.type$ -- 24
+change.case$ -- 282
+chr.to.int$ -- 24
+cite$ -- 37
+duplicate$ -- 323
+empty$ -- 638
+format.name$ -- 360
+if$ -- 2257
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 21
+newline$ -- 119
+num.names$ -- 66
+pop$ -- 258
+preamble$ -- 1
+purify$ -- 285
+quote$ -- 0
+skip$ -- 239
+stack$ -- 0
+substring$ -- 701
+swap$ -- 20
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 144
+warning$ -- 11
+while$ -- 76
+width$ -- 0
+write$ -- 295
+(There were 2 error messages)
