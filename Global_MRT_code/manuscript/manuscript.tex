@@ -499,11 +499,69 @@ additionally computed within four latitude bands: southern extratropics
 % -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
 \label{sec:esm}
-% -----------------------------------------------------------------------------
+ 
+To place our observation-constrained $\tau$ estimates in the context of
+current Earth system model (ESM) behaviour, we compiled and harmonised
+soil carbon turnover diagnostics from six CMIP6 models, each
+representing a structurally distinct land surface model (LSM) lineage
+following the model-selection strategy of \citet{Varney2022}: CESM2
+(CLM5; NCAR), UKESM1-0-LL (JULES; MOHC), IPSL-CM6A-LR (ORCHIDEE;
+IPSL), MPI-ESM1-2-LR (JSBACH; MPI-M), CanESM5 (CLASS-CTEM; CCCma),
+and MIROC-ES2L (VISIT-e; MIROC).
+ 
+For each model we extracted monthly \texttt{cSoil} (total soil carbon
+stock) and \texttt{rh} (heterotrophic respiration) from the
+\texttt{r1i1p1f1} historical ensemble member and computed the
+climatological mean over 1980--2014. Effective soil carbon turnover time
+was calculated as the quasi-equilibrium ratio
+\citep{Koven2017,Carvalhais2014}:
+ 
+\begin{equation}
+  \tau_\text{ESM} \;=\; \frac{\text{cSoil}}{\text{rh}}
+  \label{eq:tau_esm}
+\end{equation}
+ 
+\noindent
+with \texttt{rh} converted from kg\,C\,m$^{-2}$\,s$^{-1}$ to an annual
+flux (kg\,C\,m$^{-2}$\,yr$^{-1}$). Because CESM2 reports \texttt{cSoil}
+integrated over the full simulated soil column whereas the remaining
+models report stocks of shallower effective depth, we substituted
+\texttt{cSoilAbove1m} for CESM2 to improve vertical comparability with
+both the other ESMs and our 0--20~cm observation-based estimate. We
+acknowledge that residual depth and pool-definition differences persist
+across the ensemble; these are unavoidable in cross-ESM $\tau$
+comparisons and are the reason we emphasise relative spatial structure
+rather than absolute values in our analysis
+\citep[see also][]{Varney2022}.
+ 
+All model outputs were bilinearly regridded onto a common
+1\textdegree{} global grid (WGS84). Pixels with
+$\tau_\text{ESM} < 1$~yr or $> 10\,000$~yr were masked as physically
+implausible. We then computed the six-member ensemble mean and the
+across-model standard deviation as a measure of structural disagreement
+among LSMs. For comparison with the RF~M7 prediction, we reprojected
+the RF map to the same 1\textdegree{} grid.
+ 
+To compare spatial structure on a common basis across products with
+different absolute magnitudes, we computed area-weighted zonal means of
+$\tau$ in 1\textdegree{} latitude bands for each product and applied two
+normalisations. In the main text (Fig.~\ref{fig:esm_heatmap}) we apply a
+per-product min--max normalisation,
+$\tau_\text{norm} = (\tau - \tau_\text{min})/(\tau_\text{max} -
+\tau_\text{min})$, which rescales every product to the interval
+$[0, 1]$ and thereby exposes the \emph{shape} of each product's
+latitudinal distribution independent of its absolute range. In the
+appendix (Fig.~\ref{fig:esm_profile}) we show the un-normalised zonal
+profiles on a logarithmic axis to preserve magnitude information. To
+complement these visualisations with magnitude-free quantitative
+measures of spatial dispersion, we additionally computed for each
+product the coefficient of variation across land pixels, the
+95th-to-5th percentile ratio, and the standard deviation of
+$\ln \tau$ (Appendix Table~\ref{tab:esm_dispersion}).
 
-[To be completed once CMIP comparison analysis is finalised.]
 
-% -----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
 \subsection{Software and reproducibility}
 \label{sec:software}
 % -----------------------------------------------------------------------------
@@ -682,11 +740,49 @@ or variable importance estimates (which use point-extracted values).
 % -----------------------------------------------------------------------------
 \subsection{ESM benchmarking}
 \label{sec:results_esm}
-% -----------------------------------------------------------------------------
  
-\emph{[Placeholder --- to be completed with CMIP6 comparison.]}
+Comparison of our observation-constrained $\tau$ map with the six-member
+CMIP6 ensemble reveals substantial divergence in both absolute magnitude
+and the spatial organisation of turnover time.
  
-% [To be completed once CMIP comparison analysis is finalised.]
+In absolute terms, the ESMs predict a much wider dynamic range of
+zonal-mean $\tau$ than RF~M7 (Appendix Fig.~\ref{fig:esm_profile}).
+The CMIP6 ensemble mean spans roughly 5--10~yr in tropical latitudes to
+several hundred years at high northern latitudes, with individual
+models (notably CESM2, IPSL-CM6A-LR, MPI-ESM1-2-LR) exceeding
+1000~yr in polar bands --- a 50--100-fold latitudinal range. RF~M7
+zonal means, by contrast, vary only between approximately 15 and
+50~yr across the same latitudinal domain, a 3--5-fold range. The
+pixel-level dispersion statistics
+(Appendix Table~\ref{tab:esm_dispersion}) confirm that ESMs have larger
+absolute spatial variance in $\tau$ than our observation-constrained
+estimate, but that this variance is highly skewed toward a polar tail.
+ 
+When each product is rescaled to its own range to isolate spatial
+structure from absolute magnitude (Fig.~\ref{fig:esm_heatmap}), a
+qualitatively different picture emerges. The CMIP6 ensemble mean and
+four of the six individual LSMs (CESM2, UKESM1-0-LL, IPSL-CM6A-LR,
+MPI-ESM1-2-LR) place the overwhelming majority of their latitudinal
+domain --- from the tropics through the mid-latitudes and into most of
+the boreal zone --- in the lower portion of their own normalised range,
+with the upper end of the scale confined to a narrow band of pixels at
+high northern latitudes. Only CanESM5 (CLASS-CTEM) and MIROC-ES2L
+(VISIT-e) show a gradual and continuously distributed latitudinal
+gradient. MPI-ESM1-2-LR additionally produces a localised arid
+subtropical $\tau$ maximum near 20--30\textdegree{}~N, not reproduced
+by any other model. RF~M7, in contrast, expresses structured variation
+distributed across all latitudes, with identifiable signals in the
+subtropics, northern temperate zone, boreal zone, and southern mid-
+to high-latitudes --- features that are compressed or absent in the
+ESM columns.
+ 
+Taken together, these results indicate that ESMs and the
+observation-constrained estimate disagree not only on the magnitude of
+$\tau$ but, more diagnostically, on how its spatial variation is
+\emph{organised}: ESMs concentrate variation in a high-latitude
+extremum, whereas the observation-constrained estimate distributes it
+across biomes.
+ 
 
 
 
@@ -702,6 +798,34 @@ or variable importance estimates (which use point-extracted values).
 % ¶6: Limitations — equilibrium assumption (cancellation over large N),
 %     single-pool simplification (Sierra 2018), data density bias,
 %     covariate correlation, temporal representativeness
+
+
+\paragraph{ESM benchmarking and the missing zonality.}
+ 
+The comparison with the CMIP6 ensemble highlights a systematic
+structural difference consistent with the zonality hypothesis advanced
+in this study. Current ESMs express nearly all of their spatial
+variation in soil carbon turnover time as a polar extremum set against
+a broadly uniform lower-latitude background, whereas the
+observation-constrained estimate shows structured variation distributed
+across climate zones. This is the pattern expected if ESMs capture the
+dominant first-order temperature sensitivity of decomposition but miss
+the edaphic, biological, and land-use controls identified by the
+nested RF analysis as meaningful secondary structure. The polar
+$\tau$ extremum in ESMs is driven by cold-extrapolated Q$_{10}$
+kinetics acting on large permafrost carbon pools
+\citep{Varney2022,Koven2017}; while this extremum is not necessarily
+wrong in magnitude, its dominance of the ESM ensemble's apparent spatial
+structure masks the absence of the mid-latitude and sub-tropical
+zonality that the observations reveal. The concrete implication for
+ESM development is that reproducing the global-mean $\tau$ or the
+polar tail is insufficient: a model consistent with observations must
+also reproduce the moderate but organised $\tau$ contrasts that arise
+in temperate and tropical biomes from non-climatic controls. The fact
+that CanESM5 and MIROC-ES2L, alone among the six LSMs, show a
+continuously distributed latitudinal gradient hints that structural
+choices at the LSM level --- not just parameter values --- may govern
+whether models can in principle represent this zonality.
 
 
 % =============================================================================
@@ -845,6 +969,31 @@ The authors declare no competing interests.
   \label{fig:ale_latband}
 \end{figure}
 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{../plots/step_20/fig_latitude_heatmap_relative.png}
+  \caption{%
+    \textbf{Relative latitudinal structure of soil carbon turnover time
+    across the CMIP6 ensemble and the observation-constrained estimate.}
+    Zonal-mean $\tau$ in 1\textdegree{} latitude bands (area-weighted)
+    is shown for the CMIP6 six-member ensemble mean, each individual
+    CMIP6 model (with its land surface model in parentheses), and the
+    RF~M7 prediction from this study. Each column has been min--max
+    normalised to the interval $[0, 1]$ (0~=~the shortest zonal $\tau$
+    produced by that product; 1~=~the longest). This normalisation
+    equalises the absolute range across products and exposes
+    differences in the \emph{spatial organisation} of $\tau$ but
+    necessarily compresses magnitude information; see
+    Fig.~\ref{fig:esm_profile} and Table~\ref{tab:esm_dispersion}
+    (Appendix) for the corresponding magnitude comparison. CMIP6
+    outputs are 1980--2014 climatological means; RF~M7 prediction at
+    0.1\textdegree{} was aggregated to 1\textdegree{} for this
+    comparison.
+  }
+  \label{fig:esm_heatmap}
+\end{figure}
+ 
+
 
 \newpage
 \section*{Tables}
@@ -973,6 +1122,27 @@ The authors declare no competing interests.
   }
   \label{fig:model_maps}
 \end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\textwidth]{../plots/step_20/fig_latitudinal_profile.png}
+  \caption{%
+    \textbf{Absolute latitudinal profile of soil carbon turnover time:
+    CMIP6 ensemble and RF~M7.}
+    Area-weighted zonal-mean $\tau$ (years, logarithmic axis) for each
+    of the six CMIP6 models (muted colours), the six-member ensemble
+    mean (dashed blue), and the RF~M7 prediction from this study
+    (solid red). Light blue shading denotes the inter-model spread
+    (minimum to maximum across the six CMIP6 members in each latitude
+    band). CMIP6 outputs are historical climatological means
+    1980--2014. The much wider dynamic range of CMIP6 models relative to
+    RF~M7 is the magnitude counterpart to the structural comparison
+    shown in Fig.~\ref{fig:esm_heatmap}.
+  }
+  \label{fig:esm_profile}
+\end{figure}
+
 
 \subsection*{Supplementary tables}
 
