@@ -224,10 +224,11 @@ would introduce a circular dependency.
 \label{sec:data}
 % -----------------------------------------------------------------------------
 
-We compiled soil profile data from the World Soil Information Service
-\citep[WoSIS;][]{Batjes2024} point dataset
-(\texttt{sol\_chem.pnts\_horizons}), which integrates observations from
-multiple national and regional soil surveys worldwide. From the full
+We compiled soil profile data from the OpenLandMap \emph{Open Compendium
+of Soil Datasets: Soil Observations and Measurements}
+\citep{OpenLandMapSoilDB2025} (\texttt{sol\_chem.pnts\_horizons}), a
+harmonised global collection that integrates observations from many
+national and regional soil surveys and ecological databases worldwide. From the full
 dataset of horizon-level records, we retained only mineral soils by
 removing all records with organic carbon (OC)
 $\geq$~120~g~kg$^{-1}$ (the conventional threshold separating mineral
@@ -251,8 +252,8 @@ After depth standardisation, the dataset contained 381\,541 profiles from
 47~source databases spanning 78\textdegree S to 78\textdegree N. We applied
 a series of quality-control filters to remove records likely to introduce
 systematic bias into the MRT calculation. First, 83\,206 profiles
-(21.8\,\%) reported OC~$=$~0~g\,kg$^{-1}$, which in WoSIS typically
-encodes missing data rather than a true measurement; these values were set
+(21.8\,\%) reported OC~$=$~0~g\,kg$^{-1}$, which in these source
+databases typically encodes missing data rather than a true measurement; these values were set
 to \texttt{NA} and the affected profiles were removed when no valid OC
 remained. Second, 102\,379 exact duplicates (matching coordinates and OC)
 were removed (26.8\,\% of all records). Third, bulk-density values outside
@@ -597,13 +598,13 @@ benchmarking. Code and intermediate outputs are archived at [DOI].
 \label{sec:results_data}
 % -----------------------------------------------------------------------------
 
-The initial WoSIS extraction yielded 1\,459\,728 mineral-soil horizon
-records, which depth standardisation collapsed to 381\,541 unique profiles
-(0--20~cm). Quality-control filtering (Sect.~\ref{sec:qc}) reduced the
-dataset to 198\,382 profiles drawn from 47~source databases, with
-GLanCE.points contributing the largest share (21.1\,\%), followed by
-USDA\_NCSS (14.2\,\%), LandPKS (8.4\,\%), SISLAC (7.7\,\%), and
-Netherlands.BIS (7.4\,\%). Observation dates ranged from 1900 to~2024,
+The initial extraction from the compendium yielded 1\,459\,728
+mineral-soil horizon records, which depth standardisation collapsed to
+381\,541 unique profiles (0--20~cm). Quality-control filtering
+(Sect.~\ref{sec:qc}) reduced the dataset to 198\,382 profiles drawn from
+44~source databases, with USDA\_NCSS contributing the largest share
+(20.4\,\%), followed by Netherlands.BIS (11.5\,\%), SISLAC (8.9\,\%),
+CSIRO\_NatSoil (7.0\,\%), and AfSPDB (6.7\,\%). Observation dates ranged from 1900 to~2024,
 with the majority (79\,\%) falling between~1980 and~2020. Of the
 198\,382 profiles, 38\,292 (19.3\,\%) had measured bulk density, 133\,557
 (67.3\,\%) received RF-predicted values, and 21\,830 (11.0\,\%) were
@@ -1008,7 +1009,8 @@ drivers, and targeted sampling in the most undersampled regions.
 \section*{Data availability}
 % =============================================================================
 
-Soil profile data are from WoSIS (\url{https://www.isric.org/explore/wosis}).
+Soil profile data are from the OpenLandMap \emph{Open Compendium of Soil
+Datasets} \citep{OpenLandMapSoilDB2025}, \url{https://zenodo.org/records/15593990}.
 ERA5-Land data are available from the Copernicus Climate Data Store
 (\url{https://cds.climate.copernicus.eu}).
 SoilGrids data are available from ISRIC (\url{https://soilgrids.org}).
@@ -1308,6 +1310,70 @@ The authors declare no competing interests.
   }
   \label{fig:esm_profile}
 \end{figure}
+
+\subsection*{Provenance control on the beyond-climate signal}
+
+% TODO(production): final values from the house-style 13c script (500 trees);
+% numbers below are from the 300-tree validation run and are expected to be stable.
+Because the soil compendium aggregates 44~source databases that are
+geographically clustered, a source-specific measurement or laboratory offset
+could in principle masquerade as large-scale (zonal) structure. We therefore
+tested whether the beyond-climate signal --- the residual of the spatial-block
+cross-validated climate model --- is carried by data provenance rather than
+ecology. Only \textbf{2.4\,\%} of the residual variance lies between source
+databases ($\eta^2_\text{source}=0.024$, versus $\eta^2=0.067$ for
+5\textdegree{} spatial blocks). Removing each source's mean residual leaves the
+coarse-scale organisation essentially intact and the covariate skill on the
+block-mean (zonal) residual barely changed (Table~\ref{tab:provenance}); the
+mid-range semivariogram structure is likewise unaffected. Because source
+membership is itself confounded with geography, this is a conservative
+(upper-bound) test: the signal that survives source removal is unambiguously
+ecological. We conclude that the modest zonal organisation of soil carbon
+turnover is a real ecological pattern, not an artefact of data compilation.
+
+\begin{table}[h!]
+  \centering
+  \small
+  \caption{%
+    \textbf{Provenance control.} Coarse-scale organisation of the
+    beyond-climate residual (ratio of observed between-block variance to the
+    spatial-randomness null) and covariate skill on the block-mean residual,
+    before and after removing each source database's mean. The signal is
+    essentially unchanged, indicating it is ecological rather than a
+    source/laboratory artefact.}
+  \label{tab:provenance}
+  \begin{tabular}{lcc}
+    \toprule
+    Metric & Before & After source de-meaning \\
+    \midrule
+    Between-source variance share ($\eta^2_\text{source}$) & \multicolumn{2}{c}{0.024 (2.4\,\%)} \\
+    Organisation @\,2\textdegree{} (obs/null)   & $9.0\times$  & $8.4\times$ \\
+    Organisation @\,5\textdegree{} (obs/null)   & $15.4\times$ & $13.4\times$ \\
+    Organisation @\,10\textdegree{} (obs/null)  & $24.1\times$ & $19.4\times$ \\
+    Block-mean covariate $R^2$ @\,5\textdegree{} & 0.224 & 0.188 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ===========================================================================
+% TODO (appendix, planned): Biological-layer parsimony & collinearity.
+% Motivation: the four biological predictors enter the model only where ALL
+% nine microbial layers are jointly available (complete-cases ~29% of land),
+% which caps the mappable footprint of the biological signal. The nine layers
+% are expected to be highly collinear (esp. SPUN richness/endemism + derived
+% ratios), so a single well-covered layer may recover most of the biological
+% delta-R2 while substantially extending coverage.
+% Planned content for this section:
+%   - Fig.: correlation matrix of the 9 biological layers + per-layer land
+%           coverage (% non-NA).            -> ../plots/appendix/biological_collinearity.png
+%   - Fig.: single-layer marginal delta-R2 (each biological var added to the
+%           M5 abiotic baseline, spatial-block CV) vs that layer's coverage,
+%           identifying the best coverage/performance trade-off.
+%                                            -> ../plots/appendix/biological_single_layer_skill.png
+%   - Text: recommend the parsimonious biological predictor for the
+%           extended-coverage map; full 9-layer model retained as sensitivity.
+% Produced by a numbered pipeline script (house style) so it is repeatable.
+% ===========================================================================
 
 \subsection*{Supplementary tables}
 

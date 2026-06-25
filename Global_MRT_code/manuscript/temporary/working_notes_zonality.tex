@@ -1,0 +1,436 @@
+% =============================================================================
+% WORKING NOTES (not for submission) --- internal memo
+% Zonality of SOC turnover: storyline development + diagnostic investigation
+% Session 2026-06-25 (Lorenzo + Claude). Standalone-compilable.
+% =============================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue!60!black}
+\usepackage{enumitem}
+\setlength{\parskip}{0.4em}
+
+\title{\textbf{Working notes: the zonality of SOC turnover}\\[2pt]
+\large Storyline decision and diagnostic investigation of the prediction maps}
+\author{Internal memo --- L.\ Menichetti (with Claude Code)}
+\date{2026-06-25 \quad\textcolor{red}{\small DRAFT / NOT FOR CIRCULATION}}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Purpose.} Capture the state of the discussion so we can resume
+cleanly. This documents (i)~the chosen storyline, (ii)~what we learned trying to
+build a global ``zonality'' map, (iii)~a diagnostic investigation of the
+prediction pipeline (including two false alarms and one real issue), and
+(iv)~where the story now stands and the next concrete step.
+
+% =============================================================================
+\section{Storyline decision}
+% =============================================================================
+
+We commit to \textbf{framing~A}: the \emph{zonality of SOC decay} as an
+\emph{interpretive framework}, presented as the main contribution. The argument:
+SOC persistence is an emergent ecosystem property (Schmidt et al.\ 2011); if so, transit times
+($\tau$) carry a spatially structured residual \emph{beyond climate}, analogous
+to classical pedogenic zonality. The deliverable that turns this from slogan into
+tool is an observation-constrained \emph{map} of that beyond-climate modulation.
+
+Supporting roles: the global $\tau$ map and CMIP6/ESM contrast are the
+empirical payload (B); the edaphic/mycorrhizal mechanism is the interpretive
+texture (C). The ESM comparison is \emph{repositioned} from ``validation'' to
+``motivating illustration'' (ESMs concentrate $\tau$ variation in a polar
+extremum and lack mid-latitude structure); this removes the dependence of the
+headline on the depth/pool comparability caveat, since the load-bearing claim
+becomes how spatial variation is \emph{organised}, not its absolute magnitude.
+
+% =============================================================================
+\section{Building the zonality map: what works and what fails}
+% =============================================================================
+
+We must define ``zone'' \emph{from the data}. We tested several constructions and
+scored each by how much of the \textbf{observed climate-residual} of
+$\ln\tau$ they explain (point level, out-of-bag; $\eta^2$ = between-zone variance
+fraction). Residual variance $\approx 0.32$ (on the biological subset).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Construction & explains observed climate-residual & verdict\\
+\midrule
+Continuous RF modulation (M7$-$M1) & \textbf{13.4\%} (ceiling) & validated signal\\
+\quad discretised, 5 zones & 10.5\% & \textbf{works}\\
+\quad discretised, 8 zones & 11.5\% & works\\
+argmax ``dominant process'' & $\sim$0\% & fails (collinear channels)\\
+single hard-rule tree (CART) & $\sim$0\% & fails (signal diffuse)\\
+$k$-means on raw predictors & 0\% & fails\\
+\bottomrule
+\end{tabular}
+\caption{Only a \emph{supervised} construction works: discretising the validated
+continuous RF ``non-climate modulation field'' recovers most of the achievable
+signal at 5--8 zones. A Köppen-style ``which process dominates here'' map is
+\emph{not} supported.}
+\end{table}
+
+\noindent\textbf{Why the intuitive map fails.} The three non-climate channels
+(Edaphic, Land~Use, Biological prediction shifts) are spatially collinear:
+a PCA of the signed $[E,L,B]$ adjustment vector gives PC1~$=67\%$ with near-equal
+positive loadings ($0.59,0.53,0.60$; pairwise $r=0.43$--$0.61$). The
+beyond-climate signal is therefore largely a \emph{single shared modulation axis}
+(``how strongly non-climate processes bend $\tau$ away from the climate
+expectation''), not three independent process-geographies. This is a cleaner,
+more defensible framing than a process-mosaic --- and it matches the data.
+
+\noindent\textbf{Recommended deliverable (3 layers):}
+\begin{enumerate}[nosep]
+  \item continuous global \emph{modulation field} = primary zonality-intensity map;
+  \item a discrete 5--8 zone companion (quantile bins of the field) for communication;
+  \item per-zone driver characterisation (predictor profiles / ALE) restoring the
+        ``which process where'' reading as an honest \emph{secondary} layer.
+\end{enumerate}
+
+% =============================================================================
+\section{Diagnostic investigation of the prediction maps}
+% =============================================================================
+
+While preparing to build the map we stress-tested the global prediction pipeline
+(script~14). Net conclusion: \textbf{the maps are sound; the only real problem is
+coverage.} Two alarms were chased down and \emph{refuted}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lc}
+\toprule
+Hypothesis & verdict\\
+\midrule
+M1 climate raster is corrupted (mean 35.6 vs point 21.8\,yr) & \textcolor{red}{refuted} --- coverage artifact\\
+SoilGrids / covariate scaling bug in script~14 & \textcolor{red}{refuted} --- all 19 predictors $r\!\approx\!1.00$\\
+Raster $(M7-M1)$ does not track the signal ($-0.15$) & \textcolor{red}{refuted} --- in-sample extraction artifact\\
+\textbf{Microbial layers cover only 29\% of land} & \textcolor{blue}{\textbf{confirmed --- the real issue}}\\
+\bottomrule
+\end{tabular}
+\caption{Outcome of the pipeline stress-test.}
+\end{table}
+
+\begin{itemize}[nosep]
+  \item \textbf{No M1 scaling bug.} The 35.6 vs 22.3\,yr gap between M1 and M7
+  is a \emph{domain} effect: M1 restricted to M7's footprint $=23.8 \approx
+  M7=22.3$. All six climate input rasters match the training ranges; offsets in
+  central tendency are the temperate \emph{sampling bias} of the training points.
+  \item \textbf{No covariate scaling bug.} Per-predictor training-vs-raster check
+  at 5{,}000 points: all 19 predictors (climate, SoilGrids edaphic with
+  \texttt{d\_factor}, terrain, microbial) have $r\approx1.00$, median ratio
+  $\approx1.00$.
+  \item \textbf{The $-0.15$ ``inconsistency'' was our own error}: comparing
+  observations to \emph{in-sample} raster predictions at the training points the
+  models were fit on yields a meaningless in-bag residual. The correct
+  out-of-bag comparison gives the non-climate adjustment correlating
+  \textbf{$+0.37$} with the observed climate-residual. \emph{Any earlier
+  raster-based $\eta^2\!\approx\!0$ numbers were contaminated by this same
+  in-sample baseline; the point-level OOB results above stand.}
+\end{itemize}
+
+\noindent\textbf{The real issue --- coverage.} M1 (climate) covers
+2{,}152{,}154 land pixels; the microbial-dependent models (M4/M6/M7) cover only
+\textbf{631{,}252 = 29\% of land} --- the microbial layers (SPUN, Barceló,
+fungal proportion) are \texttt{NA} over $\sim$71\% of land (high latitudes,
+drylands). So the ``global'' $\tau$ map, the ESM comparison, and the planned
+zonality field inherit these holes precisely where the ESM-divergence story is
+strongest (boreal/Arctic). This is a data gap, not a code bug.
+
+% =============================================================================
+\section{Option 2: M5 as the global-coverage workhorse}
+% =============================================================================
+
+To get genuine global coverage we adopt \textbf{M5 (Climate $+$ Edaphic $+$
+Land~Use)} --- no microbial dependency --- as the main map, with M7 retained as a
+biologically-enriched overlay where microbial data exist. The M5 modulation field
+$\ln(M5/M1)$ is saved at
+\texttt{outputs/MRT\_predictions/zonality\_modulation\_M5\_M1\_logratio.tif}
+(mean $0.018$, SD $0.279$, range $[-1.47, 2.01]$).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Model & land coverage & $\Delta R^2$ vs climate (OOB) & explains climate-residual\\
+\midrule
+M5 (climate+edaphic+landuse) & \textbf{49\%} (all soil-bearing land) & 0.017 & 3.7\%\\
+M7 (+ biological)            & 29\% & 0.063 & 13.4\%\\
+\bottomrule
+\end{tabular}
+\caption{Coverage improves (29\%$\to$49\%) but the abiotic signal is weak.}
+\end{table}
+
+\noindent\textbf{Key emergent finding.} The \emph{biological} (mycorrhizal) group
+carries most of the beyond-climate zonality, yet it is the least globally mapped.
+\emph{The strongest beyond-climate signal is the least mappable.} Reframed
+positively, this is a result in its own right --- soil biology is the dominant
+non-climate control on SOC turnover, and the absence of global soil-biology maps
+is the limiting factor. It motivates a concrete call for global microbial mapping
+and supports a \textbf{dual-layer deliverable}: a global \emph{abiotic} zonality
+field (M5) plus a \emph{biological enrichment} overlay (M7) where data permit.
+
+% =============================================================================
+\section{Resolving process classes without a per-pixel ``which-where'' map}
+% =============================================================================
+
+The channel collinearity blocks \emph{one} thing, not everything. Keep two
+questions apart:
+\begin{itemize}[nosep]
+  \item \textbf{Q1 --- ``which process class dominates \emph{where}?''}
+  (a per-pixel attribution map). \textcolor{red}{Blocked.} Channels correlate
+  $r\approx0.4$--$0.6$, enough to make a pixel-by-pixel argmax unstable (the
+  salt-and-pepper map). A Köppen-style process-territory map is \emph{not}
+  supportable.
+  \item \textbf{Q2 --- ``which process \emph{class} carries beyond-climate
+  signal, and how much?''} (aggregate). \textcolor{blue}{Works.}
+\end{itemize}
+
+\noindent\textbf{Key reconciliation: correlated $\neq$ redundant.}
+Correlation $\sim0.5$ is enough to break per-pixel argmax (Q1 fails) but
+\emph{not} enough to make classes redundant: biology still adds large
+\emph{unique} variance (M7 reaches 13.4\% of the residual vs M5's 3.7\%).
+``Collinear'' was too strong --- the channels are correlated, not redundant.
+
+\noindent\textbf{Resolve Q2 by nested increments, not 3-way attribution.}
+Use the nested ladder $M1\!\to\!M5\!\to\!M7$. Each increment is a \emph{single}
+comparison, so its magnitude \emph{and} geography are interpretable (unlike a
+simultaneous 3-way argmax):
+\begin{itemize}[nosep]
+  \item $M5-M1$ = \textbf{abiotic} modulation (edaphic + land use; land use is
+  redundant, so $\approx$ edaphic). Globally mappable ($\sim$49\%/all soil).
+  \item $M7-M5$ = \textbf{biological enrichment} (the \emph{unique} biological
+  contribution given abiotic + climate). Substantial and largely independent
+  (since $M7\gg M5$), on the 29\% footprint.
+\end{itemize}
+Caveat: nested $\Delta R^2$ is order-dependent (``biology given abiotic''); a
+commonality analysis (shared vs unique) is the rigorous version, but the
+headline (biology adds much beyond abiotic; land use redundant) is robust.
+
+\noindent\textbf{Coverage two levels = Tier~2.} The coverage limit is not a
+bolt-on caveat; it \emph{is} the scope boundary between the nested tiers:
+\textbf{Tier~1} (a beyond-climate zonality exists and is spatially organised)
+is the overarching thesis and does \emph{not} depend on the 29\% --- it is
+visible in M5 over all soil-bearing land. \textbf{Tier~2} resolves that
+zonality into a global abiotic level ($M5-M1$) and a biological-enrichment
+zoom-in ($M7-M5$, 29\%). Narrative: a global Level-1 abiotic zonality, then a
+Level-2 deep-dive where soil biology is mapped. ``Biological conclusions hold
+within the microbially-mapped domain'' + a call for global soil-biology maps.
+
+% =============================================================================
+\section{Routes to a clustered zone map}
+% =============================================================================
+
+Two distinct jobs: \textbf{(i) discover} the zones (which pixels group together)
+and \textbf{(ii) describe} them with rules (portable, interpretable). Three
+constructions, increasing in richness. \emph{Terminology: call the classes
+\textbf{zones / turnover regimes}, not ``syndromes''.}
+
+\begin{itemize}[nosep]
+  \item \textbf{Route A --- cluster the nested-increment space}
+  $[M1,\,M5\!-\!M1,\,M7\!-\!M5]$. Cheap internal sanity check only; uses
+  existing rasters. Collinearity-safe (increments, not raw channels).
+  \item \textbf{Route C (alone) --- regression tree on the modulation field.}
+  One step: leaves are zones, splits are rules. Zones defined by \emph{level} of
+  modulation (intensity bands). Transparent, portable, Köppen-like.
+  \item \textbf{Route B --- cluster per-pixel driver contributions (TreeSHAP).}
+  Each pixel gets a $\pm$-years budget per predictor; clustering groups pixels
+  shaped by the same driver combination. Richest for \emph{insight}, but
+  attribution has its own collinearity caveat and is not portable (needs the RF
+  + SHAP to classify a new site). An analysis, not a tool.
+\end{itemize}
+
+\noindent\textbf{The B$\to$C bridge.} B and C are not a forced chain --- B
+\emph{discovers}, C \emph{describes}. To connect them, take B's per-pixel
+cluster labels and fit a classification tree whose \emph{response is the cluster
+ID} and whose inputs are the predictors. That tree emits a rule per zone (``if
+sand $>$ 60\% $\to$ zone~3; else if fungal $>$ 0.2 \& pH $<$ 5 $\to$
+zone~5''). Why bother over C-alone: a regression tree merges regions with the
+same $\tau$-shift even if driven differently (a dryland shortened by sand vs by
+fungal\,+\,low-pH both read ``$-5$\,yr'' $\to$ same leaf); B separates them by
+driver profile, C then names them. So B$\to$C yields
+\emph{mechanism-differentiated} zones; C-alone yields intensity bands.
+
+\noindent\textbf{When to use which.} Build C-alone first (cheap). Only reach for
+B$\to$C if intensity-only zones visibly lump mechanistically-different regions.
+If the modulation is $\sim$1-D (PCA PC1\,$=67\%$ suggests it may be), C-alone
+suffices and B adds little. \textbf{Recommendation:} lead with \textbf{C} as the
+flagship (portable rule-based zonation); use \textbf{B} to explain what each
+zone means; keep \textbf{A} as a throwaway check. Final manuscript object: a
+zonation map + a table giving each zone its (i)~defining rule,
+(ii)~characteristic $\tau$-modulation, (iii)~dominant drivers.
+
+% =============================================================================
+\section{Caveats that must be resolved before drawing final figures}
+% =============================================================================
+
+\begin{enumerate}[nosep]
+  \item \textbf{OOB understates the signal.} The diagnostics above use OOB, where
+  climate $R^2=0.53$; the manuscript uses \emph{spatial} CV, where climate
+  $R^2=0.28$. Spatial CV leaves a much larger residual for non-climate to explain,
+  so the honest (spatial-CV) effect sizes are \emph{larger} than the
+  3.7\%/13.4\% quoted here. \textbf{Re-validate the M5/M7 modulation fields with
+  spatial-block CV} (reuse the existing 2$^\circ$ blocks).
+  \item \textbf{Edaphic $\Delta R^2$ discrepancy.} Quick OOB gives
+  edaphic$+$landuse only $+0.017$, whereas the manuscript reports edaphic-alone
+  $+0.076$ (spatial CV). Almost certainly the OOB-vs-spatial-CV difference, but it
+  is central to the variance-partition claims and must be reconciled explicitly.
+  \item \textbf{Map coherence.} At 0.1$^\circ$ the modulation field is spatially
+  noisy, so quantile-bin zones fragment. Coherent (Köppen-like) zones require
+  coarser resolution or spatially-constrained clustering.
+  \item \textbf{The 29\% may be escapable.} It is the \emph{intersection} of
+  $\sim$9 biological layers. A ``biology-light'' model carrying only the single
+  strongest biological variable --- fungal proportion (Yu 2022, $\sim$1\,km,
+  likely near-global) --- would intersect far less and could push the biological
+  tier toward $\sim$49\% while keeping the signal that mattered most in the ALE.
+  \textbf{Check per-layer coverage first} (SPUN richness/endemism is the likely
+  bottleneck).
+  \item \textbf{Biological footprint biased \emph{within} the 29\%.} Microbial
+  data are dense in temperate Europe/N.\ America, thin in the tropics and high
+  latitudes; biological conclusions are therefore doubly scoped.
+\end{enumerate}
+
+% =============================================================================
+\section{Where we stand, and the next step}
+% =============================================================================
+
+\textbf{Standing:} (i)~storyline~A is chosen and viable; (ii)~the prediction
+pipeline is verified sound; (iii)~the global zonality map is achievable as a
+continuous modulation field $+$ discrete companion, but only \emph{supervised}
+constructions work; (iv)~the abiotic field (M5) is global-but-modest while the
+strong signal is biological-but-coverage-limited --- now framed as a finding via
+a dual-layer (M5 global $+$ M7 enrichment) deliverable.
+
+\textbf{Immediate next step (on reopen):} set up \textbf{spatial-CV validation}
+of the M5 and M7 modulation fields, which simultaneously (a)~yields
+paper-consistent effect sizes for the zonality signal and (b)~reconciles the
+edaphic $\Delta R^2$ against the manuscript's $+0.076$. The magnitude this returns
+decides whether the zonality story is ``modest but real'' or ``substantial,''
+i.e.\ how hard we can lean on framing~A.
+
+\textbf{Then:} (a)~check per-layer biological coverage (is the 29\% escapable via
+a fungal-proportion-only model?); (b)~build the clustered zone map --- lead with
+Route~C (rule-based zonation) at a coherent resolution, add Route~B (TreeSHAP
+contributions) to characterise each zone, with Route~A as a sanity check;
+(c)~decide whether to pursue microbial gap-filling (Option~1) as a sensitivity
+analysis to extend the biological tier globally. The deliverable is a global
+Level-1 abiotic zonality map + a Level-2 biological-enrichment zoom-in, each zone
+described by rule, $\tau$-modulation, and dominant drivers.
+
+% =============================================================================
+\section{Session update (2026-06-26): validation, scale, provenance,
+and a data-source correction}
+% =============================================================================
+
+\paragraph{Spatial-block CV validation (common row set $n=101{,}400$, 2\textdegree{}
+blocks, seed~42, 300 trees).} All quantities computed on a single biological-complete
+row set so nested increments are strictly comparable (unlike the manuscript table,
+where each model used a different subset). Total $R^2_\text{CV}=0.378$.
+\begin{itemize}\itemsep2pt
+  \item \textbf{Order-independent attribution (Shapley, sums exactly to total):}
+  Climate \textbf{32.8\%}, Edaphic \textbf{32.6\%}, Biological \textbf{24.2\%},
+  LandUse 10.4\%. \emph{Climate is only $\sim$1/3 of the attributable signal; the
+  non-climate domains carry 2/3.} This is the headline and it is scale-independent.
+  \item \textbf{Singles alone:} Edaphic 0.318 $\ge$ Climate 0.306 $>$ Biological
+  0.268 $\gg$ LandUse 0.129. Singles sum to 1.021 vs full 0.378 $\Rightarrow$
+  overlap 0.64 (``correlated, not redundant''). Use \emph{singles-first} as the
+  Results opening.
+  \item \textbf{Order-dependence reconciled:} biology added last (CELB$-$CEL)
+  $=+0.008$ but Shapley share 24\% --- same data; LandUse redundant with Edaphic.
+  \item \textbf{Modulation field is out-of-sample valid but modest:}
+  cor(observed climate-residual, full modulation)~$=0.32$ ($R^2=0.10$); discrete
+  5--8 zones capture $\eta^2\approx0.07$--$0.09$. Biology is a spatially
+  \emph{separate} axis: cor(abiotic modulation, biological enrichment) $=-0.16$.
+\end{itemize}
+
+\paragraph{Scale spectrum and noise floor (appendix material).} Residual variogram
+nugget/sill $\approx\mathbf{0.66}$: $\sim$2/3 of the beyond-climate residual is
+unstructured noise (measurement $+$ change-of-support $+$ sub-reliable-resolution
+covariate error) at $>$15~km; the variogram is nearly pure-nugget beyond 15~km.
+$\eta^2$/null shows coarse-scale organisation rising from $5\times$ (1\textdegree)
+to $33\times$ (20\textdegree) chance, but the absolute coarse signal is small
+($\sim$3--7\% of variance), visible only after block-averaging. Covariates predict
+the \emph{block-mean} (zonal) residual 2--3$\times$ better than the point residual
+($R^2$ 0.10~$\to$~0.20--0.29, peaking at $\sim$3--4\textdegree). \emph{Implication:}
+build the map at the coarse effective scale; never show native-pixel texture; the
+scale story is supporting (appendix), not the headline. Figure:
+\texttt{plots/appendix/scale\_noisefloor.png}.
+
+\paragraph{Provenance control --- PASSES.} Tested whether the coarse signal is a
+source/lab artifact using \texttt{source\_db} (44 contributing databases). Only
+\textbf{2.4\%} of beyond-climate residual variance is between sources; de-meaning by
+source leaves the coarse organisation almost intact ($10$\textdegree: $24\times\to19\times$
+chance) and covariate skill barely dented ($0.22\to0.19$ at 5\textdegree). The
+variogram mid-lag bump is unchanged by de-meaning, so it is \emph{not} a between-source
+offset. Conclusion: the modest zonal signal is \textbf{ecological, not provenance}.
+(Caveat: source is confounded with geography, so this is a conservative/upper-bound
+test --- surviving signal is definitely ecological.)
+
+\paragraph{Data-source correction (important).} The SOC data is \textbf{not} WoSIS.
+It is the OpenLandMap \emph{Open Compendium of Soil Datasets: Soil Observations and
+Measurements} (Zenodo~15593990; \texttt{sol\_chem.pnts\_horizons.rds}). WoSIS is not
+even a \texttt{source\_db} label in the data. Manuscript fixed in 4 places
+(\S Soil data compilation, OC$=$0 sentence, Results data paragraph, Data
+availability) $+$ new bib entry \texttt{OpenLandMapSoilDB2025} (author/year
+\textbf{TODO}: verify against Zenodo record). Source breakdown corrected: post-QC
+198{,}382 profiles from \textbf{44} (not 47) databases; \texttt{GLanCE.points}
+(claimed 21.1\% largest) is removed entirely by QC --- the old paragraph applied the
+pre-QC breakdown to the post-QC count. Real top sources: USDA\_NCSS 20.4\%,
+Netherlands.BIS 11.5\%, SISLAC 8.9\%, CSIRO\_NatSoil 7.0\%, AfSPDB 6.7\%.
+
+\paragraph{Refined storyline.} Lead with \emph{attribution} (climate only 1/3,
+robust and scale-free) and the ESM contrast: ESMs get zonality wrong in two
+independent ways --- they \emph{over-amplify} the climate range (polar 50--100$\times$
+vs data $\sim$3--5$\times$; magnitude claim, caveated by steady-state/change-of-support)
+\emph{and} omit the soil$+$biological axis that carries most of the real organisation
+(structural claim, robust). Bridge to next-generation models needing explicit
+mineral$+$microbial processes. Zonality is \emph{real but modest}; present the map
+honestly at coarse scale.
+
+% =============================================================================
+\section{Open issues / next steps}
+% =============================================================================
+\begin{enumerate}\itemsep2pt
+  \item \textbf{Promote to production} (must-do before anything enters the MS):
+  house-style \texttt{13c\_commonality\_validation.R} at 500 trees, writing
+  \texttt{outputs/13c\_*.rds}, the singles$\to$pairs$\to$full $+$ Shapley figure,
+  the scale/variogram appendix figure, and the provenance-control table. Repeatable
+  via \texttt{run\_pipeline.R}.
+  \item \textbf{Biological-parsimony appendix (the ``29\% killer'').} Check
+  collinearity + per-layer coverage of the 9 biological layers; single-layer
+  marginal $\Delta R^2$ vs coverage; recommend one parsimonious layer to extend the
+  biological footprint well beyond 29\%. Figures $\to$ \texttt{plots/appendix/};
+  TODO comment already placed in \texttt{manuscript.tex} before
+  \texttt{Supplementary tables}.
+  \item \textbf{Verify the compendium citation} (authors/year/version) from the
+  Zenodo record; update \texttt{OpenLandMapSoilDB2025}.
+  \item \textbf{Add Moran's I} on block-aggregated residuals as the standard
+  spatial-autocorrelation statistic to accompany the $\eta^2$/null backbone.
+  \item \textbf{Build the dual-layer zonality map} at the coarse effective scale
+  ($\sim$3--4\textdegree), with per-zone driver characterisation (ALE/TreeSHAP).
+  \item \textbf{Reconcile MS magnitude numbers}: the current ``$\sim$10~pp beyond
+  climate'' is partly a subset artifact; on comparable rows climate~$=0.31$ and
+  beyond-climate~$\approx$7~pp.
+  \item \textbf{Narrative}: write with Schimel OCAR; keep Jungian archetypes as a
+  hidden internal scaffold only (deferred --- do not implement in text).
+\end{enumerate}
+
+\bigskip
+\noindent\rule{\linewidth}{0.4pt}\\
+{\footnotesize Artifacts (2026-06-25/26):
+\texttt{outputs/MRT\_predictions/zonality\_modulation\_M5\_M1\_logratio.tif};
+\texttt{plots/appendix/scale\_noisefloor.png}; exploratory scripts in the session
+scratchpad (\texttt{spatialcv\_validation.R}, \texttt{spatialcv\_finish.R},
+\texttt{scale\_noisefloor.R}, \texttt{provenance\_control.R}; earlier
+\texttt{zone\_explore.R}, \texttt{zone\_supervised.R}, \texttt{m5\_zonality.R}).
+All reproducible from \texttt{outputs/12b\_model\_ready.rds},
+\texttt{outputs/13\_rf\_models.rds}, \texttt{outputs/13\_var\_groups.rds}.
+\emph{Scratchpad scripts are exploratory and must be promoted to house-style
+pipeline code before any result enters the manuscript.}}
+
+\end{document}

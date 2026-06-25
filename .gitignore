@@ -48,3 +48,4 @@ Thumbs.db
 
 # CDS API configuration (contains your API key!)
 .cdsapirc
+.positai
