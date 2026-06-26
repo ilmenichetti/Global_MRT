@@ -95,16 +95,48 @@ negligible. (Land-use is the opposite: genuinely redundant — unique ≈ 0.)
   Justifies MAIN = fungal+SPUN (drop Barceló-3, unique ΔR² ≈ +0.001). Figs:
   `plots/appendix/biological_{collinearity,single_layer_skill}.png`. Slots into the
   existing appendix TODO block (~L1365). *(production numbers from 13d_run.log)*
+- **Scale / noise-floor (13f, 500 trees, MAIN n=154,675):** variogram **nugget/sill =
+  0.56, range ≈ 16 km** (~⅔ unstructured noise, short-range structure). Multiscale
+  organisation (obs/null) grows 4.2×(1°)→12.5×(20°). **CAVEAT — panel (c) flagged
+  for discussion:** the covariate-skill-vs-scale panel now uses an honest
+  out-of-sample (5-fold-CV) *linear* R²; it is weak (max ~0.07 at 1°) and goes
+  negative at coarse scales (overfitting, few blocks). This LINEAR proxy is NOT the
+  RF modulation-field skill behind the memory's "meso ~3–4° peak (~0.25–0.29)", so
+  it neither confirms nor refutes the meso mapping recommendation. Decision for
+  discussion: keep panel (c) clearly labelled as a linear proxy, drop it, or
+  replace with an RF-based scale-resolved skill curve (the latter belongs in the
+  mapping-scale work). Figs `plots/appendix/scale_noisefloor.png`.
 - **Tier-1 Moran's I (13e):** beyond-climate residual Moran's I ≈ 0.25 at 2° and 5°
   (p ≪ 0.001) → spatially organised, not noise. Complements the weak/scale-dependent
   ICC. Figs: `plots/step_13c_commonality/13e_{block_residual_map,moran_scatter}.png`.
   New short Results/appendix paragraph for Tier-1 rigour. *(numbers from 13e_run.log)*
-- **Provenance table (L1349–1353):** still the 300-tree numbers; separate
-  `provenance_control.R` (not 13c). Regenerate only if we want 500-tree consistency.
+- **Provenance table (L1349–1353): REGENERATED — now `13g_provenance_control.R`**
+  (500 trees, MAIN footprint n=154,675). η²_source = **0.024 (2.4 %)** — matches the
+  old table exactly. Organisation (obs/null) before→after de-meaning: 2°
+  **5.29→5.06**, 5° **7.22→6.42**, 10° **11.60→10.07**; block-mean covariate R²@5°
+  **0.188→0.152**. The organisation *ratios* are lower than the old table
+  (9.0/15.4/24.1) because the footprint grew from n=101,400 (all-9) to n=154,675
+  (MAIN); conclusion unchanged (signal is ecological). **Update the table cells to
+  these MAIN-footprint numbers** (keep the 2.4 % headline). Outputs:
+  `outputs/13g_provenance.{csv,rds}`.
 
 ---
 
-## E. Open block-size sensitivity (proposed, not yet run)
+## E. Block-size sensitivity — DONE (13h), corroborates the 2° choice
 
-Reviewer-proofing: re-run the 13c Shapley split at 1°/2°/5° CV blocks to show the
-shares are stable (kills "why 2°?"). Cheap via a `BLOCK_SIZE` sweep in 13c.
+Provisional 300-tree sweep (1°/5°; 2° headline is 500 trees) via `MRT_13C_BLOCK`,
+consolidated by `13h_blocksize_sensitivity.R` (`outputs/13h_blocksize_sensitivity.csv`,
+fig `plots/step_13c_commonality/13h_blocksize_shapley.png`). Shapley shares (%):
+
+| Domain | 1° | 2° | 5° |
+|---|---|---|---|
+| Climate | 35.3 | 35.1 | 34.6 |
+| Edaphic | 32.5 | 32.8 | 34.9 |
+| Biological | 22.1 | 22.3 | 20.8 |
+| LandUse | 10.1 | 9.7 | 9.6 |
+
+Full R² shifts with block size (1°: 0.400, 2°: 0.380, 5°: 0.334 — the honesty
+gradient), but **attribution is invariant: max share spread = 2.4 pp** (Edaphic).
+M&M paragraph added (Methods, after the spatial-block-CV description) citing the
+~16 km variogram range (independence) + the ≤2.4 pp invariance (robustness).
+Refresh the 2.4 pp at the final 500-tree run.

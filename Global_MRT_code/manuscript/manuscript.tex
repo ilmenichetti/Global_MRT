@@ -463,6 +463,18 @@ Out-of-bag (OOB) statistics from a final model fitted on all data served
 as an additional reference. Permutation-based variable importance was
 extracted from the final M7 model.
 
+% NOTE: 2.4 pp is from the provisional 300-tree block-size sweep (13h);
+% refresh from outputs/13h_blocksize_sensitivity.csv at the final 500-tree run.
+The 2\textdegree{} block size is well above the spatial range of the
+beyond-climate residual (empirical semivariogram range~$\approx$~16~km), so
+held-out blocks are effectively independent of the training data. The variance
+attribution is moreover insensitive to this choice: although the absolute
+cross-validated $R^2$ declines with block size (as expected for stricter spatial
+separation), repeating the decomposition with 1\textdegree{} and 5\textdegree{}
+blocks shifts each process class's share of attributable variance by at
+most~2.4~percentage points, leaving the ranking and the
+climate-versus-non-climate split unchanged.
+
 % -----------------------------------------------------------------------------
 \subsection{Global prediction}
 \label{sec:prediction}
