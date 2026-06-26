@@ -157,6 +157,39 @@ negligible. (Land-use is the opposite: genuinely redundant — unique ≈ 0.)
 | Zonality map (nested) + abiotic/biology corr | 15b_zonality_map.R | Appendix + Discussion | fig+csv ✓; prose TODO |
 | ~7 pp beyond-climate fix | (from 13c) | Results | numbers ✓; prose TODO |
 
+## H. Existing-figure disposition (steps 17 / 18 / 20) — DECIDED 2026-06-26
+
+**Step 17 (visualizations) — mostly OBSOLETE:**
+- M1–M7 prediction maps + `MRT_all_models_comparison_log` + `MRT_histogram_by_latitude`
+  → DROP (superseded by 15b zonality maps + near-global M5; histogram redundant w/ step 20).
+- **Manuscript swap:** `step_17_visualizations/MRT_M7_full_map_log.png` →
+  `step_15b_zonality/zonality_map_abiotic.png` (or the symmetric dual).
+- Keep 1–2 DATA-description figures (`latitudinal_sampling_coverage`, maybe
+  `global_SOC_density_heatmap`) for Methods/Data only.
+
+**Step 18 (ALE) — KEEP (mechanism pillar):** `18C_ALE_by_latband`, `18D_ALE_top10_MRT`
+are sound (SoilGrids d_factor fix applied) and interpretable. They are the "HOW each
+driver acts" layer (complements Shapley=how-much, map=where). No change.
+
+**Step 20 (ESM) — reframe as STRUCTURAL; over-zonalization is the payoff:**
+- **MAIN figure = `fig_biome_relative_tau`** (mean-normalized; robust). NOTE: this is
+  NOT yet in manuscript.tex — **ADD it** as the ESM headline. Shows RF modest zonality
+  (polar ~1.7×) vs ESM extreme polar amplification (CESM2 ~8.5×, others 3–5×) AND large
+  inter-model disagreement (MPI inverted).
+- **SI:** `fig_latitude_heatmap_relative` (continuous-latitude companion; min–max norm).
+- **`fig_latitudinal_profile` (absolute) → APPENDIX**, used as a **resolved-tension side
+  arc in the Discussion**: raise the apples-to-pears caveat (absolute τ differs by depth/
+  pool/reference-period definitions) → resolve it via the normalized structural comparison.
+  Small, for robustness; not central. `fig_latitude_heatmap` (absolute) → DROP.
+- **Own the incomparability** in text: "absolute τ is not comparable across products; we
+  compare the normalized spatial STRUCTURE." Dispersion stat from `cmip6_dispersion_stats.csv`.
+- **Over-zonalization contrast (computed; from `cmip6_biome_relative_tau.csv` + ensemble raster):**
+  polar/tropical τ ratio = **RF ~2.5×** (raster >50°/tropical = 1.6×) vs **CMIP6 ensemble ~5×**,
+  individual ESMs up to ~14× (CESM2 ~12, CanESM5 ~14, UKESM/IPSL/MIROC ~8–9), **MPI inverted ~0.6×**.
+  → ESMs amplify polar relative to tropical 2–6× more than the data support; inter-model spread spans
+  an order of magnitude (0.6×–14×). Polar ×own-mean: RF 1.8×; ESMs 0.8× (MPI) to 8.9× (CESM2).
+  Discussion side-arc draft written (raise apples-to-pears caveat → resolve via normalized structure).
+
 ## E. Block-size sensitivity — DONE (13h), corroborates the 2° choice
 
 Provisional 300-tree sweep (1°/5°; 2° headline is 500 trees) via `MRT_13C_BLOCK`,
