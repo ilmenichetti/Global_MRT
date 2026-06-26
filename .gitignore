@@ -49,3 +49,8 @@ Thumbs.db
 # CDS API configuration (contains your API key!)
 .cdsapirc
 .positai
+
+# LaTeX build intermediates (working memo)
+Global_MRT_code/manuscript/temporary/*.aux
+Global_MRT_code/manuscript/temporary/*.out
+Global_MRT_code/manuscript/temporary/*.log

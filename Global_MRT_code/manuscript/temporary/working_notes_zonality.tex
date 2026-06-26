@@ -420,6 +420,67 @@ honestly at coarse scale.
   hidden internal scaffold only (deferred --- do not implement in text).
 \end{enumerate}
 
+\section{Session update (2026-06-26, cont.): production decomposition,
+biological parsimony, Tier-1 Moran's I}
+
+\paragraph{Validation promoted to house-style code.} The exploratory spatial-CV
+scratchpad is now the production script
+\texttt{13c\_commonality\_validation.R} (500 trees, 2\textdegree{}/10-fold/seed-42
+block CV; env knobs \texttt{MRT\_13C\_BIO}, \texttt{MRT\_13C\_BLOCK}). It fits all
+15 group coalitions on \emph{one common-row set} so coalition $R^2$ are comparable
+and Shapley values sum exactly to the full-model $R^2$. The all-9 sensitivity run
+reproduces the 300-tree memo numbers almost exactly (Climate 32.9, Edaphic 32.4,
+Biological 24.3, LandUse 10.4\,\%; full $R^2=0.378$; $n=101{,}400$), validating the
+machinery.
+
+\paragraph{Biological predictor decision (drop Barcel\'o root colonization).} Per-layer
+\emph{observation} coverage is not uniform: \texttt{fungal\_proportion} 99.8\,\%,
+the five SPUN richness/endemism layers 96.2\,\%, but the three Barcel\'o
+root-colonization layers only $\sim$62\,\% --- the sole constraint collapsing the
+common-row set to $n=101{,}400$. Equal-row block-CV (script
+\texttt{13d\_biological\_parsimony.R}) gives a unique Barcel\'o-3 contribution of
+$+0.001$ $R^2$ (inert; alone $-0.004$). \textbf{MAIN model} therefore uses
+\texttt{fungal\_proportion} + 5 SPUN layers (6 layers, 96\,\% coverage, $\sim$84\,\%
+of the biological $\Delta R^2$); the all-9 set is retained as a sensitivity case.
+Collinearity: only the derived ratios are redundant
+(\texttt{EcM\_AM\_root\_ratio}$\approx$\texttt{EcM\_roots} $0.99$;
+\texttt{EcM\_AM\_richness\_ratio}$\approx$\texttt{EcM\_richness} $0.92$); biology is
+otherwise multidimensional, so no single layer substitutes for the set.
+
+\paragraph{Headline decomposition (MAIN, $n=154{,}675$, full $R^2=0.380$).} Dropping
+Barcel\'o lifts the common-row set by 53\,\% with essentially no loss of full-model
+skill (a robustness point). Shapley shares: \textbf{Climate 35.1, Edaphic 32.8,
+Biological 22.3, LandUse 9.7\,\%} (sum exact) --- climate $\approx\!\tfrac13$,
+non-climate $\approx\!\tfrac23$. Singles: $C\,0.307 \approx E\,0.307 > B\,0.227
+\gg L\,0.110$; $\Sigma$ singles $=0.950$ vs full $0.380 \Rightarrow$ overlap $0.57$
+(``correlated, not redundant''). Land-use unique $\approx 0$; biology is badly
+\emph{understated} by its nested-last increment ($+0.010$) versus Shapley
+($22\,\%$) --- \textbf{lead Results with Shapley}. Conclusion is insensitive to the
+biological-set choice (vs all-9: 32.9/32.4/24.3/10.4). Figure:
+\texttt{plots/step\_13c\_commonality/13c\_decomposition.png}.
+
+\paragraph{Tier-1 rigour --- Moran's I (script \texttt{13e\_tier1\_morans\_i.R}).} The
+beyond-climate residual (observed $-$ climate-only block-CV prediction), aggregated
+to spatial blocks, has \textbf{Moran's $I=0.25$ at 2\textdegree{} and $0.26$ at
+5\textdegree{}} ($p \ll 0.001$): the residual is spatially \emph{organised}, not
+noise, complementing the weak/scale-dependent ICC. (Cross-check: the climate-only
+block-CV $R^2=0.307$ here matches the 13c climate single exactly.) Moderate
+magnitude is consistent with the noise floor; zonality is real but modest.
+
+\paragraph{Manuscript reconciliation (analysis done; prose pending discussion).} The
+current ``$\sim$10 percentage points beyond climate'' (L826--827) is a
+\emph{footprint artifact}: climate $R^2=0.280$ is scored on $n\approx178$k while the
+full model is on $n\approx101$k. On a common footprint climate rises to $0.307$ and
+the increment is \textbf{$\sim$7 pp}. Full reconciliation table (old$\to$new with
+line refs; mechanical fixes vs.\ framing decisions) in
+\texttt{results\_reconciliation\_2026-06-26.md}. The qualitative ordering (edaphic
+largest non-climate, biology second, land-use redundant) survives.
+
+\paragraph{Next.} Run the 1\textdegree{}/5\textdegree{} block-size sweep
+(\texttt{MRT\_13C\_BLOCK}) for Shapley stability; then the Results-narrative
+discussion (Shapley-primary framing; replace/augment the M1--M7 table) and the
+manuscript edits.
+
 \bigskip
 \noindent\rule{\linewidth}{0.4pt}\\
 {\footnotesize Artifacts (2026-06-25/26):
