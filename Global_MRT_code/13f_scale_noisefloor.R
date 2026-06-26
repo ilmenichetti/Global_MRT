@@ -191,21 +191,15 @@ pb <- ggplot(spectrum, aes(scale_deg, org_obs_null)) +
        x = "Block size (degrees)", y = "Observed / null ratio") +
   theme_bw(base_size = 11) + theme(plot.tag = element_text(face = "bold"))
 
+# Out-of-sample covariate-skill-vs-scale (panel c) is kept in the CSV but NOT
+# plotted: it is a tangential linear proxy (see header note) and this is an
+# appendix robustness figure. The two panels below carry the noise-floor story.
 peak_scale <- spectrum$scale_deg[which.max(spectrum$block_cov_R2)]
-pc <- ggplot(spectrum, aes(scale_deg, block_cov_R2)) +
-  geom_hline(yintercept = 0, linewidth = 0.3, colour = "grey70") +
-  geom_line() + geom_point() +
-  geom_vline(xintercept = peak_scale, linetype = "dashed", colour = "#377EB8") +
-  labs(tag = "c", title = "Covariate skill on block means vs scale",
-       subtitle = sprintf("Out-of-sample (5-fold-CV) R²; peaks near %g° (coarse scales block-limited)",
-                          peak_scale),
-       x = "Block size (degrees)", y = expression("Block-mean CV " * R^2)) +
-  theme_bw(base_size = 11) + theme(plot.tag = element_text(face = "bold"))
 
-fig <- (pa | pb | pc) +
+fig <- (pa | pb) +
   plot_annotation(title = "Scale spectrum & noise floor of the beyond-climate residual",
                   theme = theme(plot.title = element_text(face = "bold", size = 13)))
-ggsave(file.path(PLOT_DIR, "scale_noisefloor.png"), fig, width = 14, height = 4.6, dpi = 200)
+ggsave(file.path(PLOT_DIR, "scale_noisefloor.png"), fig, width = 9.5, height = 4.6, dpi = 200)
 cat("\nOK  ", file.path(PLOT_DIR, "scale_noisefloor.png"), "\n")
 cat("OK  outputs/13f_scale_noisefloor.csv + .rds\n")
 cat(sprintf("\nVerdict: ~%.0f%% of the beyond-climate residual is unstructured noise (nugget),\n",
