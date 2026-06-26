@@ -18,11 +18,15 @@
 # because the residual is ~2/3 noise with a ~16 km range (13f): native-pixel
 # texture is not interpretable.
 #
+# A symmetric ALTERNATIVE is also produced (each domain relative to climate:
+# log M5/M1 and log M4/M1), with no abiotic-before-biology ordering, for comparison.
+#
 # Input:  outputs/MRT_predictions/zonality_modulation_M5_M1_logratio.tif  (log M5/M1)
-#         outputs/MRT_predictions/MRT_M5_climate_edaphic_landuse.tif
-#         outputs/MRT_predictions/MRT_M7_full.tif
-# Output: plots/step_15b_zonality/zonality_map_abiotic.png   (headline, near-global)
-#         plots/step_15b_zonality/zonality_map_dual.png      (a abiotic + b biological)
+#         outputs/MRT_predictions/MRT_M1_climate.tif, MRT_M4_climate_biological.tif,
+#         MRT_M5_climate_edaphic_landuse.tif, MRT_M7_full.tif
+# Output: plots/step_15b_zonality/zonality_map_abiotic.png          (headline, near-global)
+#         plots/step_15b_zonality/zonality_map_dual.png             (nested: a=M5/M1, b=M7/M5)
+#         plots/step_15b_zonality/zonality_map_dual_symmetric.png   (symmetric: a=M5/M1, b=M4/M1)
 #
 # Author: Lorenzo   Date: 2026-06-26
 ################################################################################
@@ -60,11 +64,14 @@ plot_modulation <- function(r, main, sub, pal, clampval, legtitle) {
   mtext(sub, side = 1, line = 0.5, cex = 0.72, col = "grey30")
 }
 
-# ---- Build the two layers (nested succession) -------------------------------
+# ---- Build the layers -------------------------------------------------------
 abio <- meso_agg(rast(file.path(OUTPUT_DIR, "zonality_modulation_M5_M1_logratio.tif")))
+m1   <- rast(file.path(OUTPUT_DIR, "MRT_M1_climate.tif"))
+m4   <- rast(file.path(OUTPUT_DIR, "MRT_M4_climate_biological.tif"))
 m5   <- rast(file.path(OUTPUT_DIR, "MRT_M5_climate_edaphic_landuse.tif"))
 m7   <- rast(file.path(OUTPUT_DIR, "MRT_M7_full.tif"))
-bio  <- meso_agg(log(m7 / m5))
+bio      <- meso_agg(log(m7 / m5))   # nested: biology on top of abiotic  (log M7/M5)
+bio_clim <- meso_agg(log(m4 / m1))   # symmetric: biology relative to climate (log M4/M1)
 
 # ---- (1) Headline: abiotic modulation, near-global --------------------------
 png(file.path(PLOT_DIR, "zonality_map_abiotic.png"), width = 2200, height = 1200, res = 200)
@@ -89,5 +96,24 @@ plot_modulation(bio,
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual.png"), "\n")
 
-cat(sprintf("\nDone. Meso = %g deg; clamps: abiotic +/-%.2f, biological +/-%.2f.\n",
+# ---- (3) ALTERNATIVE formulation: symmetric (each domain over climate) -------
+# No abiotic-before-biology ordering: both panels are log( tau[climate+domain] /
+# tau[climate] ), same baseline M1 and SAME colour scale, so the two amplitudes
+# are directly comparable. (Trade-off: not additive, and abiotic/biology share
+# the beyond-climate signal, corr ~0.34, vs the nested version's ~0.)
+png(file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), width = 2200, height = 2100, res = 200)
+par(mfrow = c(2, 1))
+plot_modulation(abio,
+  main = "(a) Abiotic effect relative to climate (edaphic + land-use)",
+  sub  = "log( turnover from climate+edaphic+land-use  /  turnover from climate ).  Red = longer, blue = shorter.",
+  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "log(M5 / M1)")
+plot_modulation(bio_clim,
+  main = "(b) Biological effect relative to climate",
+  sub  = "log( turnover from climate+biology  /  turnover from climate ).  Green = longer, purple = shorter.",
+  pal = pal_biology, clampval = CLAMP_A, legtitle = "log(M4 / M1)")
+dev.off()
+cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), "\n")
+
+cat(sprintf("\nDone. Meso = %g deg. Nested dual clamps: abiotic +/-%.2f, biology(M7/M5) +/-%.2f;",
             AGG_DEG, CLAMP_A, CLAMP_B))
+cat(sprintf(" symmetric dual clamp: +/-%.2f (both, for comparability).\n", CLAMP_A))
