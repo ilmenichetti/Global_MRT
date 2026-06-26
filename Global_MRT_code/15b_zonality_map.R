@@ -64,17 +64,30 @@ plot_modulation <- function(r, main, sub, pal, clampval, legtitle) {
   mtext(sub, side = 1, line = 0.5, cex = 0.72, col = "grey30")
 }
 
-# (c) abiotic-vs-biology scatter at meso scale, annotated with native + meso r
-scatter_panel <- function(x_meso, y_meso, r_nat, r_meso, xlab, ylab, col) {
-  v <- na.omit(cbind(x = values(x_meso), y = values(y_meso)))
-  op <- par(pty = "s", mar = c(4.2, 4.2, 2.6, 2)); on.exit(par(op))
-  plot(v[, 1], v[, 2], pch = 16, col = adjustcolor(col, 0.18), cex = 0.5,
+# Köppen main zones (for colouring the scatter): 1=A Tropical, 2=B Arid,
+# 3=C Temperate, 4=D Continental, 5=E Polar.
+KOP_COL <- c("1" = "#2c7fb8", "2" = "#d95f02", "3" = "#1b9e77",
+             "4" = "#7570b3", "5" = "#737373")
+KOP_LAB <- c("1" = "A Tropical", "2" = "B Arid", "3" = "C Temperate",
+             "4" = "D Continental", "5" = "E Polar")
+
+# (c) abiotic-vs-biology scatter at meso scale, full-width (matches the map
+# panels), points coloured by Köppen zone, annotated with native + meso r.
+scatter_panel <- function(x_meso, y_meso, kop_meso, r_nat, r_meso, xlab, ylab) {
+  df <- data.frame(x = values(x_meso)[, 1], y = values(y_meso)[, 1],
+                   k = values(kop_meso)[, 1])
+  df <- df[!is.na(df$x) & !is.na(df$y), ]
+  pcol <- KOP_COL[as.character(df$k)]; pcol[is.na(pcol)] <- "#cccccc"
+  op <- par(mar = c(4.2, 4.4, 2.6, 2)); on.exit(par(op))   # no pty="s": fill width
+  plot(df$x, df$y, pch = 16, col = adjustcolor(pcol, 0.4), cex = 0.5,
        xlab = xlab, ylab = ylab,
-       main = "(c) Do the two axes co-vary?")
-  abline(h = 0, v = 0, col = "grey75"); abline(lm(v[, 2] ~ v[, 1]), col = "black", lwd = 2)
+       main = "(c) Do the two axes co-vary?  (points by Köppen zone)")
+  abline(h = 0, v = 0, col = "grey75"); abline(lm(df$y ~ df$x), col = "black", lwd = 2)
   legend("topleft", bty = "n", cex = 0.95,
          legend = c(sprintf("r (2° meso) = %.2f", r_meso),
                     sprintf("r (native)  = %.2f", r_nat)))
+  legend("bottomright", bty = "n", cex = 0.85, pch = 16, horiz = FALSE,
+         col = KOP_COL, legend = KOP_LAB, title = "Köppen main")
 }
 
 corpair <- function(x, y) { v <- na.omit(cbind(values(x), values(y))); cor(v[, 1], v[, 2]) }
@@ -91,6 +104,10 @@ bclim_nat <- log(m4 / m1)   # symmetric: biology relative to climate
 abio  <- meso_agg(abio_nat)
 bnest <- meso_agg(bnest_nat)
 bclim <- meso_agg(bclim_nat)
+
+# Köppen main zone per meso cell (majority class), on the same 2° grid
+kop <- aggregate(rast("./Global_MRT_code/spatialized_layers/climate/koppen_main_0.1deg.tif"),
+                 fact = round(AGG_DEG / 0.1), fun = "modal", na.rm = TRUE)
 
 # ---- Correlations (computed in-code, saved for repeatability) ----------------
 cors <- data.frame(
@@ -121,9 +138,8 @@ plot_modulation(bclim,
   main = "(b) Biological effect relative to climate",
   sub  = "log( turnover from climate+biology  /  turnover from climate ).  Green = longer, purple = shorter.",
   pal = pal_biology, clampval = CLAMP_A, legtitle = "log(M4 / M1)")
-scatter_panel(abio, bclim, cors$r_native[1], cors$r_meso_2deg[1],
-  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M4/M1)",
-  col = "#4D4D4D")
+scatter_panel(abio, bclim, kop, cors$r_native[1], cors$r_meso_2deg[1],
+  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M4/M1)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), "\n")
 
@@ -138,9 +154,8 @@ plot_modulation(bnest,
   main = "(b) Biological modulation: biology added on top of the abiotic model",
   sub  = "log( turnover from full model  /  turnover from climate+edaphic+land-use ).  Green = longer, purple = shorter.",
   pal = pal_biology, clampval = CLAMP_B, legtitle = "log(M7 / M5)")
-scatter_panel(abio, bnest, cors$r_native[2], cors$r_meso_2deg[2],
-  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M7/M5)",
-  col = "#4D4D4D")
+scatter_panel(abio, bnest, kop, cors$r_native[2], cors$r_meso_2deg[2],
+  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M7/M5)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual.png"), "\n")
 

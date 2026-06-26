@@ -66,7 +66,8 @@ observational benchmark.
 
 **Main (Results):**
 1. **Zonality map (symmetric)** — `15b` `zonality_map_dual_symmetric.png`: (a) abiotic
-   log(M5/M1), (b) biology log(M4/M1), (c) abiotic-vs-biology scatter. Near-global
+   log(M5/M1), (b) biology log(M4/M1), (c) abiotic-vs-biology scatter (full-width,
+   points coloured by Köppen zone). Near-global
    abiotic panel doubles as the headline. → *where*.
 2. **Variance decomposition** — `13c` `13c_decomposition.png`: singles → build-up →
    Shapley. → *how much* + the overlap.
