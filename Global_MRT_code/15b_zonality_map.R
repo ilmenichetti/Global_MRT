@@ -16,19 +16,20 @@
 #     (a) abiotic   = log(M5 / M1)
 #     (b) biology   = log(M7 / M5)  -- biology on top of abiotic (its minimum)
 #
-# Each dual figure carries a 3rd panel: the abiotic-vs-biology scatter with the
-# spatial correlation (native + meso). Interpretation: the SYMMETRIC pair
-# co-varies (r~0.4-0.5; both tap the shared beyond-climate signal) while the
-# NESTED pair is ~orthogonal (biology conditional on abiotic = its unique axis).
-# Together this is the "correlated, not redundant" result, spatially. The
-# correlations are computed here (not by hand) and saved for repeatability.
+# The abiotic-vs-biology scatter (with the spatial correlation, native + meso) is
+# a SEPARATE appendix figure (Köppen-coloured), not a panel on the maps.
+# Interpretation: the SYMMETRIC pair co-varies (r~0.4-0.5; both tap the shared
+# beyond-climate signal) while the NESTED pair is ~orthogonal (biology conditional
+# on abiotic = its unique axis) -- the "correlated, not redundant" result,
+# spatially. Correlations are computed here (not by hand) and saved for repeatability.
 #
 # Input:  outputs/MRT_predictions/{zonality_modulation_M5_M1_logratio,
 #         MRT_M1_climate, MRT_M4_climate_biological,
 #         MRT_M5_climate_edaphic_landuse, MRT_M7_full}.tif
 # Output: plots/step_15b_zonality/zonality_map_abiotic.png          (headline, near-global)
-#         plots/step_15b_zonality/zonality_map_dual_symmetric.png   (MAIN; a,b,c)
-#         plots/step_15b_zonality/zonality_map_dual.png             (APPENDIX nested; a,b,c)
+#         plots/step_15b_zonality/zonality_map_dual_symmetric.png   (MAIN; 2 panels a,b)
+#         plots/step_15b_zonality/zonality_map_dual.png             (APPENDIX nested; 2 panels)
+#         plots/step_15b_zonality/zonality_modulation_scatter.png   (APPENDIX; scatter a,b)
 #         outputs/15b_modulation_correlations.csv
 #
 # Author: Lorenzo   Date: 2026-06-26
@@ -71,22 +72,21 @@ KOP_COL <- c("1" = "#2c7fb8", "2" = "#d95f02", "3" = "#1b9e77",
 KOP_LAB <- c("1" = "A Tropical", "2" = "B Arid", "3" = "C Temperate",
              "4" = "D Continental", "5" = "E Polar")
 
-# (c) abiotic-vs-biology scatter at meso scale, full-width (matches the map
-# panels), points coloured by Köppen zone, annotated with native + meso r.
-scatter_panel <- function(x_meso, y_meso, kop_meso, r_nat, r_meso, xlab, ylab) {
+# abiotic-vs-biology scatter (its own APPENDIX figure), square, points coloured
+# by Köppen zone, annotated with native + meso r.
+scatter_panel <- function(x_meso, y_meso, kop_meso, r_nat, r_meso, xlab, ylab, main) {
   df <- data.frame(x = values(x_meso)[, 1], y = values(y_meso)[, 1],
                    k = values(kop_meso)[, 1])
   df <- df[!is.na(df$x) & !is.na(df$y), ]
   pcol <- KOP_COL[as.character(df$k)]; pcol[is.na(pcol)] <- "#cccccc"
-  op <- par(mar = c(4.2, 4.4, 2.6, 2)); on.exit(par(op))   # no pty="s": fill width
-  plot(df$x, df$y, pch = 16, col = adjustcolor(pcol, 0.4), cex = 0.5,
-       xlab = xlab, ylab = ylab,
-       main = "(c) Do the two axes co-vary?  (points by Köppen zone)")
+  op <- par(pty = "s", mar = c(4.4, 4.6, 3.0, 2)); on.exit(par(op))
+  plot(df$x, df$y, pch = 16, col = adjustcolor(pcol, 0.4), cex = 0.55,
+       xlab = xlab, ylab = ylab, main = main)
   abline(h = 0, v = 0, col = "grey75"); abline(lm(df$y ~ df$x), col = "black", lwd = 2)
   legend("topleft", bty = "n", cex = 0.95,
          legend = c(sprintf("r (2° meso) = %.2f", r_meso),
                     sprintf("r (native)  = %.2f", r_nat)))
-  legend("bottomright", bty = "n", cex = 0.85, pch = 16, horiz = FALSE,
+  legend("bottomright", bty = "n", cex = 0.85, pch = 16,
          col = KOP_COL, legend = KOP_LAB, title = "Köppen main")
 }
 
@@ -127,9 +127,9 @@ plot_modulation(abio,
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_abiotic.png"), "\n")
 
-# ---- (2) MAIN: symmetric dual (each domain over climate) + scatter ----------
-png(file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), width = 2000, height = 2700, res = 200)
-layout(matrix(c(1, 2, 3), nrow = 3), heights = c(1, 1, 1.05))
+# ---- (2) MAIN: symmetric dual (each domain over climate) --------------------
+png(file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), width = 2000, height = 1900, res = 200)
+par(mfrow = c(2, 1))
 plot_modulation(abio,
   main = "(a) Abiotic effect relative to climate (edaphic + land-use)",
   sub  = "log( turnover from climate+edaphic+land-use  /  turnover from climate ).  Red = longer, blue = shorter.",
@@ -138,14 +138,12 @@ plot_modulation(bclim,
   main = "(b) Biological effect relative to climate",
   sub  = "log( turnover from climate+biology  /  turnover from climate ).  Green = longer, purple = shorter.",
   pal = pal_biology, clampval = CLAMP_A, legtitle = "log(M4 / M1)")
-scatter_panel(abio, bclim, kop, cors$r_native[1], cors$r_meso_2deg[1],
-  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M4/M1)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), "\n")
 
-# ---- (3) APPENDIX: nested dual (biology on top of abiotic) + scatter ---------
-png(file.path(PLOT_DIR, "zonality_map_dual.png"), width = 2000, height = 2700, res = 200)
-layout(matrix(c(1, 2, 3), nrow = 3), heights = c(1, 1, 1.05))
+# ---- (3) APPENDIX: nested dual (biology on top of abiotic) ------------------
+png(file.path(PLOT_DIR, "zonality_map_dual.png"), width = 2000, height = 1900, res = 200)
+par(mfrow = c(2, 1))
 plot_modulation(abio,
   main = "(a) Abiotic modulation: edaphic + land-use added to climate",
   sub  = "log( turnover from climate+edaphic+land-use  /  turnover from climate ).  Red = longer, blue = shorter.",
@@ -154,9 +152,21 @@ plot_modulation(bnest,
   main = "(b) Biological modulation: biology added on top of the abiotic model",
   sub  = "log( turnover from full model  /  turnover from climate+edaphic+land-use ).  Green = longer, purple = shorter.",
   pal = pal_biology, clampval = CLAMP_B, legtitle = "log(M7 / M5)")
-scatter_panel(abio, bnest, kop, cors$r_native[2], cors$r_meso_2deg[2],
-  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M7/M5)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual.png"), "\n")
 
-cat(sprintf("\nDone. Meso = %g deg. MAIN = symmetric; APPENDIX = nested.\n", AGG_DEG))
+# ---- (4) APPENDIX: abiotic-vs-biology scatter (both formulations) -----------
+# Shows "correlated, not redundant" spatially: symmetric pair co-varies (r~0.4),
+# nested pair is ~orthogonal (biology conditional on abiotic = its unique axis).
+png(file.path(PLOT_DIR, "zonality_modulation_scatter.png"), width = 2500, height = 1300, res = 200)
+par(mfrow = c(1, 2))
+scatter_panel(abio, bclim, kop, cors$r_native[1], cors$r_meso_2deg[1],
+  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M4/M1)",
+  main = "(a) Symmetric: each domain over climate")
+scatter_panel(abio, bnest, kop, cors$r_native[2], cors$r_meso_2deg[2],
+  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M7/M5)",
+  main = "(b) Nested: biology conditional on abiotic")
+dev.off()
+cat("OK  ", file.path(PLOT_DIR, "zonality_modulation_scatter.png"), "\n")
+
+cat(sprintf("\nDone. Meso = %g deg. MAIN = symmetric; APPENDIX = nested + scatter.\n", AGG_DEG))
