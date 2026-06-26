@@ -122,6 +122,41 @@ negligible. (Land-use is the opposite: genuinely redundant — unique ≈ 0.)
 
 ---
 
+## F. Zonality maps (15b_zonality_map.R) — DECIDED
+
+- **MAIN (Results):** SYMMETRIC dual map — each domain relative to climate,
+  (a) log(M5/M1) abiotic, (b) log(M4/M1) biology, **no abiotic↔biology ordering**
+  (consistent with order-independent Shapley). 3rd panel (c) = abiotic-vs-biology
+  scatter. The standalone abiotic panel doubles as the near-global headline.
+  File `zonality_map_dual_symmetric.png` (+ `zonality_map_abiotic.png`).
+- **APPENDIX:** NESTED dual map (a = log(M5/M1), b = log(M7/M5) biology on top of
+  abiotic; additive but order-dependent, biology shown at its minimum).
+  File `zonality_map_dual.png`.
+- **Correlation study (in code; `outputs/15b_modulation_correlations.csv`):**
+  abiotic vs biology modulation — SYMMETRIC pair r = 0.52 native / 0.39 meso-2°
+  (co-vary: shared beyond-climate signal); NESTED pair r = −0.11 native / 0.02
+  meso (≈orthogonal: biology conditional on abiotic = its unique axis). This is
+  the **"correlated, not redundant" result expressed spatially**. PLACEMENT:
+  **brief in Discussion** (user preference; unconventional but fits) — not Results.
+- Render at MESO 2° (noise floor). TODO (map polish): min-fill threshold for honest
+  coverage; optional per-pixel Shapley map (needs step-14 extension) as the
+  order-free gold standard.
+
+## G. Manuscript content checklist (everything destined for the MS is in code)
+
+| Analysis | Script (repeatable) | Destination | Status |
+|---|---|---|---|
+| Shapley decomposition (35/33/22/10) | 13c_commonality_validation.R | Results (headline) | code ✓; prose TODO |
+| Singles→build-up→Shapley figure | 13c_results_figure.R | Results | fig ✓; prose TODO |
+| Biological parsimony (drop Barceló) | 13d_biological_parsimony.R | Appendix | code+fig ✓; text TODO |
+| Tier-1 Moran's I (0.25) | 13e_tier1_morans_i.R | Results/Appendix | code+fig ✓; prose TODO |
+| Scale / noise-floor | 13f_scale_noisefloor.R | Appendix | code+fig ✓; text TODO |
+| Provenance control (η²=2.4%) | 13g_provenance_control.R | Appendix (table) | code ✓; table cells TODO |
+| Block-size sensitivity (≤2.4 pp) | 13h_blocksize_sensitivity.R | M&M | code+fig ✓; M&M para ADDED |
+| Zonality map (symmetric main) | 15b_zonality_map.R | Results | fig ✓; prose TODO |
+| Zonality map (nested) + abiotic/biology corr | 15b_zonality_map.R | Appendix + Discussion | fig+csv ✓; prose TODO |
+| ~7 pp beyond-climate fix | (from 13c) | Results | numbers ✓; prose TODO |
+
 ## E. Block-size sensitivity — DONE (13h), corroborates the 2° choice
 
 Provisional 300-tree sweep (1°/5°; 2° headline is 500 trees) via `MRT_13C_BLOCK`,
