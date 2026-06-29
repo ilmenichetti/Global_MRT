@@ -97,7 +97,9 @@ morans_at_scale <- function(block_deg) {
     mutate(bx = floor(lon / block_deg), by = floor(lat / block_deg)) %>%
     group_by(bx, by) %>%
     summarise(resid = mean(resid), n = n(),
-              lon = mean(lon), lat = mean(lat), .groups = "drop") %>%
+              lon = mean(lon), lat = mean(lat),
+              koppen = as.integer(names(which.max(table(koppen_value)))),
+              .groups = "drop") %>%
     filter(n >= 5)                       # stable block means only
   coords <- as.matrix(agg[, c("lon", "lat")])
   nb  <- knn2nb(knearneigh(coords, k = KNN))
@@ -143,38 +145,38 @@ ggsave(file.path(PLOT_DIR, "13e_block_residual_map.png"), p_map,
        width = 10, height = 5.5, dpi = 200)
 cat("OK  ", file.path(PLOT_DIR, "13e_block_residual_map.png"), "\n")
 
-# (b) Moran scatter at 2 deg --- clean ggplot, points coloured by quadrant (with
-#     legend), slope = Moran's I. Replaces the base moran.plot (unlabelled symbols).
+# (b) Moran scatter at 2 deg --- points coloured by each block's coarse Koppen zone
+#     (the quadrants are self-evident from the axes; the climate zone is the
+#     informative classifier, showing how the beyond-climate autocorrelation
+#     distributes across zones). Slope = Moran's I.
 agg_ms <- res_list[[1]]$agg
 lw_ms  <- res_list[[1]]$listw
 xc <- agg_ms$resid - mean(agg_ms$resid)
 ylag <- spdep::lag.listw(lw_ms, agg_ms$resid, zero.policy = TRUE)
 yc <- ylag - mean(ylag)
-quad <- factor(
-  ifelse(xc >= 0 & yc >= 0, "High-High (clustered)",
-  ifelse(xc <  0 & yc <  0, "Low-Low (clustered)",
-  ifelse(xc >= 0 & yc <  0, "High-Low (outlier)", "Low-High (outlier)"))),
-  levels = c("High-High (clustered)", "Low-Low (clustered)",
-             "High-Low (outlier)", "Low-High (outlier)"))
-ms_df <- data.frame(x = xc, y = yc, quad = quad)
+# coarse Koppen group from the 30-class code (Beck 2023): A 1-3, B 4-7, C 8-16, D 17-28, E 29-30
+kz <- cut(agg_ms$koppen, breaks = c(0, 3, 7, 16, 28, 30),
+          labels = c("A Tropical", "B Arid", "C Temperate", "D Cold", "E Polar"))
+ms_df <- data.frame(x = xc, y = yc, koppen = kz)
+saveRDS(ms_df, file.path(OUTPUT_DIR, "13e_moran_scatter_data.rds"))  # for cheap replotting
 I2 <- morans_df$morans_I[1]
-p_ms <- ggplot(ms_df, aes(x, y, colour = quad)) +
-  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
-  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
-  geom_point(alpha = 0.55, size = 1.4) +
+pal <- c("A Tropical" = "#117733", "B Arid" = "#DDCC77", "C Temperate" = "#332288",
+         "D Cold" = "#AA4499", "E Polar" = "#88CCEE")
+p_ms <- ggplot(ms_df, aes(x, y, colour = koppen)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey70") +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey70") +
+  geom_point(alpha = 0.6, size = 1.4) +
   geom_abline(slope = I2, intercept = 0, colour = "black", linewidth = 0.9) +
-  scale_colour_manual(
-    values = c("High-High (clustered)" = "#B2182B", "Low-Low (clustered)" = "#2166AC",
-               "High-Low (outlier)" = "#F4A582", "Low-High (outlier)" = "#92C5DE"),
-    name = "Block vs. neighbours") +
+  scale_colour_manual(values = pal, name = "Koppen zone\n(modal per block)",
+                      na.translate = FALSE) +
   annotate("text", x = Inf, y = -Inf, hjust = 1.1, vjust = -0.7, fontface = "bold",
            label = sprintf("Moran's I = %.3f", I2)) +
-  labs(title = "Moran scatter (2° blocks)",
-       subtitle = "Slope = Moran's I; colour = each block relative to its neighbours",
+  labs(title = "Moran scatter (2 deg blocks)",
+       subtitle = "Slope = Moran's I; colour = modal Koppen zone of each block",
        x = "Block-mean beyond-climate residual",
        y = "Spatially lagged residual (mean of neighbours)") +
   theme_bw(base_size = 11) + theme(legend.position = "right")
-ggsave(file.path(PLOT_DIR, "13e_moran_scatter.png"), p_ms, width = 7.2, height = 5.2, dpi = 200)
+ggsave(file.path(PLOT_DIR, "13e_moran_scatter.png"), p_ms, width = 7.4, height = 5.2, dpi = 200)
 cat("OK  ", file.path(PLOT_DIR, "13e_moran_scatter.png"), "\n")
 
 # =============================================================================
