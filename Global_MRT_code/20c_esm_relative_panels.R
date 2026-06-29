@@ -23,10 +23,10 @@ labs  <- c(RF_M7 = "RF (this study)", CESM2 = "CESM2",
            "UKESM1-0-LL" = "UKESM1-0-LL", "IPSL-CM6A-LR" = "IPSL-CM6A-LR",
            "MPI-ESM1-2-LR" = "MPI-ESM1-2-LR", CanESM5 = "CanESM5",
            "MIROC-ES2L" = "MIROC-ES2L")
-pal   <- c("RF (this study)" = "#B2182B", "CESM2" = "#332288",
-           "UKESM1-0-LL" = "#117733", "IPSL-CM6A-LR" = "#88CCEE",
-           "MPI-ESM1-2-LR" = "#DDCC77", "CanESM5" = "#CC6677",
-           "MIROC-ES2L" = "#AA4499")
+pal   <- c("RF (this study)" = "#B2182B", "CESM2" = "#0072B2",
+           "UKESM1-0-LL" = "#009E73", "IPSL-CM6A-LR" = "#56B4E9",
+           "MPI-ESM1-2-LR" = "#E69F00", "CanESM5" = "#CC79A7",
+           "MIROC-ES2L" = "#999999")
 plev  <- unname(labs[src])
 
 # ---- panel (a): biome zones ----
@@ -34,18 +34,16 @@ ba <- biome %>% filter(source %in% src) %>%
   mutate(zone = factor(zone, levels = c("Tropical", "Temperate", "Boreal", "Polar")),
          prod = factor(labs[source], levels = plev),
          is_rf = source == "RF_M7")
-pa <- ggplot(ba, aes(zone, tau_rel, colour = prod, group = prod)) +
-  geom_hline(yintercept = 1, linetype = "dotted", colour = "grey55") +
-  geom_line(aes(linewidth = is_rf), alpha = 0.9) +
-  geom_point(data = ~filter(.x, is_rf), size = 2.2, show.legend = FALSE) +
-  scale_y_log10() +
-  scale_linewidth_manual(values = c(`FALSE` = 0.5, `TRUE` = 1.4), guide = "none") +
-  scale_colour_manual(values = pal, name = NULL) +
-  labs(tag = "a", title = "By biome zone",
+pa <- ggplot(ba, aes(zone, tau_rel, fill = prod)) +
+  geom_col(position = position_dodge(width = 0.85), width = 0.8,
+           colour = "grey25", linewidth = 0.2, show.legend = FALSE) +
+  geom_hline(yintercept = 1, linetype = "dotted", colour = "grey45") +
+  scale_fill_manual(values = pal, guide = "none") +
+  labs(tag = "a", title = "By biome zone (relative)",
        x = NULL, y = "Relative turnover (product / own global mean)") +
   theme_bw(base_size = 10) +
   theme(plot.tag = element_text(face = "bold"),
-        axis.text.x = element_text(angle = 25, hjust = 1))
+        axis.text.x = element_text(angle = 20, hjust = 1))
 
 # ---- panel (b): continuous latitude (same normalisation) ----
 gm <- biome %>% distinct(source, global_mean)

@@ -27,10 +27,29 @@ Global_MRT_code/cmip6/
 Global_MRT_code/outputs/
 #ignore all plots subfolder (intermediates)
 Global_MRT_code/plots/*/
-# But keep these two
+# But keep the figures used in the manuscript
 !Global_MRT_code/plots/step_17_visualizations/
 !Global_MRT_code/plots/step_18_sensitivity/
 !Global_MRT_code/plots/step_20/
+# appendix: track only the manuscript figures
+!Global_MRT_code/plots/appendix/
+Global_MRT_code/plots/appendix/*
+!Global_MRT_code/plots/appendix/biological_collinearity.png
+!Global_MRT_code/plots/appendix/scale_noisefloor.png
+!Global_MRT_code/plots/appendix/scale_rf_mapping_skill.png
+# step_13c_commonality: track only the manuscript figures
+!Global_MRT_code/plots/step_13c_commonality/
+Global_MRT_code/plots/step_13c_commonality/*
+!Global_MRT_code/plots/step_13c_commonality/13c_decomposition.png
+!Global_MRT_code/plots/step_13c_commonality/13e_block_residual_map.png
+!Global_MRT_code/plots/step_13c_commonality/13e_moran_scatter.png
+!Global_MRT_code/plots/step_13c_commonality/13h_blocksize_shapley.png
+# step_15b_zonality: track only the manuscript figures
+!Global_MRT_code/plots/step_15b_zonality/
+Global_MRT_code/plots/step_15b_zonality/*
+!Global_MRT_code/plots/step_15b_zonality/zonality_map_dual.png
+!Global_MRT_code/plots/step_15b_zonality/zonality_map_dual_symmetric.png
+!Global_MRT_code/plots/step_15b_zonality/zonality_modulation_scatter.png
 
 # Temporary files
 tmp/
