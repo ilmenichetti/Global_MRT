@@ -69,107 +69,43 @@ Earth system models
 
 \paragraph{SOC turnover governs the climate feedback.}
 
-Soils store approximately twice as much carbon as the atmosphere, and the
-rate at which this carbon cycles through the soil system is a primary
-determinant of the land carbon--climate feedback. Whether soils act as a
-net source or sink under changing conditions depends not on stocks alone
-but on turnover --- specifically, on the mean transit time ($\tau$) of
-carbon through the soil, defined as the average time elapsed between a
-carbon atom entering and leaving the system
-\citep{Sierra2017,Sierra2018}. Even modest shifts in transit times
+Soils store approximately twice as much carbon as the atmosphere, and the rate at which this carbon cycles through the soil system is a primary determinant of the land carbon--climate feedback. Whether soils act as a net source or sink under changing conditions depends not on stocks alone but on turnover --- specifically, on the mean transit time ($\tau$) of carbon through the soil, defined as the average time elapsed between a
+carbon atom entering and leaving the system \citep{Sierra2017,Sierra2018}. Even modest shifts in transit times
 across large areas can alter the global carbon balance substantially.
 
 \paragraph{The classical paradigm: chemistry and constants.}
 
-Since the foundational models of the 1970s--1990s
-% [CITE: Jenkinson, Parton/CENTURY, RothC lineage]
-, soil organic carbon (SOC) decomposition has been represented as a
-first-order process: the rate of loss from each pool is proportional to
-its mass, scaled by functions of temperature and moisture. The rate
-constant~$k$ --- and thus the transit time $\tau = 1/k$ --- is treated as
-an intrinsic property of the pool, spatially invariant once the
-environmental scalars are applied. This framework descends from the
-chemical recalcitrance paradigm, in which substrate chemistry determines
-decomposability, and the chemistry of soil organic matter is assumed
-broadly similar across environments. Earth system models (ESMs) still
-largely rely on this architecture.
+Since the foundational models of the 1970s--1990s % [CITE: Jenkinson, Parton/CENTURY, RothC lineage]
+, soil organic carbon (SOC) decomposition has been represented as a first-order process: the rate of loss from each pool is proportional to its mass, scaled by functions of temperature and moisture. The rate
+constant~$k$ (and thus the transit time $\tau = 1/k$) is treated as an intrinsic property of the pool, spatially invariant once the environmental scalars are applied. This framework descends from the chemical recalcitrance paradigm % maybe here discuss a bit the historical pewrspective, Waksman and so on
+, in which substrate chemistry determines decomposability, and the chemistry of soil organic matter is assumed broadly similar across environments. Earth system models (ESMs) still largely rely on this architecture.
 % [CITE: Todd-Brown et al. 2013; Wieder et al. 2013]
 
 \paragraph{The paradigm shift: persistence as an ecosystem property.}
 
-Over the past two decades, this view has been increasingly challenged.
-\citet{Schmidt2011} argued that SOC persistence is not a molecular
-property but an ecosystem property, emerging from interactions between
-organic matter, mineral surfaces, microbial communities, and the
-physical structure of the soil matrix. Subsequent work has reinforced
-this perspective: organo-mineral associations and reactive mineral
-surfaces stabilise organic matter independently of its chemistry
-% [CITE: Kleber et al. 2007, 2021; Lehmann \& Kleber 2015]
+Over the past two decades, this view has been increasingly challenged. \citet{Schmidt2011} argued that SOC persistence is not a molecular property but an ecosystem property, emerging from interactions between
+organic matter, mineral surfaces, microbial communities, and the physical structure of the soil matrix. Subsequent work has reinforced this perspective: organo-mineral associations and reactive mineral surfaces stabilise organic matter independently of its chemistry
+% [CITE?: Kleber et al. 2007, 2021; Lehmann \& Kleber 2015]
 ; microbial carbon use efficiency varies with community composition
-% [CITE: Kallenbach et al. 2016; Cotrufo et al. MEMS]
-; priming effects modulate the decomposition of existing stocks in
-response to fresh inputs; and mycorrhizal pathways influence both the
-quantity and chemical nature of belowground carbon transfers
-% [CITE: Averill et al. 2014]
-. The implication is that decomposition kinetics are not constant ---
-they arise from a web of interacting ecological, edaphic, and
-biological processes operating locally.
+% [CITE?: Kallenbach et al. 2016; Cotrufo et al. MEMS]
+; priming effects modulate the decomposition of existing stocks in response to fresh inputs; and mycorrhizal pathways influence both the quantity and chemical nature of belowground carbon transfers
+% [CITE?: Averill et al. 2014]
+. The implication is that decomposition kinetics are not constant, but they rather arise from a web of interacting ecological, edaphic, and biological processes operating locally.
 
 \paragraph{The zonality hypothesis.}
 
-If transit times are emergent properties of local ecology, they should
-exhibit spatial structure --- a ``zonality'' analogous to the classical
-pedogenic zonality where soil types co-vary with climate, parent
-material, organisms, topography, and time. Under this view, SOC transit
-times would not be universal constants scaled by temperature and
-moisture alone, but would carry a residual spatial signal reflecting
-edaphic, biological, and land-use context. This residual represents the
-variance that current ESMs do not capture.
+If transit times are emergent properties of local ecology, they should exhibit spatial structure; a ``zonality'' analogous to the classical pedogenic zonality where soil types co-vary with climate, parent material, organisms, topography, and time. Under this view, SOC transit times would not be universal constants scaled by temperature and moisture alone, but would carry a residual spatial signal reflecting edaphic, biological, and land-use context. This residual represents the variance that current ESMs do not capture.
 
 \paragraph{The modelling dilemma.}
 
-One could attempt to represent these interactions mechanistically, but
-doing so introduces a different class of risk. Any mechanistic model
-imposes a simplified structure on a complex, potentially nonlinear
-system. Processes may be omitted not because data are lacking but
-because they are not yet recognised, or because they operate through
-interactions invisible at the chosen scale of simplification. The model
-then risks encoding our current biases about which processes matter: a
-detailed mechanistic representation that is wrong about the structure
-of interactions may describe calibration data well (SOC models are
-already overparameterised relative to available observations) yet
-fail to extrapolate spatially and, more critically, temporally. Working
-instead at the level of the emergent kinetic property (the
-observable, bulk transit time) and exploring its spatial covariance
-with environmental covariates may introduce less structural error when
-extrapolating, precisely because it does not commit to a specific
-internal process architecture that may be incomplete or wrong.
-Introducing the zonality of SOC dynamics directly into models
-(parameterising transit times as spatially varying,
-reflecting local ecological context) could be a way to capture this
-missing variance without the risks of mechanistic overspecification.
+One could attempt to represent these interactions mechanistically, but doing so introduces a different class of risk. Any mechanistic model imposes a simplified structure on a complex, potentially nonlinear
+system. Processes may be omitted not only because of lack of data about their magnitude but because they are not yet recognised, or because they operate through interactions invisible at the chosen scale of simplification. The model then risks encoding these biases about which processes matter, and while a detailed mechanistic representation that is wrong about the structure of interactions would still likely describe calibration data well (SOC models are already overparameterised relative to available observations), it would fail to extrapolate spatially and, more critically, temporally. Working instead at the level of the emergent kinetic property (the observable, bulk transit time) and exploring its spatial covariance with environmental covariates may introduce less structural error when extrapolating, precisely because it does not commit to a specific internal process architecture that may be incomplete or wrong.
+Introducing the zonality of SOC dynamics directly into models (parameterising transit times as spatially varying according to discrete classes again similar to the pedological soil classification, and reflecting local ecological context holistically) could be a way to capture this missing variance without the risks of mechanistic overspecification.
 
 \paragraph{This study.}
 
-As an exploratory step in that direction, we compile a global dataset of
-soil profiles, calculate apparent mean transit times under steady-state
-first-order assumptions \citep[sensu][]{Sierra2017,Sierra2018}, and ask:
-how much of the spatial variation in transit times can be attributed to
-processes beyond climate, and which process classes matter where? We use
-a nested Random Forest framework to partition variance across four
-groups (climate, edaphic, land use, and biological) where the
-change in performance between the climate-only baseline (M1) and the
-full model (M7) directly quantifies the ``missing zonality'' that
-current ESMs do not represent. The steady-state assumption is a known
-simplification done under the expectations that over a dataset of this
-size and geographic scope, errors from non-equilibrium sites are
-expected to partially cancel. Accumulated Local Effects analysis
-identifies the marginal response of transit times to individual
-predictors, revealing the functional shape of the relationships,
-information that could inform how zonality might eventually be
-parameterised. The resulting observation-constrained maps provide a
-benchmark for identifying where and why ESMs might systematically
-diverge from data-driven estimates.
+As an exploratory step in that direction, we compile a global dataset of soil profiles, calculate apparent mean transit times under steady-state first-order assumptions \citep[sensu][]{Sierra2017,Sierra2018}, and ask: how much of the spatial variation in transit times can be attributed to processes beyond climate, and which process classes matter where? 
+We used a nested Random Forest framework to partition variance across four groups (climate, edaphic, land use, and biological) where the change in performance between the climate-only baseline (M1) and the dull model (M7) directly quantifies the ``zonality'' variance that current ESMs might not represent. The steady-state assumption is a known simplification done under the expectations that over a dataset of this size and geographic scope, errors from non-equilibrium sites are expected to partially cancel. Accumulated Local Effects analysis was used to identify the marginal response of transit times to individual predictors, revealing the functional shape of the relationships, information that could inform how zonality might eventually be parameterised or stratified. The resulting observation-constrained maps provide a benchmark for identifying where and why ESMs predictions about SOC could be improved.
 
 
 % =============================================================================
@@ -182,11 +118,7 @@ diverge from data-driven estimates.
 \label{sec:framework}
 % -----------------------------------------------------------------------------
 
-We define the mean transit time ($\tau$) of SOC as the average time a
-carbon atom spends in the soil from entry to exit
-\citep{Sierra2017,Sierra2018}. Under steady-state assumptions (constant
-SOC stock and input flux) and a single homogeneous pool, $\tau$ equals
-the ratio of the SOC stock to the annual carbon input flux and is the
+We define the mean transit time ($\tau$) of SOC as the average time a carbon atom spends in the soil from entry to exit \citep{Sierra2017,Sierra2018}. Under steady-state assumptions (constant SOC stock and input flux) and a single homogeneous pool, $\tau$ equals the ratio of the SOC stock to the annual carbon input flux and is the
 inverse of the apparent first-order decomposition rate constant~$k$:
 
 \begin{equation}
@@ -196,89 +128,48 @@ inverse of the apparent first-order decomposition rate constant~$k$:
 \end{equation}
 
 \noindent
-We acknowledge that for multi-pool systems, $\tau$ as computed here
-represents a bulk diagnostic that conflates pools with different
-turnover rates \citep{Sierra2018}. Nevertheless, this metric is widely
-used as a first-order characterisation of SOC dynamics and is directly
-comparable to the transit time diagnostics computed from ESM output
-\citep{Carvalhais2014,Sierra2017}.
+We acknowledge that for multi-pool systems, $\tau$ as computed here represents a simplification that aggregates pools with different turnover rates \citep{Sierra2018}. Nevertheless, this metric is widely used as a first-order characterisation of SOC dynamics and is roughly comparable to the transit time diagnostics computed from ESM output \citep{Carvalhais2014,Sierra2017}.
 
-To separate the contributions of different process classes to spatial
-variation in $\tau$, we designed a nested Random Forest (RF) modelling
-framework in which predictor variables are organised into four
-mechanistically distinct groups: Climate, Edaphic, Land~Use, and
-Biological (Table~\ref{tab:predictors}). Seven model configurations
-(M1--M7) progressively combine these groups
-(Table~\ref{tab:model_comparison}), so that the change in cross-validated
-performance between successive models isolates the additional explanatory
-power of each process class while holding the climate baseline constant.
+To separate the contributions of different process classes to spatial variation in $\tau$, we designed a nested Random Forest (RF) modelling framework in which predictor variables are organised into four
+mechanistically distinct groups: Climate, Edaphic, Land~Use, and Biological (Table~\ref{tab:predictors}). Seven model configurations (M1--M7) progressively combine these groups
+(Table~\ref{tab:model_comparison}), so that the change in cross-validated performance between successive models isolates the additional explanatory power of each process class while holding the climate baseline constant.
 
-A key design constraint is the exclusion of productivity-related
-variables (net primary productivity, leaf area index) from the predictor
-set. Because $\tau$ is calculated as SOC stock divided by an NPP-derived
-input flux (Eq.~\ref{eq:mtt}), including productivity as a predictor
-would introduce a circular dependency.
+A key design constraint is the exclusion of productivity-related variables (net primary productivity, leaf area index) from the predictor set. Because $\tau$ is calculated as SOC stock divided by an NPP-derived input flux (Eq.~\ref{eq:mtt}), including productivity as a predictor would introduce a circular dependency.
+
+Productivity-related variables are not included among the free predictors, because NPP already enters $\tau$ directly as the input flux (Eq.~\ref{eq:mtt}). Their contribution to $\tau$ is thus assumed to be general by construction rather than zonal.
 
 % -----------------------------------------------------------------------------
 \subsection{Soil data compilation}
 \label{sec:data}
 % -----------------------------------------------------------------------------
 
-We compiled soil profile data from the World Soil Information Service
-\citep[WoSIS;][]{Batjes2024} point dataset
-(\texttt{sol\_chem.pnts\_horizons}), which integrates observations from
-multiple national and regional soil surveys worldwide. From the full
-dataset of horizon-level records, we retained only mineral soils by
-removing all records with organic carbon (OC)
-$\geq$~120~g~kg$^{-1}$ (the conventional threshold separating mineral
-from organic soil horizons). Records with missing OC were retained.
+We took soil profile data from the OpenLandMap soil compendium \citep{Hengl2025}, a harmonised global compilation of open soil-sample and soil-profile datasets drawn from national and regional surveys as well as international repositories (including WoSIS, USDA~NCSS, LandPKS,
+SISLAC, Netherlands.BIS, and GLanCE). We used the \texttt{sol\_chem.pnts\_horizons} file (v1.0.1), which contains harmonised horizon-level observations of soil physical and chemical
+properties worldwide. From the full dataset of horizon-level records, we retained only mineral soils by removing all records with organic carbon (OC) $\geq$~120~g~kg$^{-1}$ (the conventional threshold separating mineral from organic soil horizons). Records with missing OC were retained.
 
 Horizon-level data were standardised to a 0--20~cm depth interval by
-depth-weighted averaging. For each unique soil profile (identified by
-site~ID), we computed the overlap of each recorded horizon with the
-0--20~cm target interval and calculated a thickness-weighted mean for
-seven soil variables: organic carbon, total nitrogen, pH~(H$_2$O), clay
-content, silt content, sand content, and oven-dry bulk density.
-Site-level metadata (coordinates, observation date, source database)
-were carried forward as the most common value across horizons.
+depth-weighted averaging. For each unique soil profile (identified by site~ID), we computed the overlap of each recorded horizon with the 0--20~cm target interval and calculated a thickness-weighted mean for
+organic carbon and oven-dry bulk density; these two variables enter the MRT calculation directly (Sect.~\ref{sec:mtt_calc}) as the SOC stock inputs. Other soil properties (clay, silt, sand, pH, total
+nitrogen) were taken from spatialised SoilGrids layers (Sect.~\ref{sec:predictors}) rather than from the profiles themselves, to ensure that the training observations and the global prediction grid share a consistent definition and measurement convention. Site-level metadata (coordinates, observation date,
+source database) were carried forward as the most common value across horizons.
+
 
 % -----------------------------------------------------------------------------
 \subsection{Data quality control}
 \label{sec:qc}
 % -----------------------------------------------------------------------------
 
-After depth standardisation, the dataset contained 381\,541 profiles from
-47~source databases spanning 78\textdegree S to 78\textdegree N. We applied
-a series of quality-control filters to remove records likely to introduce
-systematic bias into the MRT calculation. First, 83\,206 profiles
-(21.8\,\%) reported OC~$=$~0~g\,kg$^{-1}$, which in WoSIS typically
-encodes missing data rather than a true measurement; these values were set
-to \texttt{NA} and the affected profiles were removed when no valid OC
-remained. Second, 102\,379 exact duplicates (matching coordinates and OC)
-were removed (26.8\,\% of all records). Third, bulk-density values outside
-the physically plausible range ($<$~0.1 or $>$~2.5~g\,cm$^{-3}$) were set
-to \texttt{NA}. After filtering, 198\,382 profiles remained (52.0\,\% of
-the pre-QC total). Profiles with low-precision (integer-only) coordinates
-($n = 208$) and unusually high OC ($>$~100~g\,kg$^{-1}$; $n = 3\,252$)
-were flagged but retained.
+After depth standardisation, the dataset contained 381\,541 profiles from 44~source databases spanning 78.5\textdegree S to 86.8\textdegree N. We applied a series of quality-control filters to remove records likely to introduce systematic bias into the MRT calculation. First, 83\,206 profiles (21.8\,\%) reported OC~$=$~0~g\,kg$^{-1}$, which in the compiled source databases typically encodes missing data rather than a true measurement; these values were set to \texttt{NA} and the affected
+profiles were removed when no valid OC remained. Second, 102\,379 exact duplicates (matching coordinates and OC) were removed (26.8\,\% of all records). Third, bulk-density values outside the physically plausible range ($<$~0.1 or $>$~2.5~g\,cm$^{-3}$) were set to \texttt{NA}. After
+filtering, 198\,382 profiles remained (52.0\,\% of the pre-QC total). Profiles with low-precision (integer-only) coordinates ($n = 208$) and unusually high OC ($>$~100~g\,kg$^{-1}$; $n = 488$) were flagged but retained.
+
 
 % -----------------------------------------------------------------------------
 \subsection{Bulk density gap-filling}
 \label{sec:bd}
 % -----------------------------------------------------------------------------
 
-Bulk density (BD) is required to convert OC concentration to SOC stock
-but is frequently unreported. We gap-filled missing BD values using a
-three-tier approach. First, a Random Forest model
-(\texttt{randomForest} R~package; 200~trees) was trained on the subset
-of profiles with measured BD, using terrain metrics, K\"oppen zone, land
-cover fractions, SoilGrids soil properties (excluding BD), MODIS NPP,
-WRB functional group, and MODIS burn count as predictors. Ten-fold
-cross-validation confirmed that the RF model outperformed the SoilGrids
-BD product for sites with measured BD. Second, profiles lacking measured
-BD but with complete RF predictors received RF-predicted values. Third,
-remaining gaps were filled with SoilGrids BD as a fallback. Each profile
-was flagged with its BD source (measured, RF, or SoilGrids).
+Bulk density (BD) is required to convert OC concentration to SOC stock but is frequently unreported. We gap-filled missing BD values using a three-tier approach. First, a Random Forest model (\texttt{randomForest} R~package; 200~trees) was trained on the subset of profiles with measured BD, using terrain metrics, K\"oppen zone, land cover fractions, SoilGrids clay, sand, coarse fragment volume, CEC, nitrogen, and pH, MODIS NPP, WRB functional group, and MODIS burn count as predictors. Ten-fold cross-validation confirmed that the RF model outperformed the SoilGrids BD product for sites with measured BD. Second, profiles lacking measured BD but with complete RF predictors received RF-predicted values. Third, remaining gaps were filled with SoilGrids BD as a fallback. Each profile was flagged with its BD source (measured, RF, or SoilGrids).
 
 % -----------------------------------------------------------------------------
 \subsection{Mean transit time calculation}
@@ -294,12 +185,13 @@ SOC stock for the 0--20~cm layer was calculated as:
 \end{equation}
 
 \noindent
-where OC is in g~kg$^{-1}$, BD in g~cm$^{-3}$, depth is 20~cm, and the
-factor~10 converts units.
+where OC is in g~kg$^{-1}$, BD (gap-filled; Sect.~\ref{sec:bd}) in
+g~cm$^{-3}$, depth is 20~cm, and the factor~10 converts units to
+g~C~m$^{-2}$.
 
 Carbon input to soil was estimated as the belowground fraction of net
 primary productivity (BNPP). We used MODIS MOD17A3 annual NPP
-\citep[2001--2020;][]{Running2015} extracted at each profile location,
+\citep[2001--2020;][]{Running2021} extracted at each profile location,
 applying the MODIS scale factor
 ($\text{NPP}_\text{true} = \text{NPP}_\text{raw} / 10$;
 g~C~m$^{-2}$~yr$^{-1}$). To maintain temporal consistency with the
@@ -308,12 +200,13 @@ site's sampling date were used. Sites sampled before the MODIS era
 (pre-2001) or with fewer than three pre-sampling NPP years were
 excluded from the temporal statistics.
 
-Belowground allocation fractions (BNPP/NPP) were assigned by dominant
-land cover class following \citet{Mokany2006}, \citet{Malhi2011}, and
-\citet{Litton2008}: tree cover 0.35, shrubland 0.45, grassland 0.55,
-cropland 0.30, herbaceous wetland 0.50, mangroves 0.40, moss/lichen
-0.60. Sites lacking land cover information received a global average of
-0.40. Soil carbon input was then:
+Belowground allocation fractions ($f_\text{BNPP}$) were assigned by
+dominant land cover class following \citet{Mokany2006},
+\citet{Malhi2011}, and \citet{Litton2008}: tree cover 0.35, shrubland
+0.45, grassland 0.55, cropland 0.30, bare/sparse 0.30, built-up 0.20,
+herbaceous wetland 0.50, mangroves 0.40, and moss/lichen 0.60; snow/ice
+and water pixels were excluded. Sites lacking land cover information
+received a global default of 0.40. Soil carbon input was then:
 
 \begin{equation}
   C_\text{input}\;[\text{g\,C\,m}^{-2}\text{\,yr}^{-1}]
@@ -323,11 +216,12 @@ cropland 0.30, herbaceous wetland 0.50, mangroves 0.40, moss/lichen
 
 \noindent
 and $\tau$ was computed as the ratio of SOC stock to $C_\text{input}$
-(Eq.~\ref{eq:mtt}). Quality control flags were assigned: values with
-$\tau < 1$~year or $> 1000$~years, or with missing, negative, or
-infinite values were excluded. The upper and lower 1\% tails of the
-remaining distribution were removed prior to model fitting.
-
+(Eq.~\ref{eq:mtt}). For model fitting, values with
+$\tau < 1$~year, $\tau > 1000$~years, or with missing, negative, or
+infinite values were excluded, as were observations outside the 1st
+and 99th percentiles of the remaining $\tau$ distribution. This left
+181\,887 profiles with $\tau$ ranging from 1.9 to 143.9~yr as the
+training set for the Random Forest models (Sect.~\ref{sec:rf}).
 % -----------------------------------------------------------------------------
 \subsection{Predictor variables}
 \label{sec:predictors}
@@ -1008,7 +902,9 @@ drivers, and targeted sampling in the most undersampled regions.
 \section*{Data availability}
 % =============================================================================
 
-Soil profile data are from WoSIS (\url{https://www.isric.org/explore/wosis}).
+Soil profile data are from the OpenLandMap soil compendium
+\citep{Hengl2025}, available at \url{https://zenodo.org/records/15593990}
+and documented at \url{https://soildb.openlandmap.org/}.
 ERA5-Land data are available from the Copernicus Climate Data Store
 (\url{https://cds.climate.copernicus.eu}).
 SoilGrids data are available from ISRIC (\url{https://soilgrids.org}).
