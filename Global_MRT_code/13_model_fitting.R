@@ -155,6 +155,18 @@ BIOLOGICAL_VARS <- c(
   "EcM_AM_richness_ratio"   # EcM:AM richness ratio (derived)
 )
 
+# BIO_MODE: "main" (6-layer PRODUCTION: fungal + 5 SPUN; matches 13c/13f/13i) |
+# "full" (all 9, incl. the 3 Barceló root-colonization layers, kept as a
+# sensitivity). The Barceló-3 add ~0 skill (unique ΔR² ≈ +0.001) but cost ~⅓
+# coverage, so MAIN is production. main -> canonical output filenames (consumed
+# by steps 14/18); full -> "_full" suffix so both can coexist.
+BIO_MODE  <- Sys.getenv("MRT_13_BIO", "main")
+BARCELO_3 <- c("AM_roots_colonized", "EcM_roots_colonized", "EcM_AM_root_ratio")
+if (BIO_MODE == "main") BIOLOGICAL_VARS <- setdiff(BIOLOGICAL_VARS, BARCELO_3)
+OUT_SUFFIX <- if (BIO_MODE == "full") "_full" else ""
+cat(sprintf("BIO_MODE = %s -> %d biological layers (suffix '%s')\n",
+            BIO_MODE, length(BIOLOGICAL_VARS), OUT_SUFFIX))
+
 # Store for export (used in step 14 and 15)
 VAR_GROUPS <- list(
   CLIMATE = CLIMATE_VARS,
@@ -577,24 +589,24 @@ cat("  SAVING OUTPUTS\n")
 cat("═══════════════════════════════════════════════════════════════\n\n")
 
 # 1. Save all models and results
-models_output <- file.path(OUTPUT_DIR, "13_rf_models.rds")
+models_output <- file.path(OUTPUT_DIR, paste0("13_rf_models", OUT_SUFFIX, ".rds"))
 saveRDS(results, models_output)
 cat("✓ Models saved:", models_output, "\n")
 
 # 2. Save model comparison table
-comparison_output <- file.path(OUTPUT_DIR, "13_model_comparison.csv")
+comparison_output <- file.path(OUTPUT_DIR, paste0("13_model_comparison", OUT_SUFFIX, ".csv"))
 write.csv(comparison_df, comparison_output, row.names = FALSE)
 cat("✓ Model comparison saved:", comparison_output, "\n")
 
 # 3. Save variable importance (for full model)
 if ("M7_full" %in% names(results)) {
-  importance_output <- file.path(OUTPUT_DIR, "13_variable_importance.csv")
+  importance_output <- file.path(OUTPUT_DIR, paste0("13_variable_importance", OUT_SUFFIX, ".csv"))
   write.csv(importance_df, importance_output, row.names = FALSE)
   cat("✓ Variable importance saved:", importance_output, "\n")
 }
 
 # 4. Save variable groups configuration (for prediction and visualization)
-var_groups_output <- file.path(OUTPUT_DIR, "13_var_groups.rds")
+var_groups_output <- file.path(OUTPUT_DIR, paste0("13_var_groups", OUT_SUFFIX, ".rds"))
 saveRDS(VAR_GROUPS, var_groups_output)
 cat("✓ Variable groups saved:", var_groups_output, "\n")
 
@@ -612,7 +624,7 @@ model_config_for_prediction <- lapply(names(results), function(m) {
 })
 names(model_config_for_prediction) <- names(results)
 
-config_output <- file.path(OUTPUT_DIR, "13_model_config.rds")
+config_output <- file.path(OUTPUT_DIR, paste0("13_model_config", OUT_SUFFIX, ".rds"))
 saveRDS(model_config_for_prediction, config_output)
 cat("✓ Model config saved:", config_output, "\n")
 

@@ -1,0 +1,214 @@
+% Draft Methods --- analytical half, rewritten with inline two-register (plain +
+% formal) and the new analyses (Shapley, Moran, mapping-scale, 6-layer biology,
+% 500-tree block sweep, ESM structural comparison). Staging file (2026-06-29).
+%
+% CARRIED OVER from current manuscript.tex with only minor updates (NOT reproduced
+% here): Conceptual framework (tau definition, Eq. 1), Soil data compilation
+% (OpenLandMap compendium), Data QC, Bulk-density gap-filling, Mean transit time
+% calculation, Predictor variables (Climate/Edaphic/Land use). The Biological
+% predictor subsection gains the MAIN/sensitivity note below.
+
+\section{Methods}
+\label{sec:methods}
+
+% ---------------------------------------------------------------------------
+\subsection{Modelling design and the attribution problem}
+% ---------------------------------------------------------------------------
+We organise predictors into four mechanistically distinct groups --- Climate,
+Edaphic, Land use, and Biological (Table~\ref{tab:predictors}) --- and model
+$\ln\tau$ with Random Forests. Productivity variables (NPP, leaf area index) are
+excluded by design: because $\tau$ is computed as SOC stock divided by an
+NPP-derived input (Eq.~\ref{eq:mtt}), admitting productivity as a predictor would
+make the model partly circular.
+
+The central analytical question is how much of the predictable variation in $\tau$
+belongs to each group. This is not a trivial accounting exercise, because the
+groups are spatially correlated --- climate is itself a soil-forming factor, so
+climate and edaphic descriptors carry overlapping information (Sec.~\ref{sec:intro})
+--- and correlated predictors cannot be credited by simply adding them one at a
+time, since the credit each receives then depends on the order of addition. We
+therefore attribute variance with an order-independent decomposition (Shapley
+values, Sec.~\ref{sec:shapley}) rather than with nested increments, and we test
+separately whether the variance left unexplained by climate is spatially organised
+(Sec.~\ref{sec:moran}), where it acts (Sec.~\ref{sec:mapscale}), and how each
+driver acts (Sec.~\ref{sec:ale}).
+
+% ---------------------------------------------------------------------------
+\subsection{Random Forest fitting and spatial cross-validation}
+\label{sec:rf}
+% ---------------------------------------------------------------------------
+All models were fitted with the \texttt{ranger} package \citep{Wright2017}
+(500~trees, minimum node size~5, $m_\text{try}=\lfloor\sqrt{p}\rfloor$), on
+$\ln\tau$, with predictions back-transformed by exponentiation. Skill was
+estimated by \emph{spatial block} cross-validation: the globe was partitioned into
+$2\textdegree\times2\textdegree$ blocks ($\sim$200~km), blocks were assigned to ten
+folds, and each fold's blocks were predicted from a model trained on the other
+nine. Holding out whole blocks --- rather than individual points --- prevents a
+site near a fold boundary from being predicted by an almost-coincident training
+neighbour, so the reported $R^2$ measures generalisation to unseen regions rather
+than interpolation between adjacent samples.
+
+The $2\textdegree$ block exceeds the spatial range of the beyond-climate residual
+(empirical semivariogram range $\approx16$~km; Sec.~\ref{sec:mapscale}), so
+held-out blocks are effectively independent of the training data. The attribution
+is also insensitive to the block size: although the absolute cross-validated $R^2$
+declines as blocks enlarge (stricter spatial separation, fewer effective degrees
+of freedom), repeating the decomposition with $1\textdegree$ and $5\textdegree$
+blocks (at the production 500 trees) shifts each group's share of attributable
+variance by at most 2.5 percentage points, leaving the ranking and the
+climate-versus-non-climate split unchanged.
+
+% ---------------------------------------------------------------------------
+\subsection{Attribution of variance among process classes (Shapley)}
+\label{sec:shapley}
+% ---------------------------------------------------------------------------
+\textit{In brief.} To state how much of the predictable variation in $\tau$ each
+process class accounts for, we borrow a tool from cooperative game theory. When
+players (here, predictor groups) contribute partly overlapping value, the fair way
+to credit each is to average its marginal contribution over every possible order in
+which players could join the team. Applied to explained variance, this Shapley
+share is independent of any arbitrary ordering --- the property that nested,
+add-one-at-a-time increments lack when predictors are correlated.
+
+\textit{Formally.} Let $N$ be the four groups and $v(S)$ the spatially
+cross-validated $R^2$ of the Random Forest using exactly the groups in coalition
+$S\subseteq N$. We fit all $2^{4}=16$ coalitions on a single common set of rows ---
+those complete across all groups ($n=154{,}675$) --- so that every $v(S)$ is
+estimated on the same observations and the coalition scores are mutually
+comparable. The Shapley value of group $i$ is
+\begin{equation}
+  \phi_i \;=\!\! \sum_{S\subseteq N\setminus\{i\}}
+  \frac{|S|!\,\bigl(|N|-|S|-1\bigr)!}{|N|!}\,
+  \bigl[\,v(S\cup\{i\})-v(S)\,\bigr],
+  \label{eq:shapley}
+\end{equation}
+the order-averaged marginal contribution of $i$; the $\phi_i$ sum exactly to the
+full-model $R^2=v(N)$, and we report each as a percentage share. As companion
+descriptors we report each group's single-domain skill $v(\{i\})$ and the
+\emph{overlap} $\sum_i v(\{i\}) - v(N)$, which quantifies how much the groups'
+explanatory contributions coincide: a large overlap signifies predictors that are
+correlated but not redundant, and --- following the argument of
+Sec.~\ref{sec:intro} --- is itself an expression of the zonal coupling between
+climate and soil rather than a defect of the design.
+
+The biological group is carried in two forms. The MAIN configuration uses six
+layers (soil fungal proportion and five SPUN mycorrhizal
+richness/endemism/ratio layers; $\geq96\%$ coverage of modelling rows); the three
+\citet{Barcelo2023} root-colonisation layers, which add negligible unique skill
+($\Delta R^2\approx0.001$) while reducing coverage to 61\%, are retained only as a
+nine-layer sensitivity case (Sec.~\ref{sec:robust}, Appendix).
+
+% ---------------------------------------------------------------------------
+\subsection{Spatial organisation of the beyond-climate residual (Moran's $I$)}
+\label{sec:moran}
+% ---------------------------------------------------------------------------
+\textit{In brief.} Attribution says how much non-climate variance exists; it does
+not say whether that variance is spatially \emph{organised} or merely scattered.
+We test this with Moran's $I$, which asks whether places near one another carry
+more similar values than they would if the values were shuffled at random across
+space. $I\approx0$ indicates no spatial pattern; $I>0$ indicates that nearby
+locations resemble each other --- the signature of an organised geography.
+
+\textit{Formally.} We take the beyond-climate residual as the out-of-sample
+$\ln\tau$ minus the climate-only prediction, aggregate it to block means, and
+compute
+$I=\frac{n}{\sum_{ij}w_{ij}}\cdot
+\frac{\sum_{ij}w_{ij}(x_i-\bar x)(x_j-\bar x)}{\sum_i (x_i-\bar x)^2}$,
+where $w_{ij}$ is a spatial contiguity weight between blocks $i$ and $j$.
+Significance is assessed against a null distribution from 999 random spatial
+permutations of the residuals. We evaluate $I$ at $2\textdegree$ and
+$5\textdegree$.
+
+% ---------------------------------------------------------------------------
+\subsection{Mapping the zonality, and choosing the scale}
+\label{sec:mapscale}
+% ---------------------------------------------------------------------------
+\textit{In brief.} To show \emph{where} non-climate context bends turnover, we map
+the ratio of a context-aware prediction to a climate-only prediction: values above
+one mark regions where edaphic or biological context lengthens turnover relative to
+what climate alone implies, values below one where it shortens it. Such a map is
+only worth drawing at a scale where it is reliable. Two analyses set that scale.
+First, most of the point-to-point variation in the residual is unstructured: a
+variogram shows roughly two-thirds of its variance is short-range noise. Second,
+and more directly, we measured how faithfully the map reproduces the observed
+residual as it is aggregated to coarser blocks; agreement roughly doubles from the
+noisy native pixel to a meso scale and then plateaus, with no single privileged
+resolution. We therefore map at $2\textdegree$, within that plateau.
+
+\textit{Formally.} The modulation field is the log-ratio of model predictions,
+$\ln[\hat\tau_{\text{context}}/\hat\tau_{\text{climate}}]$, computed symmetrically
+(each domain relative to climate, with no abiotic-before-biology ordering) to match
+the order-independent attribution; the abiotic and biological panels are shown
+separately. The noise floor is characterised by an empirical variogram of the
+residual (nugget/sill ratio and range). The mapping scale is set by an
+out-of-sample skill curve: using spatial-block-CV predictions, we form the native
+beyond-climate map $\hat r_i=\hat\tau_{\text{full}}-\hat\tau_{\text{climate}}$ and
+the observed residual $r_i$, aggregate both to block means at a series of block
+sizes, and report $R^2(\bar r,\hat{\bar r})$ as a function of scale. This agreement
+rises from $\approx0.11$ at the native pixel to $\approx0.22$ at
+1--2\textdegree{} and is flat across 1--7\textdegree; a purely linear version of the
+same diagnostic instead declines with scale, so the meso-scale choice rests on the
+nonlinear, map-faithful metric (Appendix).
+
+% ---------------------------------------------------------------------------
+\subsection{Mechanism: marginal responses (ALE)}
+\label{sec:ale}
+% ---------------------------------------------------------------------------
+\textit{In brief.} Attribution and the map say how much and where; to say \emph{how}
+each driver acts we trace the response of $\tau$ to each predictor while letting the
+other predictors keep their naturally co-occurring values. Accumulated Local
+Effects (ALE) do this without the extrapolation artefacts that partial-dependence
+curves suffer when predictors are correlated.
+
+\textit{Formally.} We use ALE \citep{Apley2020} on the MAIN 6-layer model
+(consistent with the attribution and the maps). Each continuous predictor is split
+into 40 quantile bins; within each bin the focal variable is nudged to the bin
+edges with all others held at observed values, and the local prediction differences
+are accumulated and centred. Curves are computed globally and within four latitude
+bands (southern extratropics, tropics, northern temperate, boreal/Arctic).
+Categorical predictors (K\"oppen zone, soil functional group) are excluded.
+
+% ---------------------------------------------------------------------------
+\subsection{Comparison with Earth System Model structure}
+\label{sec:esm}
+% ---------------------------------------------------------------------------
+We compare the spatial structure of our $\tau$ against six CMIP6 models spanning
+structurally distinct land-surface lineages \citep{Varney2022}: CESM2, UKESM1-0-LL,
+IPSL-CM6A-LR, MPI-ESM1-2-LR, CanESM5, MIROC-ES2L. For each we computed the
+quasi-equilibrium turnover $\tau_\text{ESM}=\text{cSoil}/\text{rh}$
+\citep{Koven2017,Carvalhais2014} over 1980--2014 (using \texttt{cSoilAbove1m} for
+CESM2 to reduce depth mismatch).
+
+Absolute turnover is not comparable across products: depth, pool definition, and
+reference period all differ, and these differences are unavoidable in cross-ESM
+$\tau$ comparison. We therefore do not treat any product as a standard of truth and
+do not certify absolute skill; we compare only the normalised spatial
+\emph{structure}. Each product is normalised to its own distribution, and structure
+is summarised two ways: relative turnover by biome zone (main text) and by
+continuous latitude band (appendix), together with magnitude-free dispersion
+statistics (coefficient of variation, 95:5 percentile ratio, SD of $\ln\tau$). We
+quantify over-amplification as the ratio of polar to tropical relative turnover in
+each product against the same ratio in the observation-constrained map.
+
+% ---------------------------------------------------------------------------
+\subsection{Robustness checks}
+\label{sec:robust}
+% ---------------------------------------------------------------------------
+Three checks bound the main claims (details and figures in the Appendix).
+\emph{Provenance.} To test whether the residual structure could be an artefact of
+combining many source databases, we measured the between-source share of residual
+variance ($\eta^2$) and the change in coarse organisation after removing each
+source's mean. \emph{Biological parsimony.} We compared per-layer coverage,
+collinearity, and unique skill to justify the MAIN 6-layer set against the
+9-layer alternative. \emph{Block-size sensitivity.} We repeated the Shapley
+decomposition at $1$, $2$, and $5\textdegree$ blocks (Sec.~\ref{sec:rf}).
+
+% ---------------------------------------------------------------------------
+\subsection{Software and reproducibility}
+% ---------------------------------------------------------------------------
+Analyses used R~($\geq4.3$) with \texttt{terra}, \texttt{sf}, \texttt{ranger}
+\citep{Wright2017}, and \texttt{gstat} (variograms). The pipeline is a sequence of
+numbered scripts from data assembly through prediction, attribution, organisation,
+mapping-scale, sensitivity, and ESM comparison; each reported number and figure
+regenerates from a named script. Code and intermediate outputs are archived at
+[DOI].

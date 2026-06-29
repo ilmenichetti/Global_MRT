@@ -143,12 +143,38 @@ ggsave(file.path(PLOT_DIR, "13e_block_residual_map.png"), p_map,
        width = 10, height = 5.5, dpi = 200)
 cat("OK  ", file.path(PLOT_DIR, "13e_block_residual_map.png"), "\n")
 
-# (b) Moran scatter at 2 deg
-png(file.path(PLOT_DIR, "13e_moran_scatter.png"), width = 1500, height = 1500, res = 220)
-moran.plot(res_list[[1]]$agg$resid, res_list[[1]]$listw, zero.policy = TRUE,
-           xlab = "Block-mean residual", ylab = "Spatially lagged residual",
-           main = sprintf("Moran scatter (2° blocks): I = %.3f", morans_df$morans_I[1]))
-dev.off()
+# (b) Moran scatter at 2 deg --- clean ggplot, points coloured by quadrant (with
+#     legend), slope = Moran's I. Replaces the base moran.plot (unlabelled symbols).
+agg_ms <- res_list[[1]]$agg
+lw_ms  <- res_list[[1]]$listw
+xc <- agg_ms$resid - mean(agg_ms$resid)
+ylag <- spdep::lag.listw(lw_ms, agg_ms$resid, zero.policy = TRUE)
+yc <- ylag - mean(ylag)
+quad <- factor(
+  ifelse(xc >= 0 & yc >= 0, "High-High (clustered)",
+  ifelse(xc <  0 & yc <  0, "Low-Low (clustered)",
+  ifelse(xc >= 0 & yc <  0, "High-Low (outlier)", "Low-High (outlier)"))),
+  levels = c("High-High (clustered)", "Low-Low (clustered)",
+             "High-Low (outlier)", "Low-High (outlier)"))
+ms_df <- data.frame(x = xc, y = yc, quad = quad)
+I2 <- morans_df$morans_I[1]
+p_ms <- ggplot(ms_df, aes(x, y, colour = quad)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_point(alpha = 0.55, size = 1.4) +
+  geom_abline(slope = I2, intercept = 0, colour = "black", linewidth = 0.9) +
+  scale_colour_manual(
+    values = c("High-High (clustered)" = "#B2182B", "Low-Low (clustered)" = "#2166AC",
+               "High-Low (outlier)" = "#F4A582", "Low-High (outlier)" = "#92C5DE"),
+    name = "Block vs. neighbours") +
+  annotate("text", x = Inf, y = -Inf, hjust = 1.1, vjust = -0.7, fontface = "bold",
+           label = sprintf("Moran's I = %.3f", I2)) +
+  labs(title = "Moran scatter (2° blocks)",
+       subtitle = "Slope = Moran's I; colour = each block relative to its neighbours",
+       x = "Block-mean beyond-climate residual",
+       y = "Spatially lagged residual (mean of neighbours)") +
+  theme_bw(base_size = 11) + theme(legend.position = "right")
+ggsave(file.path(PLOT_DIR, "13e_moran_scatter.png"), p_ms, width = 7.2, height = 5.2, dpi = 200)
 cat("OK  ", file.path(PLOT_DIR, "13e_moran_scatter.png"), "\n")
 
 # =============================================================================

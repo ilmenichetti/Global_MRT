@@ -18,7 +18,8 @@
 #
 # Input:  outputs/12b_model_ready.rds, outputs/13_var_groups.rds
 # Output: outputs/13f_scale_noisefloor.csv, outputs/13f_scale_noisefloor.rds
-#         plots/appendix/scale_noisefloor.png
+#         plots/appendix/scale_noisefloor.png      (panels a+b: noise floor)
+#         plots/appendix/scale_covariate_skill.png (former panel c, standalone)
 #
 # Env override: MRT_13F_NTREES (default 500).
 # Author: Lorenzo   Date: 2026-06-26
@@ -191,9 +192,11 @@ pb <- ggplot(spectrum, aes(scale_deg, org_obs_null)) +
        x = "Block size (degrees)", y = "Observed / null ratio") +
   theme_bw(base_size = 11) + theme(plot.tag = element_text(face = "bold"))
 
-# Out-of-sample covariate-skill-vs-scale (panel c) is kept in the CSV but NOT
-# plotted: it is a tangential linear proxy (see header note) and this is an
-# appendix robustness figure. The two panels below carry the noise-floor story.
+# The covariate-skill-vs-scale curve (former panel c) is kept OUT of the main
+# two-panel noise-floor figure (it is a linear out-of-sample proxy, not the RF
+# mapping skill) but is now drawn as its OWN appendix figure below, so the
+# tension with the meso-mapping recommendation is on the record rather than
+# buried in the CSV.
 peak_scale <- spectrum$scale_deg[which.max(spectrum$block_cov_R2)]
 
 fig <- (pa | pb) +
@@ -201,6 +204,27 @@ fig <- (pa | pb) +
                   theme = theme(plot.title = element_text(face = "bold", size = 13)))
 ggsave(file.path(PLOT_DIR, "scale_noisefloor.png"), fig, width = 9.5, height = 4.6, dpi = 200)
 cat("\nOK  ", file.path(PLOT_DIR, "scale_noisefloor.png"), "\n")
+
+# ---- Standalone appendix figure: covariate skill vs scale (linear OOS proxy) --
+pc <- ggplot(spectrum, aes(scale_deg, block_cov_R2)) +
+  geom_hline(yintercept = 0, linetype = "dotted", colour = "grey50") +
+  geom_line(colour = "#2166AC") +
+  geom_point(aes(size = n_blocks), colour = "#2166AC") +
+  geom_vline(xintercept = peak_scale, linetype = "dashed", colour = "grey60") +
+  scale_size_continuous(name = "blocks (n)", range = c(1.5, 5)) +
+  labs(title = "Block-mean covariate skill declines with scale",
+       subtitle = sprintf(paste0("Out-of-sample (5-fold-CV) LINEAR R² of block-mean ",
+                                  "covariates on the\nblock-mean residual. Peaks at the ",
+                                  "FINEST scale (%g°, R² = %.3f), not at a meso scale, ",
+                                  "and\nturns negative by ~4°. NB: this is a linear proxy, ",
+                                  "not the RF mapping skill."),
+                          peak_scale, max(spectrum$block_cov_R2, na.rm = TRUE)),
+       x = "Block size (degrees)", y = "Out-of-sample linear R²") +
+  theme_bw(base_size = 11) +
+  theme(plot.title = element_text(face = "bold", size = 13),
+        plot.subtitle = element_text(size = 9, colour = "grey30"))
+ggsave(file.path(PLOT_DIR, "scale_covariate_skill.png"), pc, width = 7, height = 5, dpi = 200)
+cat("OK  ", file.path(PLOT_DIR, "scale_covariate_skill.png"), "\n")
 cat("OK  outputs/13f_scale_noisefloor.csv + .rds\n")
 cat(sprintf("\nVerdict: ~%.0f%% of the beyond-climate residual is unstructured noise (nugget),\n",
             100 * nug_sill))

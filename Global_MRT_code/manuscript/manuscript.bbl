@@ -1,11 +1,5 @@
 \begin{thebibliography}{}
 
-\bibitem[Var, ]{Varney2022}
-
-
-\bibitem[Kov, ]{Koven2017}
-
-
 \bibitem[Apley and Zhu, 2020]{Apley2020}
 Apley, D.~W. and Zhu, J. (2020).
 \newblock Visualizing the effects of predictor variables in black box
@@ -18,12 +12,6 @@ Barcel{\'o}, M., van Bodegom, P.~M., and Soudzilovskaia, N.~A. (2023).
 \newblock Fine-resolution global maps of root biomass carbon colonized by
   arbuscular and ectomycorrhizal fungi.
 \newblock {\em Scientific Data}, 10:56.
-
-\bibitem[Batjes et~al., 2024]{Batjes2024}
-Batjes, N.~H., Calisto, L., and de~Sousa, L.~M. (2024).
-\newblock Providing quality-assessed and standardised soil data to support
-  global mapping and modelling ({WoSIS} snapshot 2023).
-\newblock {\em Earth System Science Data}, 16(10):4735--4765.
 
 \bibitem[Beck et~al., 2023]{Beck2023}
 Beck, H.~E., McVicar, T.~R., Vergopolan, N., Berg, A., Lutsko, N.~J., Dufour,
@@ -60,10 +48,17 @@ Hansen, M.~C., Potapov, P.~V., Moore, R., Hancher, M., Turubanova, S.~A.,
 \newblock High-resolution global maps of 21st-century forest cover change.
 \newblock {\em Science}, 342(6160):850--853.
 
-\bibitem[Hijmans, 2024]{Hijmans2024}
-Hijmans, R.~J. (2024).
-\newblock {\em terra: Spatial Data Analysis}.
-\newblock R package version 1.7-78.
+\bibitem[Hengl et~al., 2025]{OpenLandMapSoilDB2025}
+Hengl, T. et~al. (2025).
+\newblock An open compendium of soil datasets: Soil observations and
+  measurements.
+\newblock Documentation at \url{https://soildb.openlandmap.org/}.
+
+\bibitem[Koven et~al., 2017]{Koven2017}
+Koven, C.~D., Hugelius, G., Lawrence, D.~M., and Wieder, W.~R. (2017).
+\newblock Higher climatological temperature sensitivity of soil carbon in cold
+  than warm climates.
+\newblock {\em Nature Climate Change}, 7:817--822.
 
 \bibitem[Litton and Giardina, 2008]{Litton2008}
 Litton, C.~M. and Giardina, C.~P. (2008).
@@ -133,6 +128,12 @@ Van~Nuland, M.~E., Averill, C., Stewart, J.~D., Prylutskyi, O., Corrales, A.,
   Consortium}, and van~den Hoogen, J. (2025).
 \newblock Global hotspots of mycorrhizal fungal richness are poorly protected.
 \newblock {\em Nature}.
+
+\bibitem[Varney et~al., 2022]{Varney2022}
+Varney, R.~M., Chadburn, S.~E., Burke, E.~J., and Cox, P.~M. (2022).
+\newblock Evaluation of soil carbon simulation in {CMIP6} {Earth} system
+  models.
+\newblock {\em Biogeosciences}, 19(19):4671--4704.
 
 \bibitem[Wright and Ziegler, 2017]{Wright2017}
 Wright, M.~N. and Ziegler, A. (2017).
