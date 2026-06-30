@@ -77,3 +77,19 @@ Global_MRT_code/manuscript/temporary/*.html
 
 # Large local datasets folder (15GB, do not commit)
 Datasets/
+
+# LaTeX build artifacts (compiled locally or by Overleaf; not source).
+# Tracking these caused recurring Overleaf<->GitHub binary merge conflicts.
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.toc
+*.lof
+*.lot
+# Compiled main manuscript (Overleaf recompiles it server-side)
+Global_MRT_code/manuscript/manuscript.pdf
