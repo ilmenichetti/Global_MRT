@@ -74,3 +74,6 @@ Global_MRT_code/manuscript/temporary/*.aux
 Global_MRT_code/manuscript/temporary/*.out
 Global_MRT_code/manuscript/temporary/*.log
 Global_MRT_code/manuscript/temporary/*.html
+
+# Large local datasets folder (15GB, do not commit)
+Datasets/

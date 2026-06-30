@@ -637,17 +637,19 @@ p_ale_top <- ggplot(plot_df_top,
   scale_colour_manual(values = group_colours, name = "Variable group") +
   scale_fill_manual(values   = group_colours, name = "Variable group") +
   facet_wrap(~ variable, scales = "free", ncol = 5) +
-  theme_minimal(base_size = 11) +
+  theme_minimal(base_size = 15) +
   theme(
     panel.grid.minor = element_blank(),
     panel.grid.major = element_line(colour = "grey92", linewidth = 0.3),
-    strip.text       = element_text(face = "bold", size = 10),
+    strip.text       = element_text(face = "bold", size = 14),
     legend.position  = "bottom",
-    plot.title       = element_text(size = 14, face = "bold"),
-    plot.subtitle    = element_text(size = 10, colour = "grey40"),
-    axis.title       = element_text(size = 10),
-    axis.text        = element_text(size = 8),
-    axis.text.x      = element_text(angle = 30, hjust = 1)
+    legend.text      = element_text(size = 13),
+    legend.title     = element_text(size = 13),
+    plot.title       = element_text(size = 18, face = "bold"),
+    plot.subtitle    = element_text(size = 13, colour = "grey40"),
+    axis.title       = element_text(size = 14),
+    axis.text        = element_text(size = 11),
+    axis.text.x      = element_text(angle = 30, hjust = 1, size = 11)
   ) +
   labs(
     title    = "ALE Response Curves - Top 10 Variables, Global Mean MRT (M7)",
@@ -659,7 +661,7 @@ p_ale_top <- ggplot(plot_df_top,
   )
 
 ggsave(file.path(PLOT_DIR, "18D_ALE_top10_MRT.png"),
-       p_ale_top, width = 16, height = 8, dpi = 300, bg = "white")
+       p_ale_top, width = 18, height = 10, dpi = 300, bg = "white")
 cat("  \u2713 Saved: 18D_ALE_top10_MRT.png\n")
 
 # ---- PLOT E: Top 10 spaghetti (scaled x) -----------------------------------
