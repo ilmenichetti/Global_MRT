@@ -636,7 +636,9 @@ p_ale_top <- ggplot(plot_df_top,
   geom_line(linewidth = 0.9, alpha = 0.9) +
   scale_colour_manual(values = group_colours, name = "Variable group") +
   scale_fill_manual(values   = group_colours, name = "Variable group") +
-  facet_wrap(~ variable, scales = "free", ncol = 5) +
+  # shared y-axis (free x only): the vertical span of each panel is then directly
+  # comparable, so responsiveness (ALE range) reads off the figure (Aleksi's note).
+  facet_wrap(~ variable, scales = "free_x", ncol = 5) +
   theme_minimal(base_size = 15) +
   theme(
     panel.grid.minor = element_blank(),

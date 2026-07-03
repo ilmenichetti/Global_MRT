@@ -166,6 +166,9 @@ p_ms <- ggplot(ms_df, aes(x, y, colour = koppen)) +
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey70") +
   geom_vline(xintercept = 0, linetype = "dashed", colour = "grey70") +
   geom_point(alpha = 0.6, size = 1.4) +
+  # per-zone linear fits (Aleksi): does the beyond-climate autocorrelation slope
+  # differ by Koppen zone? Thin coloured lines vs the black overall Moran's I line.
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.6, alpha = 0.9) +
   geom_abline(slope = I2, intercept = 0, colour = "black", linewidth = 0.9) +
   scale_colour_manual(values = pal, name = "Koppen zone\n(modal per block)",
                       na.translate = FALSE) +

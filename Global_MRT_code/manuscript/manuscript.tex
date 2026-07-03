@@ -55,29 +55,30 @@
 
 \begin{abstract}
 Soil organic carbon (SOC) turnover is commonly modelled as a function of
-climate
-% How about litter quality ? I think that it also plays a role here ? 
-, with the unexplained remainder treated as noise. Yet soils are zonal
-objects,
-%Why they are zonal objects ? Should we open here the role of parent material, etc ? My answer: not so sure, parent material alone is not so much a zonality process (it's one of them) but I get it
-and an emergent property of the soil system (the time carbon
-persists) may share that organisation. Using a global compilation of
-mineral-soil profiles, we estimate steady-state transit times ($\tau$) and ask
-how much of their spatial variation beyond climate is attributable, organised,
-and mappable. On a common, spatially block cross-validated footing, climate
-explains about a third of the predictable variance in $\ln\tau$; an
-order-independent (Shapley) decomposition attributes the rest to edaphic
-(33\,\%), biological (22\,\%), and land-use (10\,\%) context, with climate at
-35\,\%. Edaphic and climatic predictors carry overlapping signals, as
-expected where climate is itself a soil-forming factor, yet the
-beyond-climate residual is spatially organised (Moran's $I=0.25$) rather than
-random. This organisation is led by edaphic factors, with soil biology forming a
-distinct second axis. Marginal-effect analysis reveals ecologically
-interpretable, biome-dependent response shapes. Compared with six CMIP6 Earth
-System Models, our estimated structure is gentler: the models show a
-polar-to-tropical contrast in turnover roughly three times steeper, and disagree among
-themselves by an order of magnitude. We present this as a comparison, and propose the
-zonality of soil-carbon turnover as an interpretive framework for global SOC turnover.
+climate, with the unexplained remainder treated as noise. Yet turnover responds
+to more than climate (litter quality, soil texture and mineralogy, and decomposer
+biology all leave a mark), and soils themselves are organised zonally, their
+forming factors varying in coherent geographic patterns. An emergent property of
+the soil system (the time carbon persists) may therefore share that organisation.
+Using a global compilation of mineral-soil profiles, we estimate steady-state
+transit times ($\tau$) and ask how much of their variation beyond climate is
+attributable, organised, and mappable. On a common, spatially block
+cross-validated footing, climate explains about a third of the predictable
+variance in $\ln\tau$; an order-independent (Shapley) decomposition attributes the
+rest to edaphic context (soil texture, mineralogy and chemistry; 33\,\%),
+biological context (productivity and decomposer community; 22\,\%), and land use
+(10\,\%), with climate at 35\,\%. The beyond-climate residual is not random but
+spatially organised (Moran's $I=0.25$), led by edaphic factors with soil biology
+as a distinct second axis, and marginal-effect analysis resolves it into
+ecologically interpretable, biome-dependent response shapes. Mapping the structure
+recovers a coherent zonal pattern of turnover: a modern, data-intensive analysis
+converging on the long-standing pedological insight that soils, and their emergent
+properties, are zonal. Because this rests on soil observations rather than model
+output, it also offers an observation-based benchmark for Earth System Models:
+against six CMIP6 models our estimated structure is gentler, theirs showing a
+polar-to-tropical contrast in turnover roughly three times steeper and disagreeing
+among themselves by an order of magnitude. We propose the zonality of soil-carbon
+turnover as an interpretive framework for global SOC turnover.
 \end{abstract}
 
 \bigskip
@@ -96,10 +97,19 @@ Earth system models
 Soils hold roughly twice as much carbon as the atmosphere, and the rate at which it
 cycles rather than the stock alone defines the global C balance and the land carbon--climate feedback.
 The relevant quantity is the mean transit time $\tau$, the average time a carbon atom
-spends in the soil \citep{Sierra2017,Sierra2018}. Because the total global stock is so large, even
+spends in the soil from input to loss \citep{Sierra2017,Sierra2018}. We adopt the
+transit-time definition, rather than the several related and often conflated
+residence- or turnover-time measures, because at steady state it is the
+system-level diagnostic of how long carbon persists, and it is the quantity that a
+bulk single-pool inversion of stock over input actually recovers. Because the total global stock is so large, even
 modest shifts in $\tau$ over large areas have a relevant effect on the global carbon balance. What
 controls $\tau$, and how it varies geographically, impacts directly whether soils
-keep buffering anthropogenic emissions or begin to amplify them.
+keep buffering anthropogenic emissions or begin to amplify them. Constraining that
+geographic variation observationally is an active goal: recent work exploits the
+present-day spatial relationship between $\tau$ and temperature as an emergent
+constraint on the warming response of soil carbon \citep{Varney2020}. Such
+approaches rest on the premise that the spatial $\tau$ gradient is predominantly
+thermal, a premise our beyond-climate analysis lets us examine directly.
 
 \paragraph{The classical paradigm: chemistry and constants.}
 Since the foundational models of the 1970s--1990s
@@ -209,7 +219,8 @@ estimate and drop out at the mean-transit-time step
 as having missing input data in Sect.~\ref{sec:results_data}.
 
 Horizon-level data were standardised to a 0--20~cm depth interval by
-depth-weighted averaging. For each unique soil profile (identified by
+depth-weighted averaging, applied to each profile individually rather than
+stratified by pedological class. For each unique soil profile (identified by
 site~ID), we computed the overlap of each recorded horizon with the
 0--20~cm target interval and calculated a thickness-weighted mean for
 seven soil variables: organic carbon, total nitrogen, pH~(H$_2$O), clay
@@ -225,7 +236,7 @@ were carried forward as the most common value across horizons.
 After depth standardisation, the dataset contained 381\,541 profiles from
 47~source databases spanning 78\textdegree S to 78\textdegree N. We applied
 a series of quality-control filters to remove records likely to introduce
-systematic bias into the MRT calculation. First, 83\,206 profiles
+systematic bias into the transit-time calculation. First, 83\,206 profiles
 (21.8\,\%) reported OC~$=$~0~g\,kg$^{-1}$, which in these source
 databases typically encodes missing data rather than a true measurement; these values were set
 to \texttt{NA} and the affected profiles were removed when no valid OC
@@ -278,7 +289,10 @@ converting the product $(\text{g\,kg}^{-1})(\text{g\,cm}^{-3})(\text{cm})$
 into a mass per unit area, g\,C\,m$^{-2}$.
 
 Carbon input to soil was estimated as the belowground fraction of net
-primary productivity (BNPP). We used MODIS MOD17A3 annual NPP
+primary productivity (BNPP). 
+%Aleksi: For me this raises questions. How about branches. In most cases those are left on site, unless used for bioenergy. Are we now ignoring aboveground litter fraction ? And we assume that all NPP belowground is litter ? 
+(maybe this is okay assumption?)
+We used MODIS MOD17A3 annual NPP
 \citep[2001--2020;][]{Running2015} extracted at each profile location,
 applying the MODIS scale factor
 ($\text{NPP}_\text{true} = \text{NPP}_\text{raw} / 10$;
@@ -309,6 +323,9 @@ Table~\ref{tab:allocation}), and $\tau$ was computed as the ratio of SOC stock t
 $\tau < 1$~year or $> 1000$~years, or with missing, negative, or
 infinite values were excluded. The upper and lower 1\% tails of the
 remaining distribution were removed prior to model fitting.
+
+ %Aleksi: ow about harvests ? Most of the growth of forests is harvested and taken to mills in countries like Finland & Sweden: We would need layer of managed forests, like proxy based on this:  https://earthenginepartners.appspot.com/science-2013-global-forest And. then estimates of the fraction of NPP that is annually taken out of the system
+% Aleksi: we could have biome spoecific values here if needed
 
 % -----------------------------------------------------------------------------
 \subsection{Predictor variables}
@@ -342,7 +359,7 @@ cells it covers (a count of classes, not an average, since the variable
 is categorical).
 
 \subsubsection{Edaphic}
-
+% Aleksi: How about excluding peatlands? I think that it would be important ?  At least from the analysis, maybe maps can be as they are. But if we have obs from peatlands, those may distort our interpration ? (there are some global peat maps)
 Soil properties were obtained from SoilGrids 250\,m v2.0
 \citep{Poggio2021}, depth-weighted to 0--20~cm: clay content, sand
 content, bulk density, coarse fragment volume, pH~(H$_2$O), cation
@@ -704,13 +721,13 @@ Observation dates ranged from 1900 to~2024,
 with the majority (79\,\%) falling between~1980 and~2020. Of the
 198\,382 profiles, 38\,292 (19.3\,\%) had measured bulk density, 133\,557
 (67.3\,\%) received RF-predicted values, and 21\,830 (11.0\,\%) were
-gap-filled with SoilGrids. The steady-state MRT calculation
+gap-filled with SoilGrids. The steady-state transit-time calculation
 (Sect.~\ref{sec:mtt_calc}) produced valid estimates for 185\,601 profiles
 (93.6\,\%), with the remainder flagged as infinite ($n = 719$), missing
 input data ($n = 9\,486$), or outside the plausible range
 ($<$~1~or~$>$~1\,000~yr; $n = 2\,576$). For model fitting, we removed
-the 1st and 99th MRT percentiles, retaining 181\,887 profiles
-(MRT range 1.9--143.9~yr). Spatial coverage spanned
+the 1st and 99th $\tau$ percentiles, retaining 181\,887 profiles
+($\tau$ range 1.9--143.9~yr). Spatial coverage spanned
 78\textdegree S--78\textdegree N and 172\textdegree W--176\textdegree E
 (Fig.~\ref{fig:sampling}).
 
@@ -768,8 +785,15 @@ random arrangement would produce. Most of the residual's point-to-point variance
 is nonetheless short-range and unstructured. Its empirical semivariogram (Sect.~\ref{sec:mapscale}; Fig.~\ref{fig:noisefloor}) has a high nugget (about
 56\,\% of the total sill is already present at the shortest separations, i.e.\
 variance that the spatial coordinates do not resolve) and a short correlation
-range ($\approx16$~km, the lag beyond which the semivariance stops rising), so
-little point-level structure survives past a few tens of kilometres. The
+range ($\approx16$~km, the lag beyond which the semivariance stops rising),
+so little point-level structure survives past a few tens of kilometres. This
+range should not be read as intrinsic soil autocorrelation, which for many soil
+properties operates at metres to tens of metres; it is instead inherited from the
+gridded predictor fields that drive the model. Our covariates (MODIS-derived NPP,
+climate reanalysis, and the SoilGrids products) are themselves smooth at scales of
+hundreds of metres to kilometres, so the residual can only express structure that
+those inputs resolve, and the $\approx16$~km range reflects the effective
+resolution of the predictor stack rather than a property of the soils sampled. The
 organised signal is therefore a meso-scale property: the agreement between the
 mapped and the observed residual roughly doubles from the noisy native pixel
 ($R^2\approx0.11$) to $\approx0.22$ at 1--2\textdegree{} and then plateaus
@@ -778,16 +802,17 @@ map it below.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.6\textwidth]{../plots/step_13c_commonality/13e_moran_scatter.png}
-\caption{\textbf{Spatial organisation of the beyond-climate residual.} How to read it: each point is a 2\textdegree{} block; the horizontal axis is that block's mean beyond-climate residual (observed minus climate-only prediction), and the vertical axis is the average residual of its neighbouring blocks. A positive slope means blocks resemble their neighbours more than a random arrangement would give (spatial clustering) and the slope is Moran's $I=0.25$ ($p\ll0.001$). A flat, shapeless cloud would indicate no spatial organisation. Points are coloured by each block's modal coarse K\"oppen zone (A tropical, B arid, C temperate, D cold, E polar); the beyond-climate autocorrelation is broadly distributed across zones rather than confined to one.}
+\caption{\textbf{Spatial organisation of the beyond-climate residual.}
+How to read it: each point is a 2\textdegree{} block; the horizontal axis is that block's mean beyond-climate residual (observed minus climate-only prediction), and the vertical axis is the average residual of its neighbouring blocks. A positive slope means blocks resemble their neighbours more than a random arrangement would give (spatial clustering) and the slope is Moran's $I=0.25$ ($p\ll0.001$). A flat, shapeless cloud would indicate no spatial organisation. Points are coloured by each block's modal coarse K\"oppen zone (A tropical, B arid, C temperate, D cold, E polar), and the thin coloured lines are within-zone linear fits. The beyond-climate autocorrelation is present across zones rather than confined to one, but not uniformly: the within-zone slope is steepest in tropical and arid blocks, shallower in temperate and cold ones, and essentially flat in the (few) polar blocks.}
 \label{fig:moran}
 \end{figure}
 
-\subsection{Global distribution of predicted MRT}
+\subsection{Global distribution of predicted $\tau$}
 \label{sec:results_map}
 % -----------------------------------------------------------------------------
 
 The full-model (M7) prediction, generated at 0.1\textdegree{} resolution,
-covers ${\sim}$942\,000 land pixels and yields a global mean MRT of 23.3~yr
+covers ${\sim}$942\,000 land pixels and yields a global mean $\tau$ of 23.3~yr
 (median 22.4~yr; Fig.~\ref{fig:global_mrt}). Predicted values span
 3.7--72.0~yr across the global domain. A first-order latitudinal gradient is visible in
 the predicted-$\tau$ map (Fig.~\ref{fig:global_mrt}), consistent with temperature
@@ -832,17 +857,17 @@ Consistent with its near-zero unique variance, land use produces the largest loc
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.82\textwidth]{../plots/step_15b_zonality/zonality_map_dual_symmetric.png}
-\caption{\PH{[draft figure --- to refine together]}~ \textbf{Zonality map (symmetric).} (a)~Abiotic and (b)~biological modulation, each relative to climate (log-ratio of model predictions), at meso (2\textdegree) scale. Red/green~=~longer turnover, blue/purple~=~shorter.}
+\caption{\PH{[draft figure --- to refine together]}~ \textbf{Zonality map (symmetric).} (a)~Abiotic and (b)~biological modulation, each relative to climate, at meso (2\textdegree) scale. How to read it: each panel maps how much longer or shorter turnover is than climate alone would predict, expressed as the log-ratio of the full-model prediction to the climate-only prediction in each 2\textdegree{} block. Values near zero mean climate already accounts for the local turnover; departures mark where edaphic (a) or biological (b) context lengthens or shortens turnover beyond what climate explains. Red/green~=~longer turnover, blue/purple~=~shorter.}
 \label{fig:zonality}
 \end{figure}
 
 % -----------------------------------------------------------------------------
-\subsection{Marginal effects on MRT}
+\subsection{Marginal effects on $\tau$}
 \label{sec:results_ale}
 % -----------------------------------------------------------------------------
 
 Accumulated Local Effects (ALE) analysis quantified the marginal
-response of MRT to each continuous predictor across its observed range
+response of $\tau$ to each continuous predictor across its observed range
 (Fig.~\ref{fig:ale_top10}). The three largest ALE effect ranges again
 belonged to climate variables:temperature seasonality (10.0~yr),
 snow cover (7.7~yr), and soil temperature (7.3~yr). Among non-climate
@@ -855,7 +880,15 @@ top ten.
 
 \begin{figure}[H]\centering
 \includegraphics[width=1.0\textwidth]{../plots/step_18_sensitivity/18D_ALE_top10_MRT.png}
-\caption{\textbf{ALE response curves} for the ten most responsive predictors of $\tau$ (full model, M7).}
+\caption{\textbf{ALE response curves} for the ten most responsive predictors of
+$\tau$ (full model, M7). Panels are ordered by decreasing ALE range (the vertical
+span of each curve, i.e.\ how much $\tau$ shifts across the predictor's observed
+range), so the most influential predictors appear first; the leaders are climatic
+(temperature seasonality, snow cover, and soil temperature), with sand the
+strongest edaphic response. The $y$-axis is shared across panels, so the vertical span
+of each curve is directly comparable: a flatter curve means a predictor moves
+$\tau$ less. The $x$-axis is in each predictor's native units and therefore
+differs between panels.}
 \label{fig:ale_top10}
 \end{figure}
 
@@ -866,9 +899,9 @@ climbs sharply between roughly 50 and 60\,\% snow-cover fraction), and soil
 temperature is U-shaped (a shape we revisit in the Discussion, where the
 high-temperature upturn may partly reflect drier conditions in the hottest soils);
 sand declines monotonically
-(clay-rich to sand-rich shortens MRT by nearly 5~yr), bulk density is threshold-like
+(clay-rich to sand-rich shortens $\tau$ by nearly 5~yr), bulk density is threshold-like
 below $\sim$1~g\,cm$^{-3}$, pH is a rising inverted-U peaking near 7.5--8, fungal
-proportion drops MRT above a $\sim$0.2 biomass fraction, and AM endemism is inverted-U.
+proportion drops $\tau$ above a $\sim$0.2 biomass fraction, and AM endemism is inverted-U.
 The mechanistic reading of these shapes is taken up in the Discussion.
 
 Resolved by latitude band (Fig.~\ref{fig:ale_latband}), the
@@ -1051,7 +1084,22 @@ structure (which our analysis associates with edaphic, biological, and land-use
 context) as one place where soil-carbon representations might be examined, with the
 candidate functional shapes suggested here as a possible starting point.
 
-
+Our finding also speaks to a prominent use of the spatial $\tau$ field.
+\citet{Varney2020} constrain the warming sensitivity of soil-carbon turnover by
+treating the present-day spatial relationship between $\tau$ and temperature as a
+proxy for its temporal response, an emergent constraint that implies an effective
+$Q_{10}\approx2.5$ and halves the CMIP uncertainty in soil-carbon loss under
+2\textdegree{}C of warming. That approach presumes the spatial $\tau$--temperature
+gradient is largely thermal. Our decomposition qualifies this reading: temperature
+alone explains little of the point-level variation in $\tau$
+(Fig.~\ref{fig:tempscatter}, $R^2=0.06$), and the beyond-climate residual is
+spatially organised rather than random (Moran's $I=0.25$), carrying edaphic and
+biological structure that a $\tau$--temperature curve would absorb into an apparent
+thermal sensitivity. Space-for-time constraints on $\tau$ might therefore be
+sharpened by first accounting for this non-thermal zonal structure. We note also
+that \citeauthor{Varney2020} define turnover through respiration
+($\tau=C_s/R_h$) rather than through carbon input as we do, so the two estimates are
+related but not identical.
 
 \paragraph{Limitations.}
 The steady-state assumption is a simplification; we rely on non-equilibrium errors
@@ -1063,8 +1111,18 @@ Predictor correlations among climate, edaphic, and land-use variables are inhere
 the observational design and cannot be fully disentangled without experimental or
 temporal replication. Finally, depth and pool-definition differences complicate the
 CMIP6 comparison, which is why we compare relative structure rather than absolute
-magnitude. These motivate time-resolved transit times, manipulative experiments, and
-targeted sampling in undersampled regions.
+magnitude. A large fraction of the point-to-point variance in $\tau$ also stays
+unpredictable at this resolution (Sect.~\ref{sec:mapscale}; Fig.~\ref{fig:noisefloor}):
+the beyond-climate signal we recover is a meso-scale, spatially organised component,
+not a pixel-level reconstruction. Part of that residual is measurement and
+steady-state noise, but part likely reflects fine-scale controls our global
+predictors cannot resolve, chiefly the quantity and quality of carbon inputs.
+Our input term is a belowground-NPP proxy that omits aboveground litter, litter
+chemistry, and management removals (harvest, residue export), and these are plausibly
+first-order at the local scale; predictors closer to the actual input flux, together
+with denser and repeated sampling, would be the most direct route to reducing the
+unexplained variance. These motivate time-resolved transit times, manipulative
+experiments, and targeted sampling in undersampled regions.
 
 \paragraph{Implications: a biome-aware, tractable parameterisation.}
 The structure we describe need not be operationalised by adding mechanistic
@@ -1233,6 +1291,12 @@ The authors declare no competing interests.
 \includegraphics[width=0.95\textwidth]{../plots/appendix/scale_noisefloor.png}
 \caption{\textbf{Scale spectrum and noise floor.} (a)~Residual variogram (nugget/sill~$\approx$0.56, range~$\approx$16~km); (b)~coarse organisation grows with block size.}
 \label{fig:noisefloor}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.8\textwidth]{../plots/appendix/22_temperature_tau_scatter.png}
+\caption{\textbf{Transit time versus temperature.} Observed $\tau$ (log scale) against mean annual air temperature for the QC-passed profiles, coloured by coarse K\"oppen zone, with an overall loess trend (black). Transit time declines with warming, from ${\sim}35$~yr in the coldest soils to a minimum of ${\sim}13$~yr near 22--23\textdegree{}C, corresponding to an apparent $Q_{10}$ of bulk turnover of about 1.35 (log-linear fit, $R^2=0.06$). The upturn at the warmest end is consistent with the U-shaped soil-temperature response in Fig.~\ref{fig:ale_top10} (hot, dry soils turning over more slowly). This single-predictor view is shown for comparability with earlier compilations \citep[e.g.][]{Varney2020}; the weak fit ($R^2=0.06$) underscores that temperature alone explains little of the point-level variation in $\tau$.}
+\label{fig:tempscatter}
 \end{figure}
 
 \begin{figure}[H]\centering
