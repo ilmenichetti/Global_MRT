@@ -37,6 +37,7 @@ Global_MRT_code/plots/appendix/*
 !Global_MRT_code/plots/appendix/biological_collinearity.png
 !Global_MRT_code/plots/appendix/scale_noisefloor.png
 !Global_MRT_code/plots/appendix/scale_rf_mapping_skill.png
+!Global_MRT_code/plots/appendix/22_temperature_tau_scatter.png
 # step_13c_commonality: track only the manuscript figures
 !Global_MRT_code/plots/step_13c_commonality/
 Global_MRT_code/plots/step_13c_commonality/*
