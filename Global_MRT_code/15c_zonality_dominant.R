@@ -1,0 +1,129 @@
+################################################################################
+# 15c_zonality_dominant.R  --  PROTOTYPE, not wired into the manuscript
+#
+# Discrete "dominant modulator" zonality map: at each meso (2 deg) block, which
+# non-climate domain (Edaphic / LandUse / Biological) most modulates tau relative
+# to climate-only, and in which direction (longer / shorter). Three definitions
+# of "dominant" are compared, because raw magnitude over-credits LandUse (whose
+# large per-pixel shift is mostly the land-cover allocation-coefficient imprint,
+# yet carries little explained variance):
+#   A  raw          dominant = max |log ratio|            (magnitude)
+#   C  standardised dominant = max |log ratio| / SD_domain (per-domain z-score)
+#   D  Shapley-wtd  dominant = max |log ratio| x Shapley%  (attribution-consistent)
+# The climate-dominated mask (raw |log ratio| < THRESH) and the direction (sign of
+# the dominant domain's raw log ratio) are identical across methods; only the
+# ranking of "which domain dominates" changes.
+#
+# Standalone review figure. Not referenced by manuscript.tex; output stays
+# gitignored (no un-ignore line), so it is not committed until we adopt it.
+#
+# Input : outputs/MRT_predictions/contribution_{EDAPHIC,LANDUSE,BIOLOGICAL}_logratio.tif
+#         outputs/13c_decomposition.rds   (Shapley shares, for method D)
+# Output: plots/step_15b_zonality/zonality_dominant_comparison.png
+#
+# Author: Lorenzo   Date: 2026-07-07
+################################################################################
+
+suppressMessages({ library(terra); library(rnaturalearth); library(sf) })
+
+PRED_DIR <- "./Global_MRT_code/outputs/MRT_predictions"
+PLOT_DIR <- "./Global_MRT_code/plots/step_15b_zonality"
+dir.create(PLOT_DIR, recursive = TRUE, showWarnings = FALSE)
+
+AGG_DEG <- 2
+THRESH  <- 0.05     # |log ratio| below this at 2 deg = climate already explains tau
+
+meso_agg <- function(r) aggregate(r, fact = round(AGG_DEG / 0.1), fun = "mean", na.rm = TRUE)
+borders  <- st_geometry(ne_countries(scale = 50, returnclass = "sf"))
+
+# --- per-domain log-ratio of tau vs climate-only, aggregated to meso ------------
+ed <- rast(file.path(PRED_DIR, "contribution_EDAPHIC_logratio.tif"))
+lu <- rast(file.path(PRED_DIR, "contribution_LANDUSE_logratio.tif"))
+bi <- rast(file.path(PRED_DIR, "contribution_BIOLOGICAL_logratio.tif"))
+s  <- meso_agg(c(ed, lu, bi)); names(s) <- c("Edaphic", "LandUse", "Biological")
+
+# --- shared pieces: climate mask + no-data + per-domain SD + Shapley weights -----
+absS   <- abs(s)
+maxRaw <- max(absS, na.rm = TRUE)         # NA where all three domains missing
+nodata <- is.na(maxRaw)
+clim   <- maxRaw < THRESH                  # climate-dominated
+
+sds <- global(s, "sd", na.rm = TRUE)[, 1]  # per-domain spatial spread (method C)
+dec <- readRDS("./Global_MRT_code/outputs/13c_decomposition.rds")
+shp <- setNames(dec$shapley_df$shapley_pct, dec$shapley_df$group)
+w   <- shp[c("EDAPHIC", "LANDUSE", "BIOLOGICAL")]   # Shapley weights (method D)
+
+# ranking-magnitude stacks (all >= 0), one per method
+mag_raw <- absS
+mag_std <- rast(lapply(1:3, function(i) absS[[i]] / sds[i]))
+mag_shp <- rast(lapply(1:3, function(i) absS[[i]] * w[i]))
+
+# --- classify: dominant domain (by a given magnitude) x direction ---------------
+classify <- function(mag) {
+  mf   <- ifel(is.na(mag), -1, mag)         # so which.max ignores missing domains
+  dom  <- which.max(mf)                      # 1=Edaphic, 2=LandUse, 3=Biological
+  domv <- selectRange(s, dom)                # signed raw log ratio of that domain
+  code <- (dom - 1) * 2 + 1 + (domv < 0)     # 1/2 E, 3/4 L, 5/6 B (long/short)
+  code <- ifel(clim, 0L, code)               # 0 = climate-dominated
+  code <- ifel(nodata, NA, code)
+  as.int(code)
+}
+
+LAB <- c("Climate-dominated",
+         "Edaphic  (longer τ)",    "Edaphic  (shorter τ)",
+         "LandUse  (longer τ)",    "LandUse  (shorter τ)",
+         "Biological  (longer τ)", "Biological  (shorter τ)")
+PAL <- setNames(c("#BDBDBD", "#A50F15", "#FB9A99", "#238B45",
+                  "#A1D99B", "#08519C", "#9ECAE1"), LAB)
+
+set_levels <- function(code) { levels(code) <- data.frame(value = 0:6, class = LAB); code }
+codes <- list(
+  "A  Raw magnitude  (max |log ratio|)"                 = set_levels(classify(mag_raw)),
+  "C  Standardised  (max |log ratio| / SD)"             = set_levels(classify(mag_std)),
+  "D  Shapley-weighted  (max |log ratio| x Shapley %)"  = set_levels(classify(mag_shp)))
+
+# --- plot: 3 stacked panels, one shared legend ---------------------------------
+png(file.path(PLOT_DIR, "zonality_dominant_comparison.png"),
+    width = 2000, height = 2650, res = 190)
+layout(matrix(c(1, 2, 3, 4), ncol = 1), heights = c(1, 1, 1, 0.22))
+for (nm in names(codes)) {
+  cd  <- codes[[nm]]
+  pres <- levels(cd)[[1]]$class %in% unique(values(cd, na.rm = TRUE))  # not used; keep all
+  par(mar = c(1.6, 2.0, 2.4, 0.5))
+  plot(cd, col = unname(PAL), type = "classes", legend = FALSE,
+       axes = TRUE, main = nm, cex.main = 1.05)
+  plot(borders, add = TRUE, col = NA, border = "grey40", lwd = 0.3)
+}
+# shared legend strip
+par(mar = c(0, 0, 0, 0)); plot.new()
+legend("center", legend = LAB, fill = unname(PAL), border = "grey60",
+       ncol = 4, bty = "n", cex = 1.0, title = "Dominant non-climate modulator of τ")
+dev.off()
+cat("OK  ", file.path(PLOT_DIR, "zonality_dominant_comparison.png"), "\n\n")
+
+# --- CLEAN 4-class map (method D, domain only) for the manuscript appendix ------
+# Drops the longer/shorter split for a legible headline zonation; direction is
+# left to the continuous map (15b) / the comparison figure above.
+dom_D <- which.max(ifel(is.na(mag_shp), -1, mag_shp))   # 1=Edaphic,2=LandUse,3=Biological
+code4 <- ifel(clim, 0L, dom_D)
+code4 <- as.int(ifel(nodata, NA, code4))
+levels(code4) <- data.frame(value = 0:3,
+  class = c("Climate-dominated", "Edaphic", "LandUse", "Biological"))
+PAL4 <- c("#BDBDBD", "#E41A1C", "#4DAF4A", "#377EB8")   # domain palette (matches Shapley figs)
+
+png(file.path(PLOT_DIR, "zonality_dominant.png"), width = 2200, height = 1300, res = 200)
+plot(code4, col = PAL4, type = "classes",
+     mar = c(2.2, 2.2, 2.6, 9),
+     plg = list(cex = 0.9, title = "Dominant\nmodulator"),
+     main = "Dominant non-climate modulator of transit time τ (meso, 2°)")
+plot(borders, add = TRUE, col = NA, border = "grey40", lwd = 0.3)
+dev.off()
+cat("OK  ", file.path(PLOT_DIR, "zonality_dominant.png"), "\n")
+ft4 <- freq(code4); ft4$pct <- round(100 * ft4$count / sum(ft4$count), 1)
+cat("\n4-class (D) shares:\n"); print(ft4[, c("value", "pct")], row.names = FALSE)
+
+# --- class shares per method (console) -----------------------------------------
+for (nm in names(codes)) {
+  ft <- freq(codes[[nm]]); ft$pct <- round(100 * ft$count / sum(ft$count), 1)
+  cat("===", nm, "===\n"); print(ft[, c("value", "pct")], row.names = FALSE)
+}
