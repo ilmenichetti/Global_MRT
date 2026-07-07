@@ -110,6 +110,74 @@ cat("  Group sizes:", paste(sprintf("%s=%d", names(VAR_GROUPS),
                                     lengths(VAR_GROUPS)), collapse = ", "), "\n\n")
 
 # =============================================================================
+# INPUT-TERM CONVENTION + PEATLAND SWITCHES (sensitivity sweep; step 13j)
+# =============================================================================
+# The reviewer critique (Aleksi x2 + Shoji) is that the soil carbon input is the
+# BELOWGROUND fraction of NPP only. This is a COEFFICIENT convention on ONE NPP
+# field, not a data gap: "add aboveground litter" raises the coefficient toward 1;
+# "add harvest" lowers it on managed pixels. Both are reparametrisations of the
+# same NPP field. A uniform coefficient change is scale-invariant (leaves R^2,
+# Shapley shares, Moran's I exactly unchanged); only the coefficient's SPATIAL
+# variation across land cover can move the relative (zonality) results. This
+# switch re-derives tau under three conventions so 13j can show the headline is
+# coefficient-invariant (or, if it moves, justify the heavier Lesiv build).
+#
+#   MRT_13C_INPUT = below   (DEFAULT, main): C_input = NPP * f_bnpp
+#                   total   (upper bound):   C_input = NPP        (coeff = 1)
+#                   harvest (teeth test):    C_input = NPP * [f + (1-f)(1-h)] on
+#                                            tree-dominant pixels, NPP elsewhere;
+#                                            h = MRT_13C_HARVEST_H (default 0.5),
+#                                            the generous aboveground export
+#                                            fraction on (crudely) managed forest.
+#                                            Land cover only (no Lesiv); at h=0 it
+#                                            equals `total`, at h=1 forest -> below.
+#   MRT_13C_PEAT  = keep    (DEFAULT) | drop  (drop Histosol-classified rows; the
+#                   flag-not-mask robustness check, ~1.3% of rows).
+#
+# All non-default settings tag outputs with a suffix so the main headline files
+# are never overwritten (same guarantee as the BIO / BLOCK switches).
+INPUT_MODE  <- tolower(Sys.getenv("MRT_13C_INPUT", "below"))   # below | total | harvest
+HARVEST_H   <- as.numeric(Sys.getenv("MRT_13C_HARVEST_H", "0.5"))
+PEAT_MODE   <- tolower(Sys.getenv("MRT_13C_PEAT",  "keep"))    # keep | drop
+stopifnot(INPUT_MODE %in% c("below", "total", "harvest"),
+          PEAT_MODE  %in% c("keep", "drop"))
+
+if (PEAT_MODE == "drop") {
+  n0 <- nrow(soil_data)
+  is_histosol <- !is.na(soil_data$soilclass_wrb_name) &
+                 soil_data$soilclass_wrb_name == "Histosols"
+  soil_data <- soil_data[!is_histosol, ]
+  cat(sprintf("Peatland filter: dropped %d Histosol rows (%.2f%%); %d remain\n",
+              n0 - nrow(soil_data), 100 * (n0 - nrow(soil_data)) / n0,
+              nrow(soil_data)))
+}
+
+if (INPUT_MODE != "below") {
+  # Re-derive tau on the SAME NPP field under the chosen input convention.
+  # NPP_g_C_m2_yr, bnpp_fraction and SOC_stock_g_m2 are all carried in 12b.
+  f   <- soil_data$bnpp_fraction
+  eff <- switch(INPUT_MODE,
+    total   = rep(1, nrow(soil_data)),
+    harvest = ifelse(!is.na(soil_data$lc_dominant) & soil_data$lc_dominant == "trees",
+                     f + (1 - f) * (1 - HARVEST_H),   # forest: aboveground partly exported
+                     1)                               # elsewhere: full NPP (no removal)
+  )
+  C_input_alt <- soil_data$NPP_g_C_m2_yr * eff
+  soil_data$MRT_years <- soil_data$SOC_stock_g_m2 / C_input_alt
+  # Keep the QC flag meaningful for the re-derived tau (mirror step 12 thresholds).
+  soil_data$MRT_QC <- with(soil_data, dplyr::case_when(
+    is.na(MRT_years)        ~ "missing_data",
+    is.infinite(MRT_years)  ~ "infinite",
+    MRT_years < 0           ~ "negative",
+    MRT_years < 1           ~ "very_low",
+    MRT_years > 1000        ~ "very_high",
+    TRUE                    ~ "valid"))
+  cat(sprintf("Input convention: %s%s -> tau re-derived (SOC / C_input)\n",
+              INPUT_MODE,
+              if (INPUT_MODE == "harvest") sprintf(" (h=%.2f on tree pixels)", HARVEST_H) else ""))
+}
+
+# =============================================================================
 # PREPARE RESPONSE (identical recipe to 13_model_fitting.R)
 # =============================================================================
 
@@ -151,6 +219,10 @@ if (BIO_MODE == "main") {
 # Non-default CV block size (sensitivity sweep) gets its own suffix so the 2 deg
 # headline outputs are never overwritten.
 if (BLOCK_SIZE != 2) OUT_SUFFIX <- paste0(OUT_SUFFIX, "_blk", BLOCK_SIZE)
+# Non-default input convention / peat filter likewise tag their outputs.
+if (INPUT_MODE == "total")   OUT_SUFFIX <- paste0(OUT_SUFFIX, "_inpTOTAL")
+if (INPUT_MODE == "harvest") OUT_SUFFIX <- paste0(OUT_SUFFIX, "_inpHARV")
+if (PEAT_MODE  == "drop")    OUT_SUFFIX <- paste0(OUT_SUFFIX, "_nopeat")
 cat(sprintf("Biological set: %s (%d layers); CV block: %g deg; output suffix '%s'\n",
             BIO_MODE, length(VAR_GROUPS$BIOLOGICAL), BLOCK_SIZE, OUT_SUFFIX))
 
@@ -411,6 +483,7 @@ decomposition <- list(
     cv_folds = CV_FOLDS, block_size_deg = BLOCK_SIZE, seed = 42,
     n_common = n_common, var_groups = VAR_GROUPS,
     bio_mode = BIO_MODE, biological_vars = VAR_GROUPS$BIOLOGICAL,
+    input_mode = INPUT_MODE, harvest_h = HARVEST_H, peat_mode = PEAT_MODE,
     date = Sys.Date()
   ),
   full_R2      = full_R2,

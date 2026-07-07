@@ -134,7 +134,7 @@ p_map <- ggplot(agg2, aes(lon, lat, fill = resid)) +
   geom_tile(width = 2, height = 2) +
   scale_fill_gradient2(low = "#2166AC", mid = "white", high = "#B2182B",
                        midpoint = 0, limits = c(-lim, lim), oob = scales::squish,
-                       name = "Beyond-climate\nresidual (log MRT)") +
+                       name = "Beyond-climate\nresidual (log τ)") +
   coord_quickmap() +
   labs(title = "Beyond-climate residual, 2° block means",
        subtitle = sprintf("Moran's I = %.3f (p = %s); spatially organised, not random",

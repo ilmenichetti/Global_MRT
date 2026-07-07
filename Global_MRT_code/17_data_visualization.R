@@ -612,7 +612,7 @@ if (length(tif_files) > 0) {
     png(out_png, width = 2000, height = 1000, res = 150)
     
     plot(r_log,
-         main = paste0(model_name, " — Mean Residence Time"),
+         main = paste0("Transit time τ (", gsub("^MRT_", "", model_name), ")"),
          col = cols_mrt,
          range = c(log_min, log_max),
          mar = c(2, 2, 2, 5),
@@ -633,7 +633,7 @@ if (length(tif_files) > 0) {
       text(184, y_pos, labels = legend_vals[j], cex = 0.65, xpd = TRUE, adj = 0)
       segments(180, y_pos, 181.5, y_pos, xpd = TRUE, lwd = 0.5)
     }
-    text(182, 68, "MRT (yr)", cex = 0.7, xpd = TRUE, font = 2)
+    text(182, 68, expression(paste(tau, " (yr)")), cex = 0.7, xpd = TRUE, font = 2)
     
     dev.off()
     cat("    ✓", basename(out_png), "\n")
@@ -671,8 +671,8 @@ if (length(tif_files) > 0) {
     plot(world_borders_geom, add = TRUE, col = NA, border = "grey40", lwd = 0.3)
   }
   
-  mtext("MRT Predictions — Log-scale Comparison", outer = TRUE,
-        cex = 1.2, font = 2, line = 0.3)
+  mtext(expression(paste("Transit time ", tau, " predictions: log-scale comparison")),
+        outer = TRUE, cex = 1.2, font = 2, line = 0.3)
   
   dev.off()
   cat("  ✓ MRT_all_models_comparison_log.png\n")
@@ -747,10 +747,10 @@ if (length(m7_file) > 0) {
       oob     = scales::squish
     ) +
     scale_x_continuous(
-      name   = "MRT (years)",
+      name   = "τ (years)",
       breaks = log_ticks,
       labels = mrt_ticks,
-      sec.axis = sec_axis(~ ., name = "log(MRT)", labels = function(x) round(x, 1))
+      sec.axis = sec_axis(~ ., name = "log τ", labels = function(x) round(x, 1))
     ) +
     scale_y_continuous(
       labels = label_comma(),
@@ -767,7 +767,7 @@ if (length(m7_file) > 0) {
       axis.text           = element_text(size = 9)
     ) +
     labs(
-      title    = "Global Distribution of Predicted SOC Mean Residence Time",
+      title    = "Global distribution of predicted τ",
       subtitle = sprintf(
         "Bin colour = mean latitude of pixels in each bin · n = %s pixels",
         format(nrow(df_hist), big.mark = ",")),

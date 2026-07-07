@@ -380,7 +380,7 @@ p_profile <- ggplot() +
   coord_flip() +
   labs(
     x        = "Latitude",
-    y        = expression(paste("Mean residence time ", tau, " (years, log scale)")),
+    y        = expression(paste("Transit time ", tau, " (years, log scale)")),
     title    = "Latitudinal profile of soil carbon turnover time",
     subtitle = paste0("RF M7 (red) vs. CMIP6 ensemble ",
                       YEAR_START, "\u2013", YEAR_END,
@@ -651,7 +651,7 @@ if (!is.null(rf_1) && length(tau_rasters) > 0) {
     plot_annotation(
       title    = expression(paste("RF M7 ", tau, " minus CMIP6 ", tau,
                                   " (years)")),
-      subtitle = paste0("Positive (red) = RF predicts longer residence time ",
+      subtitle = paste0("Positive (red) = RF predicts longer transit time ",
                         "than ESM; negative (blue) = RF shorter.\n",
                         "CMIP6 historical mean ",
                         YEAR_START, "\u2013", YEAR_END, "."),

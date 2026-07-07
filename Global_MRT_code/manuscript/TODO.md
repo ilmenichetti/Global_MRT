@@ -8,7 +8,13 @@ items close.
 
 ## 1. Reviewer comments needing data rework (Bucket 3)
 
-**To tackle next week (week of 2026-07-06).**
+**RESOLVED 2026-07-07** without a pipeline rebuild. The input-term critique was
+answered with a carbon-input sensitivity sweep (three conventions + a
+literature-anchored harvest h-curve) showing the relative/zonality results are
+invariant; peat handled flag-not-mask with a sensitivity table. See
+`13k_input_sensitivity_appendix.R`, Fig.~\ref{fig:input_sensitivity},
+Tables~\ref{tab:input_sensitivity}/\ref{tab:peat_sensitivity}, Methods
+Sec.~\ref{sec:robust}, and `decisions/2026-07-07_peat_flag_not_mask.md`.
 
 These came up independently from more than one co-author, so they are not optional.
 
@@ -30,21 +36,19 @@ are NOT equal weight:
     literature BNPP fractions themselves carry enough biome-structured error to
     matter even for the "smooth" cases?)
 
-- [ ] **Carbon input = belowground NPP only.** Aleksi (twice) and Shoji both
-  question using the belowground fraction of NPP as the soil input term. Open
-  points: aboveground litter is ignored; litter *quality* / chemistry is not
-  represented; the implicit assumption that all belowground NPP becomes litter.
-  Action: write a defensible justification paragraph in Methods, and/or revise
-  the input term. (manuscript.tex, inline comment near BNPP definition.)
-- [ ] **Harvest removals.** In managed forests (e.g. Finland, Sweden) a large
-  fraction of NPP is exported to mills and never enters the soil. Aleksi suggests
-  a managed-forest layer (Hansen Global Forest Change,
-  https://earthenginepartners.appspot.com/science-2013-global-forest) and a
-  fraction-of-NPP-removed term, possibly biome-specific. Requires new input layer
-  and a pipeline re-run.
-- [ ] **Peatland exclusion.** Peat observations may distort interpretation.
-  Filter peat sites from the training data (global peat maps exist); the maps
-  themselves can stay as is. Requires re-running the pipeline on filtered obs.
+- [x] **Carbon input = belowground NPP only.** Answered via the carbon-input
+  sensitivity sweep (belowground / total NPP / total$-$harvest, same NPP field):
+  relative results invariant, only LandUse share responds. Belowground defended as
+  a conservative boundary (root-C preferential stabilisation) at the BNPP
+  definition; justification + sensitivity in Methods Sec.~\ref{sec:robust}.
+- [x] **Harvest removals.** Addressed with a crude land-cover harvest export on
+  tree-dominant pixels, swept across the literature range of $h$ (0.2--0.6): the
+  beyond-climate gap does not fall (Fig.~\ref{fig:input_sensitivity}D). A dedicated
+  managed-forest layer (Hansen/Lesiv) was judged unnecessary; the effect lands on
+  the LandUse axis and the crude sweep already brackets it.
+- [x] **Peatland exclusion.** Flag-not-mask: dropping Histosol-classified obs
+  leaves the gap and Moran's $I$ essentially unchanged (Table~\ref{tab:peat_sensitivity});
+  records retained in the fit, flagged on the maps. Decision record filed.
 
 ## 2. Manuscript placeholders to fill
 

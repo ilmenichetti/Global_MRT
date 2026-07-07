@@ -88,6 +88,22 @@ cat("\u2550\u2550\u2550 SOC MRT ALE ANALYSIS (Step 18) \u2550\u2550\u2550\n\n")
 # LOAD MODEL (M7 only)
 # =============================================================================
 
+# Cache-aware: the ALE result (ale_df) is small and fully sufficient for every
+# figure below, so if it is already cached we skip the 2.75 GB M7 model load and
+# the ALE recomputation and go straight to plotting. Set MRT_18_REFRESH=1 to force
+# a recompute from the model.
+if (file.exists(CACHE_FILE) && Sys.getenv("MRT_18_REFRESH", "") == "") {
+  cat("Cached ALE results found (", basename(CACHE_FILE),
+      "); skipping model load + ALE compute.\n")
+  cat("  (set MRT_18_REFRESH=1 to recompute from the M7 model.)\n\n")
+  cc <- readRDS(CACHE_FILE)
+  if (is.data.frame(cc))
+    stop("Legacy 18 cache (bare ale_df, no pixel count). Re-run once with ",
+         "MRT_18_REFRESH=1 to upgrade the cache format.")
+  ale_df    <- cc$ale_df
+  n_sampled <- cc$n_sampled     # sampled-pixel count, for the plot subtitles
+} else {
+
 cat("Loading M7 model...\n")
 models <- readRDS(file.path(OUTPUT_DIR, "13_rf_models.rds"))
 
@@ -411,8 +427,11 @@ rownames(ale_df) <- NULL
 # =============================================================================
 
 cat("Saving results...\n")
-saveRDS(ale_df, CACHE_FILE)
+n_sampled <- length(sampled_global)   # carried in the cache for the plot subtitles
+saveRDS(list(ale_df = ale_df, n_sampled = n_sampled), CACHE_FILE)
 cat("  \u2713 Saved:", CACHE_FILE, "\n\n")
+
+}  # end cache-vs-recompute guard (opened before the M7 model load)
 
 # =============================================================================
 # VARIABLE GROUP METADATA
@@ -493,12 +512,12 @@ p_ale <- ggplot(plot_df,
     axis.text.x      = element_text(angle = 30, hjust = 1)
   ) +
   labs(
-    title    = "ALE Response Curves - Effect on Global Mean MRT (M7)",
+    title    = "ALE response curves: effect on global mean τ (M7)",
     subtitle = sprintf(
       "Accumulated Local Effects \u00b7 %d quantile bins \u00b7 n = %s pixels \u00b7 y centred at weighted mean \u00b7 dashed = zero",
-      N_BINS, format(length(sampled_global), big.mark = ",")),
+      N_BINS, format(n_sampled, big.mark = ",")),
     x = "Variable value (native units)",
-    y = "ALE effect on MRT (years)"
+    y = "ALE effect on τ (years)"
   )
 
 ggsave(file.path(PLOT_DIR, "18A_ALE_curves_MRT.png"),
@@ -531,7 +550,7 @@ p_spaghetti <- ggplot(plot_df,
     title    = "ALE Response Curves - All Variables Overlaid",
     subtitle = "x rescaled to p5-p95 range for cross-variable comparison \u00b7 each line = one predictor",
     x        = "Variable percentile range",
-    y        = "ALE effect on MRT (years)"
+    y        = "ALE effect on τ (years)"
   )
 
 ggsave(file.path(PLOT_DIR, "18B_ALE_spaghetti.png"),
@@ -609,7 +628,7 @@ p_latbands <- ggplot(lat_df,
     title    = "ALE by Latitude Band - Top 10 Most Responsive Predictors",
     subtitle = "Solid = Global; dashed lines = latitude band means",
     x        = "Variable percentile range",
-    y        = "ALE effect on MRT (years)"
+    y        = "ALE effect on τ (years)"
   )
 
 ggsave(file.path(PLOT_DIR, "18C_ALE_by_latband.png"),
@@ -654,12 +673,12 @@ p_ale_top <- ggplot(plot_df_top,
     axis.text.x      = element_text(angle = 30, hjust = 1, size = 11)
   ) +
   labs(
-    title    = "ALE Response Curves - Top 10 Variables, Global Mean MRT (M7)",
+    title    = "ALE response curves: top 10 variables, global mean τ (M7)",
     subtitle = sprintf(
       "Accumulated Local Effects \u00b7 %d quantile bins \u00b7 n = %s pixels \u00b7 dashed = zero",
-      N_BINS, format(length(sampled_global), big.mark = ",")),
+      N_BINS, format(n_sampled, big.mark = ",")),
     x = "Variable value (native units)",
-    y = "ALE effect on MRT (years)"
+    y = "ALE effect on τ (years)"
   )
 
 ggsave(file.path(PLOT_DIR, "18D_ALE_top10_MRT.png"),
@@ -698,7 +717,7 @@ p_top_spaghetti <- ggplot(plot_df_top_scaled,
     title    = "ALE Response Curves - Top 10 Variables Overlaid",
     subtitle = "x rescaled to p5-p95 range \u00b7 colour = variable group",
     x        = "Variable percentile range",
-    y        = "ALE effect on MRT (years)"
+    y        = "ALE effect on τ (years)"
   )
 
 ggsave(file.path(PLOT_DIR, "18E_ALE_top10_spaghetti.png"),

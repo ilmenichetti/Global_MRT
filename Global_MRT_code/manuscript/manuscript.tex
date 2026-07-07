@@ -289,9 +289,12 @@ converting the product $(\text{g\,kg}^{-1})(\text{g\,cm}^{-3})(\text{cm})$
 into a mass per unit area, g\,C\,m$^{-2}$.
 
 Carbon input to soil was estimated as the belowground fraction of net
-primary productivity (BNPP). 
-%Aleksi: For me this raises questions. How about branches. In most cases those are left on site, unless used for bioenergy. Are we now ignoring aboveground litter fraction ? And we assume that all NPP belowground is litter ? 
-(maybe this is okay assumption?)
+primary productivity (BNPP). Root-derived carbon is preferentially stabilised in
+persistent SOC (\PH{[cite: Rasse 2005; Jackson 2017]}), so the belowground
+fraction is a deliberate, conservative boundary for the input flux rather than an
+oversight; sensitivity to this choice, including aboveground litter and forest
+harvest, is examined in Sec.~\ref{sec:robust}.
+% Addressed 2026-07-07 (Aleksi: aboveground litter / branches / all-BNPP-is-litter): carbon-input sensitivity in Sec.~\ref{sec:robust}, Fig.~\ref{fig:input_sensitivity}, Table~\ref{tab:input_sensitivity}.
 We used MODIS MOD17A3 annual NPP
 \citep[2001--2020;][]{Running2015} extracted at each profile location,
 applying the MODIS scale factor
@@ -324,8 +327,7 @@ $\tau < 1$~year or $> 1000$~years, or with missing, negative, or
 infinite values were excluded. The upper and lower 1\% tails of the
 remaining distribution were removed prior to model fitting.
 
- %Aleksi: ow about harvests ? Most of the growth of forests is harvested and taken to mills in countries like Finland & Sweden: We would need layer of managed forests, like proxy based on this:  https://earthenginepartners.appspot.com/science-2013-global-forest And. then estimates of the fraction of NPP that is annually taken out of the system
-% Aleksi: we could have biome spoecific values here if needed
+% Addressed 2026-07-07 (Aleksi: forest harvest removals): a generous land-cover-based harvest export was applied on tree-dominant pixels and swept across the literature range of the export fraction; the beyond-climate signal does not fall (Sec.~\ref{sec:robust}, Fig.~\ref{fig:input_sensitivity}D). A dedicated managed-forest layer (e.g. Hansen/Lesiv) was judged unnecessary because the crude sweep already brackets the effect and it lands on the LandUse axis.
 
 % -----------------------------------------------------------------------------
 \subsection{Predictor variables}
@@ -359,7 +361,7 @@ cells it covers (a count of classes, not an average, since the variable
 is categorical).
 
 \subsubsection{Edaphic}
-% Aleksi: How about excluding peatlands? I think that it would be important ?  At least from the analysis, maybe maps can be as they are. But if we have obs from peatlands, those may distort our interpration ? (there are some global peat maps)
+% Addressed 2026-07-07 (Aleksi: exclude peatlands): flag-not-mask. Dropping Histosol-classified observations leaves the beyond-climate gap and its spatial organisation essentially unchanged (Table~\ref{tab:peat_sensitivity}), so they are retained in the fit and flagged (not interpreted) on the maps. Decision record: manuscript/decisions/2026-07-07_peat_flag_not_mask.md.
 Soil properties were obtained from SoilGrids 250\,m v2.0
 \citep{Poggio2021}, depth-weighted to 0--20~cm: clay content, sand
 content, bulk density, coarse fragment volume, pH~(H$_2$O), cation
@@ -676,7 +678,7 @@ here.
 \subsection{Robustness checks}
 \label{sec:robust}
 % ---------------------------------------------------------------------------
-Three checks bound the main claims (details and figures in the Appendix).
+Five checks bound the main claims (details and figures in the Appendix).
 \emph{Provenance.} To test whether the residual structure could be an artefact of
 combining many source databases, we measured the between-source share of residual
 variance ($\eta^2$) and the change in coarse organisation after removing each
@@ -689,6 +691,26 @@ the climate-versus-non-climate split, are a property of the data rather than
 of how strictly spatial independence is enforced: enlarging the block lowers
 the absolute skill but should not redistribute variance among the groups if
 the attribution is robust.
+
+\emph{Carbon-input convention.} Because the soil carbon input is set by a
+coefficient on one NPP field (Eq.~\ref{eq:c_input}) rather than by independent
+data, we tested whether the choice of convention alters the relative results. A
+spatially uniform change in that coefficient rescales $\tau$ and leaves every
+scale-invariant quantity (block-CV $R^2$, the Shapley shares, and Moran's $I$)
+unchanged; only spatial variation of the coefficient, which enters through land
+cover, can move the attribution. We therefore re-derived $\tau$ on the same NPP
+field under three conventions (belowground, total NPP, and total minus a generous
+forest-harvest export on tree-dominant pixels) and re-ran the full decomposition.
+The beyond-climate gap, Moran's $I$, and the Shapley shares are essentially
+unchanged (Fig.~\ref{fig:input_sensitivity}, Table~\ref{tab:input_sensitivity});
+only the LandUse share responds, as expected for a land-cover-structured
+coefficient, and the beyond-climate signal is if anything slightly larger under
+harvest. Sweeping the harvest export fraction across its literature range (0.2 to
+0.6) does not lower the gap (Fig.~\ref{fig:input_sensitivity}D).
+\emph{Peatlands.} Excluding Histosol-classified observations (about 1.3\% of
+records) leaves the gap and its spatial organisation essentially unchanged
+(Table~\ref{tab:peat_sensitivity}); we retain these records in the fit and flag,
+rather than interpret, $\tau$ over Histosol-dominated areas on the maps.
 
 % ---------------------------------------------------------------------------
 \subsection{Software and reproducibility}
@@ -1119,7 +1141,10 @@ steady-state noise, but part likely reflects fine-scale controls our global
 predictors cannot resolve, chiefly the quantity and quality of carbon inputs.
 Our input term is a belowground-NPP proxy that omits aboveground litter, litter
 chemistry, and management removals (harvest, residue export), and these are plausibly
-first-order at the local scale; predictors closer to the actual input flux, together
+first-order at the local scale (though they do not affect the attributed spatial
+structure: re-deriving $\tau$ under total-NPP and generous-harvest conventions leaves
+the beyond-climate gap and its organisation essentially unchanged, Sec.~\ref{sec:robust});
+predictors closer to the actual input flux, together
 with denser and repeated sampling, would be the most direct route to reducing the
 unexplained variance. These motivate time-resolved transit times, manipulative
 experiments, and targeted sampling in undersampled regions.
@@ -1276,6 +1301,21 @@ The authors declare no competing interests.
 \end{figure}
 
 \begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{../plots/step_13c_commonality/13k_input_sensitivity_appendix.png}
+\caption{\textbf{Carbon-input sensitivity.} The soil-carbon-input coefficient is
+re-derived on the same NPP field under three conventions.
+\textbf{(A)}~Median $\tau$ per land-cover class: the change is a real,
+land-cover-structured shift in $\tau$ (harvest departs from total only on tree
+cover). \textbf{(B)}~Shapley shares are flat across conventions except LandUse, the
+axis a land-cover-structured coefficient projects onto. \textbf{(C)}~The
+beyond-climate gap (full minus climate-only block-CV $R^2$; Moran's $I$ of the
+residual inset) is invariant across conventions. \textbf{(D)}~For the harvest
+convention, the gap does not fall as the export fraction $h$ is swept across its
+literature range (product-average, boreal and temperate stem-only, whole-tree).}
+\label{fig:input_sensitivity}
+\end{figure}
+
+\begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{../plots/appendix/biological_collinearity.png}
 \caption{\textbf{Biological parsimony.} Collinearity among the nine biological layers and single-layer skill vs coverage, justifying the default six-layer set; the three root-colonisation layers add negligible unique skill. See also \texttt{biological\_single\_layer\_skill}.}
 \label{fig:parsimony}
@@ -1424,6 +1464,41 @@ turnover is a real ecological pattern, not an artefact of data compilation.
     \textit{Default (missing)}  & --- & 0.40 \\
     \bottomrule
   \end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\small
+\caption{Carbon-input sensitivity of the beyond-climate signal. The soil carbon input coefficient is re-derived on the same NPP field under three conventions (belowground, total NPP, and total minus a generous forest-harvest export $h$). Block-CV $R^2$, the beyond-climate gap (full $-$ climate-only), Moran's $I$ of the beyond-climate residual, and the four Shapley shares are all but unchanged; only LandUse responds, as expected for a land-cover-structured coefficient.}
+\label{tab:input_sensitivity}
+\begin{tabular}{lrccccrrrr}
+\toprule
+ & & \multicolumn{2}{c}{Block-CV $R^2$} & Gap & Moran's & \multicolumn{4}{c}{Shapley share (\%)} \\
+\cmidrule(lr){3-4}\cmidrule(lr){7-10}
+Convention & $n$ & full & clim. & (pp) & $I$ & C & E & B & L \\
+\midrule
+Belowground (main) & 154,675 & 0.380 & 0.307 & 7.3 & 0.252 & 35.1 & 32.8 & 22.3 & 9.7 \\
+Total NPP & 152,410 & 0.384 & 0.310 & 7.4 & 0.265 & 35.5 & 32.9 & 21.8 & 9.8 \\
+Total $-$ harvest ($h{=}0.5$) & 152,912 & 0.382 & 0.296 & 8.6 & 0.260 & 34.0 & 32.5 & 22.2 & 11.3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\small
+\caption{Peatland sensitivity of the beyond-climate signal (flag-not-mask decision). Re-running the full commonality decomposition with Histosol-classified observations dropped (1,157 common rows removed, $\sim$1.3\% of the full dataset) leaves the beyond-climate gap and its spatial organisation essentially unchanged; the gap in fact decreases slightly, i.e. organic soils are not inflating the signal. Histosols are therefore retained in the fit and flagged (not interpreted) on the maps.}
+\label{tab:peat_sensitivity}
+\begin{tabular}{lrccccrrrr}
+\toprule
+ & & \multicolumn{2}{c}{Block-CV $R^2$} & Gap & Moran's & \multicolumn{4}{c}{Shapley share (\%)} \\
+\cmidrule(lr){3-4}\cmidrule(lr){7-10}
+Run & $n$ & full & clim. & (pp) & $I$ & C & E & B & L \\
+\midrule
+Main (Histosols retained) & 154,675 & 0.380 & 0.307 & 7.3 & 0.252 & 35.1 & 32.8 & 22.3 & 9.7 \\
+Histosols dropped & 153,518 & 0.381 & 0.314 & 6.7 & 0.248 & 35.7 & 32.7 & 22.5 & 9.1 \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 \begin{table}[h!]

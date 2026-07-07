@@ -62,7 +62,8 @@ plot_modulation <- function(r, main, sub, pal, clampval, legtitle) {
        main = main, mar = c(2.4, 2.2, 2.6, 4.8),
        plg = list(title = legtitle, title.cex = 0.8))
   plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
-  mtext(sub, side = 1, line = 0.5, cex = 0.72, col = "grey30")
+  # In-map caption removed (moved to the LaTeX figure caption); `sub` is retained
+  # in the signature as an in-code note of each panel's meaning.
 }
 
 # Köppen main zones (for colouring the scatter): 1=A Tropical, 2=B Arid,
@@ -123,7 +124,7 @@ png(file.path(PLOT_DIR, "zonality_map_abiotic.png"), width = 2200, height = 1200
 plot_modulation(abio,
   main = "Non-climate (abiotic) modulation of soil-carbon turnover",
   sub  = "log( turnover from climate+edaphic+land-use  /  turnover from climate alone ).  Red = longer turnover, blue = shorter.",
-  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "log(M5 / M1)")
+  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "Abiotic\n(log τ ratio)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_abiotic.png"), "\n")
 
@@ -133,11 +134,11 @@ par(mfrow = c(2, 1))
 plot_modulation(abio,
   main = "(a) Abiotic effect relative to climate (edaphic + land-use)",
   sub  = "log( turnover from climate+edaphic+land-use  /  turnover from climate ).  Red = longer, blue = shorter.",
-  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "log(M5 / M1)")
+  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "Abiotic\n(log τ ratio)")
 plot_modulation(bclim,
   main = "(b) Biological effect relative to climate",
   sub  = "log( turnover from climate+biology  /  turnover from climate ).  Green = longer, purple = shorter.",
-  pal = pal_biology, clampval = CLAMP_A, legtitle = "log(M4 / M1)")
+  pal = pal_biology, clampval = CLAMP_A, legtitle = "Biological\n(log τ ratio)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual_symmetric.png"), "\n")
 
@@ -147,11 +148,11 @@ par(mfrow = c(2, 1))
 plot_modulation(abio,
   main = "(a) Abiotic modulation: edaphic + land-use added to climate",
   sub  = "log( turnover from climate+edaphic+land-use  /  turnover from climate ).  Red = longer, blue = shorter.",
-  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "log(M5 / M1)")
+  pal = pal_abiotic, clampval = CLAMP_A, legtitle = "Abiotic\n(log τ ratio)")
 plot_modulation(bnest,
   main = "(b) Biological modulation: biology added on top of the abiotic model",
   sub  = "log( turnover from full model  /  turnover from climate+edaphic+land-use ).  Green = longer, purple = shorter.",
-  pal = pal_biology, clampval = CLAMP_B, legtitle = "log(M7 / M5)")
+  pal = pal_biology, clampval = CLAMP_B, legtitle = "Biological\n(log τ ratio)")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual.png"), "\n")
 
@@ -161,10 +162,10 @@ cat("OK  ", file.path(PLOT_DIR, "zonality_map_dual.png"), "\n")
 png(file.path(PLOT_DIR, "zonality_modulation_scatter.png"), width = 2500, height = 1300, res = 200)
 par(mfrow = c(1, 2))
 scatter_panel(abio, bclim, kop, cors$r_native[1], cors$r_meso_2deg[1],
-  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M4/M1)",
+  xlab = "Abiotic modulation (log τ ratio)", ylab = "Biological modulation (log τ ratio)",
   main = "(a) Symmetric: each domain over climate")
 scatter_panel(abio, bnest, kop, cors$r_native[2], cors$r_meso_2deg[2],
-  xlab = "Abiotic modulation  log(M5/M1)", ylab = "Biological modulation  log(M7/M5)",
+  xlab = "Abiotic modulation (log τ ratio)", ylab = "Biological modulation (log τ ratio, nested)",
   main = "(b) Nested: biology conditional on abiotic")
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_modulation_scatter.png"), "\n")
