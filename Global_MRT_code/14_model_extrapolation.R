@@ -250,7 +250,8 @@ predict_from_stack <- function(model, stack, chunk_size = 1e6) {
     
     if (sum(complete) > 0) {
       pred_df         <- as.data.frame(vals[complete, , drop = FALSE])
-      log_predictions <- predict(model, data = pred_df)$predictions
+      log_predictions <- predict(model, data = pred_df,
+                          num.threads = as.integer(Sys.getenv("MRT_RF_THREADS", "11")))$predictions
       predictions     <- exp(log_predictions)
       
       out_vals           <- rep(NA, length(cells))

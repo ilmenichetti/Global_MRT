@@ -54,7 +54,8 @@ dir.create(PLOT_DIR, recursive = TRUE, showWarnings = FALSE)
 RF_NTREES <- 500
 RF_MTRY   <- NULL  # Will be set to sqrt(p) by default
 RF_MIN_NODE_SIZE <- 5
-RF_NUM_THREADS <- parallel::detectCores() - 1  # Leave one core free
+RF_NUM_THREADS <- as.integer(Sys.getenv("MRT_RF_THREADS",
+                             as.character(parallel::detectCores() - 1)))  # env override; default leaves 1 free
 
 # Cross-validation parameters
 CV_FOLDS <- 10
@@ -182,6 +183,10 @@ VAR_GROUPS <- list(
 cat("Loading data...\n")
 soil_data <- readRDS(INPUT_FILE)
 cat("  Loaded", format(nrow(soil_data), big.mark = ","), "observations\n\n")
+
+# Peatland exclusion (MAIN default = drop peat, GPM 2.0 source; see 08b + peat_filter.R)
+source(file.path(PIPELINE_DIR, "peat_filter.R"))
+soil_data <- apply_peat_filter(soil_data, OUTPUT_DIR)
 
 # Filter to valid MRT values
 cat("Filtering to valid MRT observations...\n")

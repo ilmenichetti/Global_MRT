@@ -27,6 +27,8 @@ cat("===============================================================\n\n")
 
 # ---- Load and apply the Step 13e QC recipe ---------------------------------
 d <- readRDS(file.path(OUTPUT_DIR, "12b_model_ready.rds"))
+source("./Global_MRT_code/peat_filter.R")   # MAIN: drop peat (GPM 2.0); scoped to mineral soils
+d <- apply_peat_filter(d, OUTPUT_DIR)
 d <- d %>% filter(MRT_QC == "valid", !is.na(MRT_years), MRT_years > 0, MRT_years < Inf)
 q <- quantile(d$MRT_years, c(.01, .99), na.rm = TRUE)
 d <- d %>% filter(MRT_years > q[1] & MRT_years < q[2])

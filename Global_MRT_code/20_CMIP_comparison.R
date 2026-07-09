@@ -210,6 +210,18 @@ for (i in seq_len(nrow(MODELS))) {
 
 cat("\n=== Computing ensemble statistics ===\n\n")
 
+# Apply the SAME peat+water exclusion to the ESM fields that step 14b applied to the RF
+# field, so neither product includes peat/open-water cells. This uses the peat/water
+# exclusion mask ONLY (not the RF coverage footprint), so the RF-vs-ESM domain
+# relationship is otherwise unchanged from the peat-kept comparison.
+EXCL_PATH <- file.path(dirname(RF_M7_PATH), "exclusion_mask_0p1deg.tif")
+if (file.exists(EXCL_PATH)) {
+  target_r <- rast(TARGET_EXT, resolution = TARGET_RES, crs = TARGET_CRS)
+  excl_t   <- project(rast(EXCL_PATH), target_r, method = "near")
+  for (mid in names(tau_rasters))
+    tau_rasters[[mid]] <- mask(tau_rasters[[mid]], excl_t, maskvalues = 1, updatevalue = NA)
+}
+
 tau_stack   <- rast(tau_rasters)
 tau_ensmean <- mean(tau_stack,  na.rm = TRUE)
 tau_enssd   <- stdev(tau_stack, na.rm = TRUE)
@@ -232,11 +244,11 @@ cat("\n=== Computing bias map ===\n\n")
 
 rf_1 <- NULL
 if (file.exists(RF_M7_PATH)) {
-  
-  rf_m7    <- rast(RF_M7_PATH)
+
+  rf_m7    <- rast(RF_M7_PATH)   # already peat/water-masked by step 14b
   target_r <- rast(TARGET_EXT, resolution = TARGET_RES, crs = TARGET_CRS)
   rf_1     <- project(rf_m7, target_r, method = "bilinear")
-  
+
   bias        <- rf_1 - tau_ensmean
   names(bias) <- "RF_M7_minus_CMIP6_ensemble"
   

@@ -80,7 +80,8 @@ dir.create(PLOT_DIR, recursive = TRUE, showWarnings = FALSE)
 # Leave both unset for the production 500-tree, full-data run.
 RF_NTREES        <- as.integer(Sys.getenv("MRT_13C_NTREES", "500"))
 RF_MIN_NODE_SIZE <- 5
-RF_NUM_THREADS   <- parallel::detectCores() - 1  # Leave one core free
+RF_NUM_THREADS   <- as.integer(Sys.getenv("MRT_RF_THREADS",
+                                as.character(parallel::detectCores() - 1)))  # env override; default leaves 1 free
 SUBSAMPLE_FRAC   <- as.numeric(Sys.getenv("MRT_13C_SUBSAMPLE", "1"))
 
 # Spatial-block CV parameters (identical to 13_model_fitting.R).
@@ -131,26 +132,28 @@ cat("  Group sizes:", paste(sprintf("%s=%d", names(VAR_GROUPS),
 #                                            fraction on (crudely) managed forest.
 #                                            Land cover only (no Lesiv); at h=0 it
 #                                            equals `total`, at h=1 forest -> below.
-#   MRT_13C_PEAT  = keep    (DEFAULT) | drop  (drop Histosol-classified rows; the
-#                   flag-not-mask robustness check, ~1.3% of rows).
+#   MRT_13C_PEAT  = drop    (DEFAULT, MAIN: paper is scoped to mineral soils) | keep
+#     MRT_PEAT_SOURCE = gpm (DEFAULT) | histosol
+#       gpm      = drop observations flagged peat by the Global Peatland Map 2.0
+#                  (both tiers), joined from step 08b by dsiteid. This is the
+#                  production MAIN and writes the UNSUFFIXED headline files, so the
+#                  maps and quoted numbers reflect exclusion with no repointing.
+#       histosol = the coarser modal-Histosol filter, kept as a secondary
+#                  cross-check (tagged '_nopeat', never overwrites the headline).
+#     keep = retain peatlands (tagged '_peatkept' so it cannot clobber the headline).
 #
 # All non-default settings tag outputs with a suffix so the main headline files
 # are never overwritten (same guarantee as the BIO / BLOCK switches).
 INPUT_MODE  <- tolower(Sys.getenv("MRT_13C_INPUT", "below"))   # below | total | harvest
 HARVEST_H   <- as.numeric(Sys.getenv("MRT_13C_HARVEST_H", "0.5"))
-PEAT_MODE   <- tolower(Sys.getenv("MRT_13C_PEAT",  "keep"))    # keep | drop
+PEAT_MODE   <- tolower(Sys.getenv("MRT_13C_PEAT",   "drop"))   # drop (MAIN) | keep
+PEAT_SOURCE <- tolower(Sys.getenv("MRT_PEAT_SOURCE", "gpm"))   # gpm (MAIN) | histosol
 stopifnot(INPUT_MODE %in% c("below", "total", "harvest"),
-          PEAT_MODE  %in% c("keep", "drop"))
+          PEAT_MODE  %in% c("keep", "drop"),
+          PEAT_SOURCE %in% c("gpm", "histosol"))
 
-if (PEAT_MODE == "drop") {
-  n0 <- nrow(soil_data)
-  is_histosol <- !is.na(soil_data$soilclass_wrb_name) &
-                 soil_data$soilclass_wrb_name == "Histosols"
-  soil_data <- soil_data[!is_histosol, ]
-  cat(sprintf("Peatland filter: dropped %d Histosol rows (%.2f%%); %d remain\n",
-              n0 - nrow(soil_data), 100 * (n0 - nrow(soil_data)) / n0,
-              nrow(soil_data)))
-}
+source(file.path(PIPELINE_DIR, "peat_filter.R"))
+soil_data <- apply_peat_filter(soil_data, OUTPUT_DIR)
 
 if (INPUT_MODE != "below") {
   # Re-derive tau on the SAME NPP field under the chosen input convention.
@@ -222,7 +225,10 @@ if (BLOCK_SIZE != 2) OUT_SUFFIX <- paste0(OUT_SUFFIX, "_blk", BLOCK_SIZE)
 # Non-default input convention / peat filter likewise tag their outputs.
 if (INPUT_MODE == "total")   OUT_SUFFIX <- paste0(OUT_SUFFIX, "_inpTOTAL")
 if (INPUT_MODE == "harvest") OUT_SUFFIX <- paste0(OUT_SUFFIX, "_inpHARV")
-if (PEAT_MODE  == "drop")    OUT_SUFFIX <- paste0(OUT_SUFFIX, "_nopeat")
+# Peat: drop+gpm is the MAIN (unsuffixed headline). Only the cross-check (histosol)
+# and the peat-kept run get tagged, so neither can overwrite the headline.
+if (PEAT_MODE == "keep")                              OUT_SUFFIX <- paste0(OUT_SUFFIX, "_peatkept")
+if (PEAT_MODE == "drop" && PEAT_SOURCE == "histosol") OUT_SUFFIX <- paste0(OUT_SUFFIX, "_nopeat")
 cat(sprintf("Biological set: %s (%d layers); CV block: %g deg; output suffix '%s'\n",
             BIO_MODE, length(VAR_GROUPS$BIOLOGICAL), BLOCK_SIZE, OUT_SUFFIX))
 
@@ -483,7 +489,8 @@ decomposition <- list(
     cv_folds = CV_FOLDS, block_size_deg = BLOCK_SIZE, seed = 42,
     n_common = n_common, var_groups = VAR_GROUPS,
     bio_mode = BIO_MODE, biological_vars = VAR_GROUPS$BIOLOGICAL,
-    input_mode = INPUT_MODE, harvest_h = HARVEST_H, peat_mode = PEAT_MODE,
+    input_mode = INPUT_MODE, harvest_h = HARVEST_H,
+    peat_mode = PEAT_MODE, peat_source = PEAT_SOURCE,
     date = Sys.Date()
   ),
   full_R2      = full_R2,

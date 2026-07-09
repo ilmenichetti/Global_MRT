@@ -1,8 +1,30 @@
 # Manuscript TODO
 
-Last updated: 2026-07-03. Covers everything outstanding **except** Bucket 2
+Last updated: 2026-07-09. Covers everything outstanding **except** Bucket 2
 (reviewer figure/caption tweaks), which is being handled this session. Update as
 items close.
+
+---
+
+## 0. Current revision (peat/water exclusion + Lorenzo comments, 2026-07-09)
+
+Revision in progress on branch `peat-water-exclusion`. Order: incorporate the new
+peat-excluded results + numbers FIRST (or during), then the discussion additions.
+
+- [ ] **Full number sweep** to the peat-excluded headline (gap 7.31->7.12 pp;
+  R^2 0.38->0.39, clim 0.31->0.32; Shapley 35.4/32.7/22.2/9.6; Moran 0.253/0.261;
+  n 154,675->150,863; tau mean/median 23.5/23.0, range 3.9-72.8; ESM 2.45x vs 9.19x).
+- [ ] **Rewrite the peat text** flag-not-mask -> excluded (scoped to mineral soils);
+  add a one-line open-water masking note; cite GPM 2.0 (Greifswald Mire Centre 2022,
+  CC BY-NC-SA) in Methods + Data availability. NB: keep the "signal survives peat
+  exclusion" robustness point OUT of the MS (coauthor reply only, Lorenzo's call).
+- [ ] **ESM comparison domain asymmetry (discuss briefly in THIS revision).** The ESM
+  zonal means are computed over the full ESM field while the RF field is on its
+  coverage-limited footprint (boreal SoilGrids gaps), so the polar/tropical contrast
+  (RF ~2.45x vs ESM ~9x) is *partly* a domain asymmetry, not purely a model
+  difference. Add a short honest caveat to the ESM Discussion. Do AFTER the new
+  results are fully incorporated (or during that step). [Noticed 2026-07-09 while
+  masking the ESM field during Phase 4; not a peat artefact, pre-existing.]
 
 ---
 

@@ -108,14 +108,14 @@ dom_D <- which.max(ifel(is.na(mag_shp), -1, mag_shp))   # 1=Edaphic,2=LandUse,3=
 code4 <- ifel(clim, 0L, dom_D)
 code4 <- as.int(ifel(nodata, NA, code4))
 levels(code4) <- data.frame(value = 0:3,
-  class = c("Climate-dominated", "Edaphic", "LandUse", "Biological"))
+  class = c("None (climate alone)", "Edaphic", "LandUse", "Biological"))
 PAL4 <- c("#BDBDBD", "#E41A1C", "#4DAF4A", "#377EB8")   # domain palette (matches Shapley figs)
 
 png(file.path(PLOT_DIR, "zonality_dominant.png"), width = 2200, height = 1300, res = 200)
 plot(code4, col = PAL4, type = "classes",
      mar = c(2.2, 2.2, 2.6, 9),
-     plg = list(cex = 0.9, title = "Dominant\nmodulator"),
-     main = "Dominant non-climate modulator of transit time τ (meso, 2°)")
+     plg = list(cex = 0.9, title = "Beyond-climate\nmodulator"),
+     main = "(c) Dominant beyond-climate modulator of transit time τ (meso, 2°)")
 plot(borders, add = TRUE, col = NA, border = "grey40", lwd = 0.3)
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_dominant.png"), "\n")

@@ -51,6 +51,8 @@ cat("===============================================================\n\n")
 
 # ---- Data prep + MAIN common rows -------------------------------------------
 d <- readRDS(file.path(OUTPUT_DIR, "12b_model_ready.rds"))
+source("./Global_MRT_code/peat_filter.R")   # MAIN: drop peat (GPM 2.0); see 08b
+d <- apply_peat_filter(d, OUTPUT_DIR)
 g <- readRDS(file.path(OUTPUT_DIR, "13_var_groups.rds"))
 CLIM <- g$CLIMATE
 M5   <- c(g$CLIMATE, g$EDAPHIC, g$LANDUSE)

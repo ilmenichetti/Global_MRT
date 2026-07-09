@@ -344,8 +344,9 @@ compute_ale <- function(var, df, model, n_bins, lat_band_vec) {
     df_lo[[var]] <- lo
     df_hi[[var]] <- hi
     
-    pred_lo <- exp(predict(model, data = df_lo)$predictions)
-    pred_hi <- exp(predict(model, data = df_hi)$predictions)
+    .nthr   <- as.integer(Sys.getenv("MRT_RF_THREADS", "11"))
+    pred_lo <- exp(predict(model, data = df_lo, num.threads = .nthr)$predictions)
+    pred_hi <- exp(predict(model, data = df_hi, num.threads = .nthr)$predictions)
     diff    <- pred_hi - pred_lo
     
     global_row <- data.frame(

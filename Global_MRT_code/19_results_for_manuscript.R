@@ -52,6 +52,7 @@ if ("bd_source" %in% names(d)) print(table(d$bd_source, useNA = "ifany"))
 # --- 7. ALE top 10 ---
 cat("\n=== ALE RANKING ===\n")
 ale <- readRDS("./Global_MRT_code/outputs/18_ale_results.rds")
+if (is.list(ale) && !is.data.frame(ale)) ale <- ale$ale_df   # 18 cache = list(ale_df, n_sampled)
 global_ale <- ale[ale$lat_band == "Global", ]
 ale_range <- aggregate(ale_effect ~ variable, data = global_ale,
                        FUN = function(x) diff(range(x, na.rm = TRUE)))
