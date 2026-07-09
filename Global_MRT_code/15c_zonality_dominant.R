@@ -101,24 +101,11 @@ legend("center", legend = LAB, fill = unname(PAL), border = "grey60",
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_dominant_comparison.png"), "\n\n")
 
-# --- CLEAN 4-class map (method D, domain only) for the manuscript appendix ------
-# Drops the longer/shorter split for a legible headline zonation; direction is
-# left to the continuous map (15b) / the comparison figure above.
+# --- 4-class shares (method D, domain only): console diagnostic only ------------
+# The standalone clean 4-class map was superseded by the combined 3-panel Fig 3
+# (panel c uses the direction-shaded 7-class version); code4 is kept for the shares.
 dom_D <- which.max(ifel(is.na(mag_shp), -1, mag_shp))   # 1=Edaphic,2=LandUse,3=Biological
-code4 <- ifel(clim, 0L, dom_D)
-code4 <- as.int(ifel(nodata, NA, code4))
-levels(code4) <- data.frame(value = 0:3,
-  class = c("None (climate alone)", "Edaphic", "LandUse", "Biological"))
-PAL4 <- c("#BDBDBD", "#E41A1C", "#4DAF4A", "#377EB8")   # domain palette (matches Shapley figs)
-
-png(file.path(PLOT_DIR, "zonality_dominant.png"), width = 2200, height = 1300, res = 200)
-plot(code4, col = PAL4, type = "classes",
-     mar = c(2.2, 2.2, 2.6, 9),
-     plg = list(cex = 0.9, title = "Beyond-climate\nmodulator"),
-     main = "(c) Dominant beyond-climate modulator of transit time τ (meso, 2°)")
-plot(borders, add = TRUE, col = NA, border = "grey40", lwd = 0.3)
-dev.off()
-cat("OK  ", file.path(PLOT_DIR, "zonality_dominant.png"), "\n")
+code4 <- as.int(ifel(nodata, NA, ifel(clim, 0L, dom_D)))
 ft4 <- freq(code4); ft4$pct <- round(100 * ft4$count / sum(ft4$count), 1)
 cat("\n4-class (D) shares:\n"); print(ft4[, c("value", "pct")], row.names = FALSE)
 
