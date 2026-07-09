@@ -14,9 +14,12 @@
 # =============================================================================
 
 apply_peat_filter <- function(soil_data, output_dir,
-                              id_col = "dsiteid", class_col = "soilclass_wrb_name") {
-  peat_mode   <- tolower(Sys.getenv("MRT_13C_PEAT",   "drop"))
-  peat_source <- tolower(Sys.getenv("MRT_PEAT_SOURCE", "gpm"))
+                              id_col = "dsiteid", class_col = "soilclass_wrb_name",
+                              peat_mode = NULL, peat_source = NULL) {
+  # peat_mode/peat_source default to the env vars (production MAIN); callers with an
+  # explicit intent (e.g. 13j's per-convention sweep) can override them directly.
+  if (is.null(peat_mode))   peat_mode   <- tolower(Sys.getenv("MRT_13C_PEAT",   "drop"))
+  if (is.null(peat_source)) peat_source <- tolower(Sys.getenv("MRT_PEAT_SOURCE", "gpm"))
   stopifnot(peat_mode %in% c("keep", "drop"),
             peat_source %in% c("gpm", "histosol"))
   if (peat_mode != "drop") return(soil_data)

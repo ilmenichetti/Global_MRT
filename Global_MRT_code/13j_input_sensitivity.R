@@ -112,12 +112,12 @@ conv_levels  <- intersect(c("below", "total", "harvest", "nopeat"), conv_present
 # =============================================================================
 # MORAN'S I PER CONVENTION (beyond-climate residual; 13e recipe, recomputed)
 # =============================================================================
-# tau is re-derived here EXACTLY as in 13c's input switch (kept textually in sync;
-# 13c is the source of truth). Cheap: one climate-only block-CV fit per convention.
+# tau is re-derived here EXACTLY as in 13c's input switch (kept in sync; 13c is the
+# source of truth). Peat is dropped via the SAME shared GPM filter as the fit
+# (peat_filter.R), so the recomputed Moran matches the headline basis.
+source("./Global_MRT_code/peat_filter.R")
 derive_tau <- function(d, input_mode, harvest_h, peat_mode) {
-  if (peat_mode == "drop") {
-    d <- d[!(!is.na(d$soilclass_wrb_name) & d$soilclass_wrb_name == "Histosols"), ]
-  }
+  d <- apply_peat_filter(d, OUTPUT_DIR, peat_mode = peat_mode, peat_source = "gpm")
   if (input_mode != "below") {
     f   <- d$bnpp_fraction
     eff <- switch(input_mode,
