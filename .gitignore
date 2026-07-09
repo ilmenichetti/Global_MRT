@@ -53,6 +53,7 @@ Global_MRT_code/plots/step_15b_zonality/*
 !Global_MRT_code/plots/step_15b_zonality/zonality_map_dual_symmetric.png
 !Global_MRT_code/plots/step_15b_zonality/zonality_modulation_scatter.png
 !Global_MRT_code/plots/step_15b_zonality/zonality_dominant.png
+!Global_MRT_code/plots/step_15b_zonality/zonality_three_panel.png
 
 # Temporary files
 tmp/
