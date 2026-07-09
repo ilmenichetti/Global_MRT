@@ -51,6 +51,7 @@
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{multirow}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{authblk}
@@ -202,7 +203,8 @@ redundancy to explain away.
 \paragraph{The remainder is organised, not scattered.}
 The variance climate leaves behind is spatially structured. The residual of the
 climate-only model, aggregated to $2\textdegree$ blocks, has a Moran's $I$ of $0.25$
-($p\ll0.001$; Fig.~\ref{fig:zonality}): neighbouring regions carry similar
+($p\ll0.001$; Fig.~\ref{fig:zonality}, Extended Data
+Figs~\ref{edfig:moran}--\ref{edfig:residmap}): neighbouring regions carry similar
 beyond-climate residuals far more often than a random arrangement would produce, and
 this holds across climate zones rather than in one. The organised part is a
 meso-scale feature. Most of the point-to-point variation is short-range and
@@ -248,7 +250,8 @@ it monotonically, and a higher fungal proportion shortens it. Several shapes are
 monotonic, and (more tellingly) several vary by latitude band rather than following
 a single global curve: the temperature-seasonality response is strongest in the
 boreal/Arctic zone and near-zero in the tropics, and pH is steepest in northern
-soils, whereas the biological responses are comparatively uniform across bands.
+soils, whereas the biological responses are comparatively uniform across bands
+(Extended Data Fig.~\ref{edfig:ale_latband}).
 These are best read not as ready-made functional forms but as hints at what those
 forms might look like, and as evidence that turnover is a set of region-specific
 sensitivities rather than a single climate-scaled law.
@@ -260,7 +263,8 @@ offers a structural benchmark for models. Compared with a six-member CMIP6 ensem
 (Fig.~\ref{fig:esm}). Absolute turnover is not comparable across products (soil
 depth, pool definition and reference period all differ), so we compare only the
 normalised spatial structure. There the models place most of their spatial variation
-in a high-latitude extreme over a comparatively uniform lower-latitude background,
+in a high-latitude extreme over a comparatively uniform lower-latitude background
+(Extended Data Fig.~\ref{edfig:esm_heatmap}),
 whereas our estimate spreads structure across biomes; the polar-to-tropical contrast
 in relative turnover is gentle in our map ($\sim$2.5$\times$) and steep in the
 ensemble (median $\sim$9$\times$, about a factor of 3.7 steeper), and the models
@@ -273,7 +277,8 @@ is blank where global predictors are missing (including parts of the high
 latitudes), so part of the apparent difference in poleward steepness may reflect
 that domain mismatch. The comparison also qualifies the space-for-time reading of
 \citet{Varney2020}: temperature alone explains little of the point-level variation
-in $\tau$ ($R^2=0.06$), and the organised, non-thermal residual we recover is
+in $\tau$ ($R^2=0.06$; Extended Data Fig.~\ref{edfig:tempscatter}), and the
+organised, non-thermal residual we recover is
 exactly the structure a $\tau$--temperature curve would absorb into an apparent
 thermal sensitivity.
 
@@ -378,6 +383,10 @@ removed.}
 \newpage
 \section*{Methods}
 
+\noindent This section summarises the analysis; the full procedural detail (data
+compilation, quality control, gap-filling, and the formal definitions of each
+statistic) is given in Supplementary Methods.
+
 \paragraph{Transit time.}
 We define $\tau$ as the average time a carbon atom spends in soil from entry to exit
 \citep{Sierra2017,Sierra2018}. Under steady state (constant SOC stock and input) and
@@ -413,7 +422,7 @@ excluded from the fit, and peat and open water were masked on all maps.
 
 \paragraph{Predictors and modelling.}
 Predictors were organised into four mechanistically distinct groups (Climate,
-Edaphic, Land use, Biological; Extended Data Table~1), from ERA5-Land
+Edaphic, Land use, Biological; Extended Data Table~\ref{edtab:predictors}), from ERA5-Land
 \citep{MunozSabater2021}, K\"oppen--Geiger classes \citep{Beck2023}, SoilGrids
 250\,m v2.0 \citep{Poggio2021}, the Copernicus GLO-30 DEM \citep{CopernicusDEM2022},
 ESA WorldCover \citep{Zanaga2022}, Hansen forest change \citep{Hansen2013}, MODIS
@@ -469,7 +478,7 @@ coefficient on one NPP field, a spatially uniform change only rescales $\tau$ an
 leaves every scale-invariant quantity (block-CV $R^2$, Shapley shares, Moran's $I$)
 unchanged; re-deriving $\tau$ under total-NPP and generous forest-harvest conventions
 moves only the land-use share, and the beyond-climate gap is if anything slightly
-larger under harvest.
+larger under harvest (Extended Data Fig.~\ref{edfig:input}, Table~\ref{edtab:input}).
 
 \paragraph{Software and data.}
 Analyses used R ($\geq4.3$) with \texttt{terra}, \texttt{sf}, \texttt{ranger}
@@ -504,5 +513,159 @@ The authors declare no competing interests.
 \bibliographystyle{apalike}
 \bibliography{references}
 % =============================================================================
+
+% =============================================================================
+% EXTENDED DATA (integral to the article; Nature allows up to 10 items, figures
+% and tables combined, each cited in the main text). Numbered "Extended Data
+% Fig./Table". Overflow items live in the Supplementary Information
+% (main_Nature_SI.tex).
+% =============================================================================
+\newpage
+\renewcommand{\figurename}{Extended Data Fig.}
+\renewcommand{\tablename}{Extended Data Table}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\section*{Extended Data}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.6\textwidth]{../plots/step_13c_commonality/13e_moran_scatter.png}
+\caption{\textbf{Spatial organisation of the beyond-climate residual.} Each point is
+a $2\textdegree$ block; horizontal axis is the block's mean beyond-climate residual
+(observed minus climate-only prediction), vertical axis the average residual of its
+neighbouring blocks. The positive slope is Moran's $I=0.25$ ($p\ll0.001$); a flat
+cloud would indicate no organisation. Points coloured by modal coarse K\"oppen zone,
+with within-zone fits: the autocorrelation is present across zones (steepest in
+tropical and arid blocks, flat in the few polar blocks).}
+\label{edfig:moran}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.85\textwidth]{../plots/step_13c_commonality/13e_block_residual_map.png}
+\caption{\textbf{Beyond-climate residual map.} Block-mean beyond-climate residual
+(the geographic companion to the Moran scatter, Extended Data
+Fig.~\ref{edfig:moran}).}
+\label{edfig:residmap}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\textwidth]{../plots/step_13c_commonality/13k_input_sensitivity_appendix.png}
+\caption{\textbf{Carbon-input convention sensitivity.} The soil-carbon-input
+coefficient is re-derived on the same NPP field under three conventions.
+\textbf{(A)}~Median $\tau$ per land-cover class (harvest departs from total only on
+tree cover). \textbf{(B)}~Shapley shares are flat across conventions except land use.
+\textbf{(C)}~The beyond-climate gap and the residual Moran's $I$ (inset) are
+invariant. \textbf{(D)}~For the harvest convention, the gap does not fall as the
+export fraction $h$ is swept across its literature range.}
+\label{edfig:input}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.95\textwidth]{../plots/step_18_sensitivity/18C_ALE_by_latband.png}
+\caption{\textbf{Marginal responses by latitude band.} ALE curves for $\tau$,
+computed globally and within four latitude bands (southern temperate, tropics,
+northern temperate, boreal/Arctic). These underlie the biome-dependence noted in the
+main text: the temperature-seasonality and pH responses steepen towards the poles
+while the biological responses stay comparatively uniform.}
+\label{edfig:ale_latband}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.92\textwidth]{../plots/step_20/fig_latitude_heatmap_relative.png}
+\caption{\textbf{Relative latitudinal structure across the CMIP6 ensemble and this
+study.} Each column min--max normalised. The models place most of their structure in
+a narrow high-northern band; this study distributes it across latitudes.}
+\label{edfig:esm_heatmap}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.75\textwidth]{../plots/appendix/22_temperature_tau_scatter.png}
+\caption{\textbf{Transit time versus temperature.} Observed $\tau$ (log scale)
+against mean annual air temperature, coloured by coarse K\"oppen zone, with a loess
+trend. The weak fit ($R^2=0.06$) shows that temperature alone explains little of the
+point-level variation in $\tau$; shown for comparability with earlier compilations
+\citep[e.g.][]{Varney2020}.}
+\label{edfig:tempscatter}
+\end{figure}
+
+\begin{table}[h!]
+  \centering\small
+  \caption{\textbf{Predictor variables in the full model, by mechanistic group.}
+  All variables resampled to $0.1\textdegree$ for global prediction. Biological rows
+  marked $\dagger$ are used only in the nine-layer sensitivity, not in the main
+  model.}
+  \label{edtab:predictors}
+  \begin{tabularx}{\textwidth}{lllX}
+    \toprule
+    Group & Variable & Units & Source \\
+    \midrule
+    \multirow{6}{*}{\rotatebox{90}{\textbf{Climate}}}
+      & Soil temperature (0--20\,cm)    & \textdegree{}C    & ERA5-Land (depth-weighted stl1/stl2) \\
+      & Temperature seasonality         & K     & ERA5-Land (monthly SD of t2m) \\
+      & Soil moisture (0--20\,cm)       & m$^3$\,m$^{-3}$ & ERA5-Land (depth-weighted swvl1/swvl2) \\
+      & Snow cover fraction             & 0--1             & ERA5-Land \\
+      & Potential evaporation            & m                & ERA5-Land \\
+      & K\"oppen-Geiger zone            & 1--30            & \citet{Beck2023}, 1991--2020 \\
+    \midrule
+    \multirow{13}{*}{\rotatebox{90}{\textbf{Edaphic}}}
+      & Clay content                    & \%               & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & Sand content                    & \%               & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & Bulk density                    & kg\,dm$^{-3}$    & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & Coarse fragment volume          & \%               & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & pH (H$_2$O)                     & ---              & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & Cation exchange capacity        & cmol\,kg$^{-1}$  & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & Total nitrogen                  & g\,kg$^{-1}$     & SoilGrids 250\,m v2.0, 0--20\,cm \\
+      & WRB functional group            & 1--8             & SoilGrids WRB, reclassified \\
+      & Elevation                       & m                & Copernicus GLO-30 DEM \\
+      & Slope                           & \textdegree{}     & Copernicus GLO-30 DEM \\
+      & Northness                       & $-1$ to $+1$     & Copernicus GLO-30 DEM \\
+      & Eastness                        & $-1$ to $+1$     & Copernicus GLO-30 DEM \\
+      & Terrain ruggedness              & m                & Copernicus GLO-30 DEM (focal SD) \\
+    \midrule
+    \multirow{8}{*}{\rotatebox{90}{\textbf{Land Use}}}
+      & Tree cover fraction             & 0--1             & ESA WorldCover 2021 \\
+      & Grassland fraction              & 0--1             & ESA WorldCover 2021 \\
+      & Shrubland fraction              & 0--1             & ESA WorldCover 2021 \\
+      & Cropland fraction               & 0--1             & ESA WorldCover 2021 \\
+      & Bare/sparse fraction            & 0--1             & ESA WorldCover 2021 \\
+      & Wetland fraction                & 0--1             & ESA WorldCover 2021 \\
+      & Forest loss (binary)            & 0/1              & Hansen GFC v1.10 \\
+      & Fire count (pre-sampling)       & count            & MODIS MCD64A1, 2001--2020 \\
+    \midrule
+    \multirow{9}{*}{\rotatebox{90}{\textbf{Biological}}}
+      & Fungal proportion               & 0--1             & \citet{Yu2022} \\
+      & AM root colonisation$^\dagger$  & \%               & \citet{Barcelo2023} \\
+      & EcM root colonisation$^\dagger$ & \%               & \citet{Barcelo2023} \\
+      & EcM:AM root ratio$^\dagger$     & ---              & Derived from above \\
+      & AM fungal richness              & index            & \citet{VanNuland2025} (SPUN) \\
+      & EcM fungal richness             & index            & \citet{VanNuland2025} (SPUN) \\
+      & AM endemism (RWR)               & index            & \citet{VanNuland2025} (SPUN) \\
+      & EcM endemism (RWR)              & index            & \citet{VanNuland2025} (SPUN) \\
+      & EcM:AM richness ratio           & ---              & Derived from above \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[h!]
+\centering\small
+\caption{\textbf{Carbon-input sensitivity of the beyond-climate signal.} The input
+coefficient is re-derived on the same NPP field under three conventions (belowground,
+total NPP, and total minus a generous forest-harvest export $h$). Block-CV $R^2$, the
+beyond-climate gap, Moran's $I$, and the four Shapley shares are all but unchanged;
+only the land-use share responds, as expected for a land-cover-structured
+coefficient.}
+\label{edtab:input}
+\begin{tabular}{lrccccrrrr}
+\toprule
+ & & \multicolumn{2}{c}{Block-CV $R^2$} & Gap & Moran's & \multicolumn{4}{c}{Shapley share (\%)} \\
+\cmidrule(lr){3-4}\cmidrule(lr){7-10}
+Convention & $n$ & full & clim. & (pp) & $I$ & C & E & B & L \\
+\midrule
+Belowground (main) & 150,863 & 0.390 & 0.319 & 7.1 & 0.253 & 35.4 & 32.7 & 22.2 & 9.6 \\
+Total NPP & 148,714 & 0.389 & 0.319 & 6.9 & 0.260 & 36.3 & 31.6 & 21.5 & 10.6 \\
+Total $-$ harvest ($h{=}0.5$) & 149,207 & 0.390 & 0.302 & 8.8 & 0.256 & 34.0 & 32.9 & 21.6 & 11.4 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \end{document}
