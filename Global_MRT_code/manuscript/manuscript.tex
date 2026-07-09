@@ -34,6 +34,14 @@
 \doublespacing
 \linenumbers
 
+% ================ OPEN QUESTION: title terminology (transit vs residence) ================
+% RAISED BY: Shoji (transit time is the more defensible term for tau = Cs/input; the body
+%   was standardised on "mean transit time (tau)" and an intro sentence justifies it).
+% STATUS: the TITLE still reads "turnover times" (and the manuscript once said "residence
+%   time"). Body uses transit time throughout. Kept as-is for now (Lorenzo's call); revisit
+%   only if a reviewer flags the title/body mismatch. Options if changed: "...soil organic
+%   carbon transit times" or keep "turnover" as the plain-language umbrella. NOT YET FINAL.
+% ========================================================================================
 \title{%
   Beyond climate: the zonal organisation of soil organic carbon turnover times
 }
@@ -62,11 +70,11 @@ forming factors varying in coherent geographic patterns. An emergent property of
 the soil system (the time carbon persists) may therefore share that organisation.
 Using a global compilation of mineral-soil profiles, we estimate steady-state
 transit times ($\tau$) and ask how much of their variation beyond climate is
-attributable, organised, and mappable. On a common, spatially block
-cross-validated footing, climate explains about a third of the predictable
-variance in $\ln\tau$; an order-independent (Shapley) decomposition attributes the
+attributable, organised, and mappable. Comparing all predictor groups using a
+common spatial block cross-validation procedure, climate explains about a third
+of the predictable variance in $\ln\tau$; an order-independent (Shapley) decomposition attributes the
 rest to edaphic context (soil texture, mineralogy and chemistry; 33\,\%),
-biological context (productivity and decomposer community; 22\,\%), and land use
+biological context (plant productivity and decomposer community; 22\,\%), and land use
 (10\,\%), with climate at 35\,\%. The beyond-climate residual is not random but
 spatially organised (Moran's $I=0.25$), led by edaphic factors with soil biology
 as a distinct second axis, and marginal-effect analysis resolves it into
@@ -153,11 +161,13 @@ incompletely known) we ask what spatial structure the observations already carry
 once climate is accounted for. Compiling a global set of mineral-soil profiles and
 steady-state transit times, we explore the beyond-climate variance under spatial
 cross-validation: 
-1) how much belongs to which process class (climate, edaphic,
-biological, land use), attributed order-independently; 
+1) how much belongs to which process class, attributed order-independently, among
+climate, edaphic context (the soil matrix itself: texture, mineralogy and
+chemistry), biological context (the living system that supplies and processes
+carbon: plant productivity and the decomposer community), and land use;
 2) whether it is organised or noise; 
-3) where context lengthens or shortens turnover, mapped at a supportable
-scale; and 
+3) where context lengthens or shortens turnover, mapped at the finest scale the
+data can actually resolve; and
 4) how each driver acts.
 Finally, we compare this structure with that of six
 Earth System Models. The beyond-climate signal, though modest, carries a coherent,
@@ -284,7 +294,8 @@ SOC stock for the 0--20~cm layer was calculated as:
 
 \noindent
 where OC is in g~kg$^{-1}$ (as supplied by the source compilation), BD in
-g~cm$^{-3}$, and depth in cm; the factor~10 reconciles these units,
+g~cm$^{-3}$, and depth in cm (here the value~20, the thickness of the
+0--20~cm layer); the factor~10 reconciles these units,
 converting the product $(\text{g\,kg}^{-1})(\text{g\,cm}^{-3})(\text{cm})$
 into a mass per unit area, g\,C\,m$^{-2}$.
 
@@ -294,7 +305,32 @@ persistent SOC (\PH{[cite: Rasse 2005; Jackson 2017]}), so the belowground
 fraction is a deliberate, conservative boundary for the input flux rather than an
 oversight; sensitivity to this choice, including aboveground litter and forest
 harvest, is examined in Sec.~\ref{sec:robust}.
-% Addressed 2026-07-07 (Aleksi: aboveground litter / branches / all-BNPP-is-litter): carbon-input sensitivity in Sec.~\ref{sec:robust}, Fig.~\ref{fig:input_sensitivity}, Table~\ref{tab:input_sensitivity}.
+% ============ REVIEWER POINT + DECISION: carbon input = belowground NPP only ============
+% RAISED BY: Aleksi (x2: are branches left on site? is all BNPP really litter? is
+%   aboveground litter ignored?) and Shoji (using f_BNPP as the input is unusual; the
+%   main source is leaf litter). Both converge on the same critique.
+% DECISION (belowground as MAIN, defended on principle + sensitivity, NOT just omission):
+%   1) belowground is a deliberate CONSERVATIVE BOUNDARY: root-derived C is preferentially
+%      stabilised in persistent SOC (Rasse 2005; Jackson 2017, ~2x aboveground), so
+%      f_BNPP is a principled lower boundary for the flux, not an oversight.
+%   2) it is a COEFFICIENT (convention) problem, not a data gap: aboveground (1 - f_BNPP)
+%      already exists per pixel by land cover. "Add aboveground litter" = raise the
+%      coefficient toward 1; "add harvest" = lower it in managed pixels. Same NPP field.
+%   3) SCALE-INVARIANCE argument (the crisp answer): every result we rest on (block-CV
+%      R^2, beyond-climate gap, Shapley shares, Moran's I) is measured on log tau and is
+%      scale-invariant. A spatially-UNIFORM coefficient change only rescales the tau axis
+%      (provably harmless); only the spatially-STRUCTURED part can move a relative result,
+%      and because our coefficient varies BY LAND COVER it projects onto the LandUse axis
+%      (already an attributed predictor -> honest, not circular).
+%   4) CIRCULARITY RULE (governs what may enter the denominator): land-cover/management-
+%      structured coefficients are OK; climate- or biology-structured ones are FORBIDDEN in
+%      the main (they would manufacture the beyond-climate signal we exist to measure).
+%   TESTED: sensitivity sweep across 3 input conventions (belowground / total NPP / total-
+%   harvest) shows the relative/zonality results are invariant; only the LandUse share
+%   responds (Sec.~\ref{sec:robust}, Fig.~\ref{fig:input_sensitivity}, Table~\ref{tab:input_sensitivity}).
+%   STATUS: settled for now, but reviewers will re-raise. Full reasoning + un-bibbed
+%   coefficient sources (Bolinder/Saunders/Komiyama/Campioli) in memory decision file.
+% =======================================================================================
 We used MODIS MOD17A3 annual NPP
 \citep[2001--2020;][]{Running2015} extracted at each profile location,
 applying the MODIS scale factor
@@ -327,7 +363,28 @@ $\tau < 1$~year or $> 1000$~years, or with missing, negative, or
 infinite values were excluded. The upper and lower 1\% tails of the
 remaining distribution were removed prior to model fitting.
 
-% Addressed 2026-07-07 (Aleksi: forest harvest removals): a generous land-cover-based harvest export was applied on tree-dominant pixels and swept across the literature range of the export fraction; the beyond-climate signal does not fall (Sec.~\ref{sec:robust}, Fig.~\ref{fig:input_sensitivity}D). A dedicated managed-forest layer (e.g. Hansen/Lesiv) was judged unnecessary because the crude sweep already brackets the effect and it lands on the LandUse axis.
+% ================ REVIEWER POINT + DECISION: forest harvest removals ================
+% RAISED BY: Aleksi (managed forests export biomass off-site, so aboveground litter is
+%   partly fictional there). This is the input-term critique's sub-case with the most
+%   teeth, because harvest is spatially ORGANISED (managed boreal/temperate forest) and
+%   overlaps the beyond-climate signal, so unlike a smooth coefficient it could in
+%   principle masquerade as zonality.
+% DECISION: answered with a crude land-cover harvest export on tree-dominant pixels,
+%   C_input = NPP * [f_BNPP + (1-f_BNPP)(1-h)], h applied only on forest pixels, swept
+%   across the literature range h = 0.2-0.6 (stem-only ~0.3 boreal / ~0.45 temperate;
+%   whole-tree ~0.5-0.7). The beyond-climate gap does NOT fall under any h; it is if
+%   anything slightly larger, and only the LandUse Shapley share moves
+%   (Sec.~\ref{sec:robust}, Fig.~\ref{fig:input_sensitivity}D).
+% WHY NO DEDICATED MANAGED-FOREST LAYER (Hansen/Lesiv): judged unnecessary AND partly
+%   unsafe. (i) The crude sweep already brackets the effect and it lands on the LandUse
+%   axis (already attributed). (ii) Hansen loss is EPISODIC (wrong for a steady-state h)
+%   and is already a disturbance PREDICTOR (step 05), so building h from it would
+%   manufacture that predictor's importance (circularity). Lesiv (management type, ~100 m)
+%   would be independent but is a new layer + full pipeline re-run + co-author re-review;
+%   only worth it if the cheap sweep had MOVED the numbers, which it did not.
+%   STATUS: settled for now; reviewers may push for a real management layer. See memory
+%   decision file for the h anchors and the circularity reasoning.
+% ===================================================================================
 
 % -----------------------------------------------------------------------------
 \subsection{Predictor variables}
@@ -590,8 +647,9 @@ where the spatial lag $\sum_j w_{ij}x_j$ is each block's average over its eight 
 neighbouring blocks (a row-standardised $k$-nearest-neighbour weight, $k=8$, in any
 direction, not a fixed-distance radius).
 Significance is assessed against a null distribution from 999 random spatial
-permutations of the residuals. We evaluate $I$ at $2\textdegree$ and
-$5\textdegree$.
+permutations of the residuals. We evaluate $I$ at two block aggregation
+resolutions, $2\textdegree$ and $5\textdegree$ (the grid-cell size to which
+residuals are averaged; the neighbour count $k=8$ is held fixed).
 
 % ---------------------------------------------------------------------------
 \subsection{Mapping the zonality, and choosing the scale}
@@ -711,6 +769,31 @@ harvest. Sweeping the harvest export fraction across its literature range (0.2 t
 records) leaves the gap and its spatial organisation essentially unchanged
 (Table~\ref{tab:peat_sensitivity}); we retain these records in the fit and flag,
 rather than interpret, $\tau$ over Histosol-dominated areas on the maps.
+%
+% ====================== OPEN QUESTION (Aleksi, 2026-07-08) =======================
+% COMMENT (Aleksi): How about excluding peatlands from the ANALYSIS (not
+%   necessarily the maps)? If we have observations from peatlands, those could
+%   distort our interpretation. There are global peat maps we could use to filter.
+% NOTE (Lorenzo): not sure we will keep the current flag-not-mask decision --
+%   wants this question and the answer recorded here for now.
+%
+% ANSWER (this is what the flag-not-mask decision rests on): we already tested
+%   exactly this. Dropping the Histosol-classified observations (2,573 sites; 1,157
+%   common rows, ~1.3% of the data) does NOT distort the interpretation in the
+%   feared direction. The beyond-climate gap moves 7.3 -> 6.7 pp and climate-only
+%   R^2 rises 0.307 -> 0.314, i.e. peat sites if anything ADD to (do not inflate)
+%   the beyond-climate signal; Moran's I is flat (0.252 -> 0.248) and the Shapley
+%   shares barely move (Table~\ref{tab:peat_sensitivity}). So keeping peat in the
+%   fit is conservative for our central claim, which is why we chose flag-not-mask
+%   (keep in fit, do not interpret tau over organic soils on the maps) rather than
+%   a full exclusion. Two caveats if we DO decide to exclude: (i) the filter is a
+%   0.1-deg modal WRB Histosol class, which misses thin/degraded peat, so a global
+%   peat map (e.g. PEATMAP / Xu et al. 2018) would catch more but is a new layer +
+%   a full pipeline re-run + co-author re-review; (ii) the steady-state mineral-soil
+%   tau framing does not apply to organic soils regardless, which is the argument
+%   for flagging them on the maps in either case. Decision record:
+%   manuscript/decisions/2026-07-07_peat_flag_not_mask.md. NOT YET FINAL -- revisit.
+% ================================================================================
 
 % ---------------------------------------------------------------------------
 \subsection{Software and reproducibility}
@@ -764,7 +847,8 @@ On the common set of rows complete across all four predictor groups
 ($R^2=0.380$), against 31\,\% for
 climate alone ($R^2=0.307$), a beyond-climate increment of about
 7~percentage points. The order-independent Shapley decomposition
-(Eq.~\ref{eq:shapley}; Fig.~\ref{fig:shapley}) attributes this skill as
+(Eq.~\ref{eq:shapley}; Fig.~\ref{fig:shapley}) attributes the full model's
+explained variance in $\ln\tau$ as
 Climate~35.1\,\%, Edaphic~32.8\,\%, Biological~22.3\,\%, and Land~use~9.7\,\%:
 climate accounts for about one third of the attributable variance and the
 non-climate classes for the remaining two thirds.
@@ -783,7 +867,12 @@ variance as climate alone (both $R^2\approx0.31$), with biology next
 decomposition gives. The single domains sum to $0.95$, far exceeding the
 full-model $0.38$; the resulting overlap of $0.57$ shows that the groups are
 strongly correlated but not redundant, consistent with the zonal coupling
-between climate and soil (Sect.~\ref{sec:intro}). Land use is the clearest
+between climate and soil (Sect.~\ref{sec:intro}). This same overlap is why the
+climate-only model already reaches a relatively high $R^2=0.307$: much of that
+stand-alone skill is signal climate shares with the non-climate predictors, and
+the Shapley step redistributes this shared explanatory power across the classes
+rather than crediting it to climate, which is why climate settles at a 35\,\%
+share despite its strong single-domain skill. Land use is the clearest
 illustration of the difference between the two readings: it has appreciable
 skill on its own ($R^2=0.11$) yet only a modest Shapley share (9.7\,\%), almost
 all of which is information it shares with the edaphic and climate predictors,
@@ -1083,7 +1172,7 @@ process classes having different importance in different biomes.
 Across these results, the spatial structure of $\tau$ behaves as an emergent property of
 local ecological context rather than a fixed kinetic constant scaled only by climate. Treating
 the zonality of SOC turnover as a working framework, analogous to the pedogenic
-zonality that organises soil classification, could represent an interpretative tool that helps draw the mechanistic findings of the past two decades into a synthesis useful for predictions. Because each process class is most expressed in a different region, such a framework would need to be spatially explicit, with region-specific combinations of climatic, edaphic, biological, and land-use modulation. The marginal-effect shapes we recover (thresholds, saturation, monotonic and
+zonality that organises soil classification, could represent an interpretative tool that helps draw the mechanistic findings of the past two decades into a synthesis useful for predictions. For modeling, the consequence is concrete: turnover becomes a set of region-specific sensitivities rather than a single climate-scaled law, so a meaningful share of the spatial variance in kinetics will remain unexplained by any global parameterization. Because each process class is most expressed in a different region, such a framework would need to be spatially explicit, with region-specific combinations of climatic, edaphic, biological, and land-use modulation. The marginal-effect shapes we recover (thresholds, saturation, monotonic and
 inverted-U responses) are best read not as ready-made functional forms but as hints
 at what those forms might look like, and (perhaps more usefully) as a way of
 sharpening the research questions and directions needed to establish them. They also
@@ -1101,7 +1190,11 @@ variation in a high-latitude extreme over a comparatively uniform lower-latitude
 background, whereas in the present study the structure is spread across climate
 zones, and the models disagree among themselves by an order of magnitude. We read
 this as an inconsistency worth investigating rather than evidence that either
-picture is correct. It does, however, point to mid-latitude and subtropical
+picture is correct. Both are ultimately grounded in data, but the ESMs reach the
+$\tau$ field through fixed, globally calibrated process forms that leave little
+freedom to express local variance, whereas ours lets the observed spatial
+covariation of $\tau$ with its drivers do the work; this difference may itself
+account for part of the divergence. It does, however, point to mid-latitude and subtropical
 structure (which our analysis associates with edaphic, biological, and land-use
 context) as one place where soil-carbon representations might be examined, with the
 candidate functional shapes suggested here as a possible starting point.
@@ -1150,8 +1243,13 @@ unexplained variance. These motivate time-resolved transit times, manipulative
 experiments, and targeted sampling in undersampled regions.
 
 \paragraph{Implications: a biome-aware, tractable parameterisation.}
-The structure we describe need not be operationalised by adding mechanistic
-complexity. A lighter route is to stratify the calibration of existing models by
+Existing models already carry part of this variance through fixed modifiers
+(texture or clay scaling of turnover, for instance). What our decomposition points
+to is a further, spatially organised share arising from more complex ecological
+interactions among edaphic, biological, and land-use context, which a small set of
+globally fixed modifiers is unlikely to reproduce. The question is then how to
+express it without over-specifying mechanism. The structure we describe need not be
+operationalised by adding mechanistic complexity. A lighter route is to stratify the calibration of existing models by
 biome: keeping their first-order kinetics and architecture intact, but letting the
 turnover rate differ among zonal classes that combine climatic, edaphic, and
 biological context. Working through calibration rather than structure, this could
@@ -1159,7 +1257,13 @@ recover much of the organised beyond-climate variance without imposing new
 mechanistic assumptions that may not hold in a system whose processes are only
 partly known. It also follows a long-standing pedological intuition
 (Sect.~\ref{sec:intro}): soils are complex systems, and complex systems are seldom
-well served by purely reductionist description. The biome-dependent response shapes
+well served by purely reductionist description. In the terms of the ecosystem-property
+view \citep{Schmidt2011}, the beyond-climate structure is an emergent outcome of
+interacting controls, and a calibration that lets turnover vary by zonal class
+captures that emergence directly; adding mechanistic detail process by process risks
+rebuilding the system from parts and missing what only appears at the whole-system
+level. Our proposal is one concrete way to finally operationalise that emergence.
+The biome-dependent response shapes
 (Sect.~\ref{sec:results_ale}) indicate which classes such a scheme would need to
 distinguish.
 
