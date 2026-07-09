@@ -20,6 +20,8 @@
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{authblk}
+\usepackage{caption}
+\captionsetup{font=small, labelfont=bf, textfont=it}
 \newcommand{\PH}[1]{\textcolor{red}{#1}}
 
 \hypersetup{
@@ -62,6 +64,16 @@
 \begin{document}
 
 \maketitle
+
+% NOTE: temporary placement before the abstract; reformat (and add CRediT / any tooling
+% disclosure) once the target journal is known. See also the section at the end.
+\noindent\textbf{Author contributions.}
+\begin{itemize}\setlength\itemsep{2pt}
+  \item \textbf{Lorenzo Menichetti}: conceived and designed the study, carried out the analysis, and wrote the manuscript.
+  \item \textbf{Shoji Hashimoto}: contributed to design choices during the work and to the revision of the manuscript.
+  \item \textbf{Aleksi Lehtonen}: contributed to design choices during the work and to the revision of the manuscript.
+  \item \textbf{Elisa Bruni}: contributed to design choices during the work and to the revision of the manuscript.
+\end{itemize}
 
 \begin{abstract}
 Soil organic carbon (SOC) turnover is commonly modelled as a global function of
@@ -983,7 +995,7 @@ concentrated on sharp gradients or boundaries.
 Consistent with its near-zero unique variance, land use produces the largest local shifts yet adds little that edaphic and climate do not already carry. We also note that, although the abiotic and biological panels of the zonality map (Fig.~\ref{fig:zonality}) look broadly similar, this resemblance is mostly the climate signal they share: each panel is a domain expressed relative to climate, so both inherit the same climatic backbone and co-vary ($r\approx0.4$--0.5). When biology is instead added \emph{on top of} the climate-plus-edaphic model (the nested decomposition, Fig.~\ref{fig:nestedmap}), the biological increment (what biology contributes beyond climate and edaphic context combined) is essentially uncorrelated with the abiotic field ($r\approx0$; Fig.~\ref{fig:bioscatter}). In that sense soil biology forms a distinct spatial axis rather than a restatement of the edaphic one.
 
 \begin{figure}[H]\centering
-\includegraphics[width=0.80\textwidth]{../plots/step_15b_zonality/zonality_three_panel.png}
+\includegraphics[width=0.95\textwidth]{../plots/step_15b_zonality/zonality_three_panel.png}
 % Comment by Aleksi: caption should explain how to read the figure for non-specialists.
 % RESOLVED: caption now carries an explicit "How to read it" walkthrough (below).
 % Panel (c) promoted from the appendix (Lorenzo). Caption states climate is the baseline

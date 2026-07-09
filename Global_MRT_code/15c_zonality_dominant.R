@@ -121,8 +121,8 @@ cat("\n4-class (D) shares:\n"); print(ft4[, c("value", "pct")], row.names = FALS
 CLAMP       <- 0.6
 pal_abiotic <- hcl.colors(100, "Blue-Red 3")     # red = longer tau, blue = shorter
 pal_biology <- hcl.colors(100, "Purple-Green")   # green = longer, purple = shorter
-MAR         <- c(3.0, 3.0, 3.4, 11)              # identical on all panels -> aligned
-CEX_MAIN <- 1.7; CEX_AXIS <- 1.35; CEX_LEG <- 1.35
+MAR         <- c(3.4, 3.4, 4.2, 13)              # identical on all panels -> aligned
+CEX_MAIN <- 2.4; CEX_AXIS <- 1.9; CEX_LEG <- 1.8
 
 abio  <- meso_agg(rast(file.path(PRED_DIR, "zonality_modulation_M5_M1_logratio.tif")))
 m1    <- rast(file.path(PRED_DIR, "MRT_M1_climate.tif"))
@@ -133,13 +133,13 @@ plot_mod <- function(r, main, pal, legtitle) {
   rc <- clamp(r, -CLAMP, CLAMP, values = TRUE)
   plot(rc, col = pal, range = c(-CLAMP, CLAMP), main = main, mar = MAR,
        cex.main = CEX_MAIN, pax = list(cex.axis = CEX_AXIS),
-       plg = list(title = legtitle, title.cex = 1.2, cex = CEX_LEG))
+       plg = list(title = legtitle, title.cex = 1.7, cex = CEX_LEG))
   plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
 }
 
 code7 <- set_levels(classify(mag_shp))   # method D, 7-class (domain x direction)
 
-png(file.path(PLOT_DIR, "zonality_three_panel.png"), width = 2200, height = 3050, res = 200)
+png(file.path(PLOT_DIR, "zonality_three_panel.png"), width = 1900, height = 2650, res = 170)
 par(mfrow = c(3, 1))
 plot_mod(abio,  "(a) Abiotic effect relative to climate (edaphic + land-use)",
          pal_abiotic, "Abiotic\n(log τ ratio)")
@@ -147,7 +147,7 @@ plot_mod(bclim, "(b) Biological effect relative to climate",
          pal_biology, "Biological\n(log τ ratio)")
 plot(code7, col = unname(PAL), type = "classes", mar = MAR,
      cex.main = CEX_MAIN, pax = list(cex.axis = CEX_AXIS),
-     plg = list(cex = 1.1, title = "Beyond-climate modulator", title.cex = 1.2),
+     plg = list(cex = CEX_LEG, title = "Beyond-climate\nmodulator", title.cex = 1.3),
      main = "(c) Dominant beyond-climate modulator")
 plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
 dev.off()
