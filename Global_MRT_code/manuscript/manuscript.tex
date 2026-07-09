@@ -602,8 +602,8 @@ almost-coincident training neighbour). The attribution
 is also insensitive to the block size: although the absolute cross-validated $R^2$
 declines as blocks enlarge (stricter spatial separation, fewer effective degrees
 of freedom), repeating the decomposition with $1\textdegree$ and $5\textdegree$
-blocks (at the production 500 trees) shifts each group's share of attributable
-variance by at most 2.5 percentage points, leaving the ranking and the
+blocks shifts each group's share of attributable
+variance by at most 2 percentage points, leaving the ranking and the
 climate-versus-non-climate split unchanged. (Fig.~\ref{fig:blocksize})
 
 % ---------------------------------------------------------------------------
@@ -1472,7 +1472,7 @@ The authors declare no competing interests.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.8\textwidth]{../plots/step_13c_commonality/13h_blocksize_shapley.png}
-\caption{\textbf{Block-size invariance (500 trees).} Shapley shares across 1/2/5\textdegree{} CV blocks; maximum spread $\le$2.5~pp.}
+\caption{\textbf{Block-size invariance.} Shapley shares across 1/2/5\textdegree{} CV blocks; maximum spread $\le$2~pp.}
 \label{fig:blocksize}
 \end{figure}
 
@@ -1656,8 +1656,8 @@ turnover is a real ecological pattern, not an artefact of data compilation.
 Convention & $n$ & full & clim. & (pp) & $I$ & C & E & B & L \\
 \midrule
 Belowground (main) & 150,863 & 0.390 & 0.319 & 7.1 & 0.253 & 35.4 & 32.7 & 22.2 & 9.6 \\
-Total NPP & 148,714 & 0.389 & 0.319 & 6.9 & 0.269 & 36.3 & 31.6 & 21.5 & 10.6 \\
-Total $-$ harvest ($h{=}0.5$) & 149,207 & 0.390 & 0.302 & 8.8 & 0.258 & 34.0 & 32.9 & 21.6 & 11.4 \\
+Total NPP & 148,714 & 0.389 & 0.319 & 6.9 & 0.260 & 36.3 & 31.6 & 21.5 & 10.6 \\
+Total $-$ harvest ($h{=}0.5$) & 149,207 & 0.390 & 0.302 & 8.8 & 0.256 & 34.0 & 32.9 & 21.6 & 11.4 \\
 \bottomrule
 \end{tabular}
 \end{table}
