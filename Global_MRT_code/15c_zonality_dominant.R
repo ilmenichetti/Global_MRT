@@ -134,7 +134,8 @@ cat("\n4-class (D) shares:\n"); print(ft4[, c("value", "pct")], row.names = FALS
 CLAMP       <- 0.6
 pal_abiotic <- hcl.colors(100, "Blue-Red 3")     # red = longer tau, blue = shorter
 pal_biology <- hcl.colors(100, "Purple-Green")   # green = longer, purple = shorter
-MAR         <- c(2.4, 2.2, 2.6, 9)               # identical on all panels -> aligned
+MAR         <- c(3.0, 3.0, 3.4, 11)              # identical on all panels -> aligned
+CEX_MAIN <- 1.7; CEX_AXIS <- 1.35; CEX_LEG <- 1.35
 
 abio  <- meso_agg(rast(file.path(PRED_DIR, "zonality_modulation_M5_M1_logratio.tif")))
 m1    <- rast(file.path(PRED_DIR, "MRT_M1_climate.tif"))
@@ -144,21 +145,23 @@ bclim <- meso_agg(log(m4 / m1))
 plot_mod <- function(r, main, pal, legtitle) {
   rc <- clamp(r, -CLAMP, CLAMP, values = TRUE)
   plot(rc, col = pal, range = c(-CLAMP, CLAMP), main = main, mar = MAR,
-       plg = list(title = legtitle, title.cex = 0.8))
+       cex.main = CEX_MAIN, pax = list(cex.axis = CEX_AXIS),
+       plg = list(title = legtitle, title.cex = 1.2, cex = CEX_LEG))
   plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
 }
 
 code7 <- set_levels(classify(mag_shp))   # method D, 7-class (domain x direction)
 
-png(file.path(PLOT_DIR, "zonality_three_panel.png"), width = 2000, height = 2850, res = 200)
+png(file.path(PLOT_DIR, "zonality_three_panel.png"), width = 2200, height = 3050, res = 200)
 par(mfrow = c(3, 1))
 plot_mod(abio,  "(a) Abiotic effect relative to climate (edaphic + land-use)",
          pal_abiotic, "Abiotic\n(log τ ratio)")
 plot_mod(bclim, "(b) Biological effect relative to climate",
          pal_biology, "Biological\n(log τ ratio)")
 plot(code7, col = unname(PAL), type = "classes", mar = MAR,
-     plg = list(cex = 0.72, title = "Beyond-climate\nmodulator"),
-     main = "(c) Dominant beyond-climate modulator (darker = longer τ, lighter = shorter)")
+     cex.main = CEX_MAIN, pax = list(cex.axis = CEX_AXIS),
+     plg = list(cex = 1.1, title = "Beyond-climate modulator", title.cex = 1.2),
+     main = "(c) Dominant beyond-climate modulator")
 plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_three_panel.png"), "\n")
