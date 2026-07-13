@@ -110,46 +110,89 @@ ft4 <- freq(code4); ft4$pct <- round(100 * ft4$count / sum(ft4$count), 1)
 cat("\n4-class (D) shares:\n"); print(ft4[, c("value", "pct")], row.names = FALSE)
 
 # ============================================================================
-# COMBINED 3-panel MANUSCRIPT figure (Fig 3), single image so the panels align.
+# COMBINED MANUSCRIPT figure (Fig. 2), single image so the panels align. Five
+# panels via layout(): the two modulation MAPS (a, b) each carry a latitude
+# HEATMAP BAND on their LEFT (flush, no internal border, clear of the right
+# legend); the dominant-modulator map (c) sits full width below.
 #   (a) abiotic modulation over climate    = log(M5/M1), meso   [Blue-Red 3]
 #   (b) biological modulation over climate = log(M4/M1), meso   [Purple-Green]
 #   (c) discrete dominant BEYOND-climate modulator (method D), shaded by
 #       direction (darker = longer tau, lighter = shorter), grey = climate alone.
-# Every panel uses the SAME right margin (MAR) so the map boxes line up exactly.
+# The band is the zonal MEDIAN of the SAME field (median across longitude per
+# latitude row), coloured with the SAME palette + clamp as its map -- the
+# "latitude-flat" companion, analogous to the latitude x model heatmap in step 20.
 #   -> plots/step_15b_zonality/zonality_three_panel.png
 # ============================================================================
 CLAMP       <- 0.6
 pal_abiotic <- hcl.colors(100, "Blue-Red 3")     # red = longer tau, blue = shorter
 pal_biology <- hcl.colors(100, "Purple-Green")   # green = longer, purple = shorter
-MAR         <- c(3.4, 3.4, 4.2, 13)              # identical on all panels -> aligned
-CEX_MAIN <- 2.4; CEX_AXIS <- 1.9; CEX_LEG <- 1.8
+MARL <- 8.5; MARR <- 13                           # equal L/R on all panels -> aligned boxes
+CEX_MAIN <- 2.4; CEX_AXIS <- 1.7; CEX_LEG <- 1.8
 
 abio  <- meso_agg(rast(file.path(PRED_DIR, "zonality_modulation_M5_M1_logratio.tif")))
 m1    <- rast(file.path(PRED_DIR, "MRT_M1_climate.tif"))
 m4    <- rast(file.path(PRED_DIR, "MRT_M4_climate_biological.tif"))
 bclim <- meso_agg(log(m4 / m1))
 
-plot_mod <- function(r, main, pal, legtitle) {
+# scalar value -> diverging-palette colour, same clamp as the map
+colmap <- function(v, pal, C = CLAMP) {
+  n <- length(pal); vi <- pmax(pmin(v, C), -C); pal[round((vi + C) / (2 * C) * (n - 1)) + 1]
+}
+# per-latitude-row median across longitude
+row_medians <- function(r) {
+  M <- matrix(values(r), nrow = nrow(r), ncol = ncol(r), byrow = TRUE)
+  data.frame(lat = yFromRow(r, seq_len(nrow(r))), med = apply(M, 1, median, na.rm = TRUE))
+}
+# shared latitude axis, drawn at a given user-x (keeps a/b/c label column aligned)
+lat_axis <- function(xpos) axis(2, pos = xpos, at = seq(-40, 80, 20),
+                                cex.axis = CEX_AXIS, las = 1, xpd = NA)
+BAND_FRAC <- 0.50   # band occupies this fraction of the (equal) left margin
+
+plot_mod <- function(r, main, pal, legtitle) {   # map, axes off (band carries lat axis)
   rc <- clamp(r, -CLAMP, CLAMP, values = TRUE)
-  plot(rc, col = pal, range = c(-CLAMP, CLAMP), main = main, mar = MAR,
-       cex.main = CEX_MAIN, pax = list(cex.axis = CEX_AXIS),
-       plg = list(title = legtitle, title.cex = 1.7, cex = CEX_LEG))
+  plot(rc, col = pal, range = c(-CLAMP, CLAMP), main = main, mar = c(0.8, MARL, 3.4, MARR),
+       axes = FALSE, cex.main = CEX_MAIN,
+       plg = list(title = legtitle, title.cex = 1.4, cex = CEX_LEG))
   plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
+}
+draw_band <- function(r, pal) {                  # heatmap band flush to the map's west edge
+  e <- as.vector(ext(r)); rm <- row_medians(r); dlat <- abs(rm$lat[1] - rm$lat[2])
+  mL <- e[1] - grconvertX(par("fig")[1], "ndc", "user")   # left-margin width in user x
+  bR <- e[1]; bL <- e[1] - BAND_FRAC * mL                  # right edge flush to map (no border)
+  ok <- !is.na(rm$med)
+  rect(bL, rm$lat[ok] - dlat/2, bR, rm$lat[ok] + dlat/2,
+       col = colmap(rm$med[ok], pal), border = NA, xpd = NA)
+  rect(bL, e[3], e[2], e[4], border = "grey35", lwd = 0.6, xpd = NA)  # one outer frame, band+map
+  lat_axis(bL)
 }
 
 code7 <- set_levels(classify(mag_shp))   # method D, 7-class (domain x direction)
 
-png(file.path(PLOT_DIR, "zonality_three_panel.png"), width = 1900, height = 2650, res = 170)
-par(mfrow = c(3, 1))
+png(file.path(PLOT_DIR, "zonality_three_panel.png"), width = 2100, height = 2750, res = 170)
+layout(matrix(c(1, 2, 3), ncol = 1), heights = c(1, 1, 1.06))
+
 plot_mod(abio,  "(a) Abiotic effect relative to climate (edaphic + land-use)",
-         pal_abiotic, "Abiotic\n(log τ ratio)")
+         pal_abiotic, "Abiotic\n(log tau ratio)")
+draw_band(abio, pal_abiotic)
+
 plot_mod(bclim, "(b) Biological effect relative to climate",
-         pal_biology, "Biological\n(log τ ratio)")
-plot(code7, col = unname(PAL), type = "classes", mar = MAR,
-     cex.main = CEX_MAIN, pax = list(cex.axis = CEX_AXIS),
-     plg = list(cex = CEX_LEG, title = "Beyond-climate\nmodulator", title.cex = 1.3),
-     main = "(c) Dominant beyond-climate modulator")
+         pal_biology, "Biological\n(log tau ratio)")
+draw_band(bclim, pal_biology)
+
+par(mar = c(3.4, MARL, 3.4, MARR))
+plot(code7, col = unname(PAL), type = "classes", axes = FALSE, legend = FALSE,
+     cex.main = CEX_MAIN, main = "(c) Dominant beyond-climate modulator")
 plot(borders, add = TRUE, col = NA, border = "grey45", lwd = 0.3)
+ec <- as.vector(ext(code7))
+mLc <- ec[1] - grconvertX(par("fig")[1], "ndc", "user")
+rect(ec[1], ec[3], ec[2], ec[4], border = "grey35", lwd = 0.6)          # map frame only (no band)
+lat_axis(ec[1] - BAND_FRAC * mLc)                                       # lat labels in the same column
+axis(1, at = seq(-180, 180, 60), cex.axis = CEX_AXIS)
+# custom class legend, placed over the empty South Pacific inside the panel
+# (terra's right-margin legend truncates the long labels)
+legend(x = -178, y = 8, legend = LAB, fill = unname(PAL), border = "grey50",
+       bg = "white", box.col = "grey60", cex = 1.2, y.intersp = 1.05,
+       title = "Beyond-climate modulator", title.adj = 0)
 dev.off()
 cat("OK  ", file.path(PLOT_DIR, "zonality_three_panel.png"), "\n")
 

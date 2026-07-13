@@ -213,13 +213,30 @@ separations), and the agreement between the mapped and the observed residual rou
 doubles from the noisy native pixel ($R^2\approx0.11$) to $\approx0.22$ at
 1--2\textdegree{} before plateauing, so we map at $2\textdegree$ (Methods). Mapped
 there, the modulation of $\tau$ by non-climate context (the log-ratio of the full to
-the climate-only prediction) is itself zonally arranged (Fig.~\ref{fig:zonality}):
+the climate-only prediction) is itself zonally arranged (Fig.~\ref{fig:zonality},
+with its per-latitude median beside each panel):
 edaphic modulation clusters on mountainous and arid-gradient regions, land use on
 agricultural and disturbance mosaics, and soil biology across the boreal and
 southern-temperate belts. A discrete zonation (each block labelled by its largest
 Shapley-weighted modulator; Fig.~\ref{fig:zonality}c) makes the pattern explicit:
 different process classes dominate the departure from climate in different biomes.
 This is the spatial signature the zonal reading anticipates.
+
+\paragraph{Which class carries the departure shifts with latitude.}
+Refitting the decomposition within contiguous latitude bands (Methods; Extended Data
+Fig.~\ref{edfig:latshapley}) turns the discrete zonation into a quantitative profile
+of the beyond-climate attribution. Edaphic context is the leading beyond-climate
+contributor at almost every latitude, close to half of the beyond-climate variance
+across the low and middle latitudes and peaking in the subtropics. Soil biology
+strengthens at the two ecological extremes, rising in the humid equatorial belt and
+dominating the boreal, where it carries about two thirds of the beyond-climate
+variance at 50--60\textdegree N. Land use is a modest contributor that never leads,
+roughly steady through the low and middle latitudes and falling to near zero in the
+boreal. Because each band's decomposition removes the poleward gradient, these shares
+describe the spatial structure within a belt rather than the level set across belts,
+so a control that fixes a biome's mean turnover while varying little within it would
+carry little weight here; read with that caveat, the profile places edaphic and, at
+the extremes, biological context at the centre of the organised beyond-climate signal.
 
 \paragraph{Soil biology is a distinct axis, not a restatement of the soil matrix.}
 Although the edaphic and biological modulation fields look broadly similar, the
@@ -282,6 +299,27 @@ organised, non-thermal residual we recover is
 exactly the structure a $\tau$--temperature curve would absorb into an apparent
 thermal sensitivity.
 
+\paragraph{Where management fits.}
+The attribution invites a specific question about human influence: does land
+management, which reorganises soil carbon strongly and unevenly across regions, drive
+the beyond-climate signal? Resolved by latitude, it does not. Land use holds the
+smallest global share (about a tenth) and stays a modest, non-leading contributor at
+every latitude, fading to near zero in the boreal where climate and soil biology take
+over. Two readings are compatible with this, and the difference matters for what to do
+next. The conservative one is methodological: our land-cover grouping resolves broad
+use type rather than management intensity, and a within-band decomposition scores
+structure inside a belt, so a management effect that is spatially uniform within a
+region, or that our predictors do not resolve, would be attributed little weight by
+construction; testing the boreal-management question directly would need an explicit
+intensity layer \PH{[cite: forest-management intensity]}. The stronger reading is
+ecological, and the data lean towards it: beyond climate, what organises turnover is
+chiefly the soil matrix and, at the cold and wet extremes, its biology, with
+management a real but locally scaled modifier rather than a zonal control. This fits a
+pedological view in which management is patchy against a stronger backdrop of soil
+formation, and it sharpens the consequence for models: their difficulty with soils is
+not mainly a missing land-use term but a missing, zonally structured representation of
+edaphic and biological context.
+
 % -----------------------------------------------------------------------------
 % SYNTHESIS (short). This is the resolution beat of the arc: the recognition that
 % the modern decomposition lands on the old pedological insight, and the concrete
@@ -335,6 +373,9 @@ expression of the zonal coupling between climate and soil.}
 (a)~Abiotic (edaphic $+$ land-use) and (b)~biological modulation of $\tau$ relative
 to climate, at meso ($2\textdegree$) scale: the log-ratio of the full-model to the
 climate-only prediction per block (red/green~=~longer turnover, blue/purple~=~shorter).
+The heatmap band on the left of each map is the same field collapsed onto latitude
+(the zonal median across longitude, same palette and scale), the ``latitude-flat''
+summary of the map beside it.
 (c)~Dominant non-climate modulator per block (largest Shapley-weighted log-ratio),
 shaded by direction; grey~=~climate alone. Climate is the baseline of all panels, so
 a coloured block marks where a non-climate class most shapes the departure from
@@ -449,7 +490,13 @@ each group's marginal contribution over all orders of entry,
   \label{eq:shapley}
 \end{equation}
 where $v(S)$ is the cross-validated $R^2$ of the model on subset $S$; the $\phi_i$
-sum to the full-model $R^2$ and are reported as percentage shares.
+sum to the full-model $R^2$ and are reported as percentage shares. The same
+decomposition was repeated within contiguous $10\textdegree$ latitude bands,
+refitting every subset with local block cross-validation inside each band (bands with
+fewer than 800 observations or 40 blocks were left unattributed), to test whether the
+attribution itself is zonally structured; because each band removes the between-band
+gradient, these shares reflect within-band spatial structure rather than the
+latitudinal level (Extended Data Fig.~\ref{edfig:latshapley}).
 
 \paragraph{Organisation, mapping and mechanism.}
 Spatial organisation of the beyond-climate residual (out-of-sample $\ln\tau$ minus
@@ -546,6 +593,22 @@ tropical and arid blocks, flat in the few polar blocks).}
 (the geographic companion to the Moran scatter, Extended Data
 Fig.~\ref{edfig:moran}).}
 \label{edfig:residmap}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.72\textwidth]{../plots/step_13c_commonality/13l_beyondclimate_composition.png}
+\caption{\textbf{The beyond-climate attribution is zonally structured.} The Shapley
+decomposition (Methods) refit within contiguous $10\textdegree$ latitude bands, shown
+as the composition of the beyond-climate explained variance among the three
+non-climate classes (Edaphic, Land use, Biological), renormalised to 100\% per band.
+Edaphic context leads at nearly every latitude; soil biology rises in the humid
+equatorial belt and dominates the boreal; land use is modest and never leading, and
+vanishes in the boreal (its local Shapley value there is slightly negative and set to
+zero before renormalising). Bands below the reliability thresholds (far southern,
+$>60\textdegree$N) are omitted. Because each band's decomposition removes the poleward
+gradient, these shares describe within-band spatial structure, not the cross-latitude
+level.}
+\label{edfig:latshapley}
 \end{figure}
 
 \begin{figure}[H]\centering
