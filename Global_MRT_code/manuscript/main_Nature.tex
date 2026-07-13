@@ -103,24 +103,20 @@ climate does not explain is treated as noise. Two decades of accumulating
 evidence have recast the persistence of soil carbon as an emergent property of the
 whole soil system rather than of its molecules, but that view was built from the
 soil's internal processes and left largely qualitative; whether the emergence it
-describes is organised at large, geographic scale, as soils themselves are, has not
-been asked. If persistence is emergent and soils are
-zonal,
-
-% We do know that soils are zonal, that's what pedology is based upon. We are introducing that framework in SOC decay theory, merging the two. The tension is testing what this hypothesized framework does, how does it work
-
-the turnover that climate leaves unexplained should not be noise but zonal
-geography. We test this on an existing global compilation of mineral-soil profiles,
-onto which we assemble climatic, edaphic, biological and land-use covariates,
-estimating steady-state transit times and attributing their variation on held-out
-geographic regions. Climate accounts for about a third of the predictable variation;
-the rest is coherently organised, edaphic-led with soil biology a distinct second
-axis, and forms a zonal pattern of turnover. A data-intensive analysis thus returns
-to the century-old pedological principle that soils, and their emergent behaviour,
-are zonal, and it yields an observation-based benchmark whose poleward gradient
-current Earth System Models render several times too steep.
-
-%too rough judgement on ESM models, we don't know what is truth here. They just render it different than us, a lot steeper... reader will judge.
+describes is organised at large, geographic scale has not been asked. Soils are
+zonally organised, a founding principle of pedology, so an emergent property of the
+soil system should inherit that organisation; bringing the two together yields a
+testable prediction, that the transit time climate leaves unexplained is not noise
+but zonal geography. We test it on an existing global compilation of mineral-soil
+profiles, onto which we assemble climatic, edaphic, biological and land-use
+covariates, estimating steady-state transit times and attributing their variation on
+held-out geographic regions. Climate accounts for about a third of the predictable
+variation; the rest is spatially organised rather than scattered, edaphic-led with
+soil biology a distinct second axis, and forms a zonal pattern of transit time. A
+data-intensive analysis thus returns to the century-old pedological principle that
+soils, and their emergent behaviour, are zonal, and it yields an observation-based
+benchmark whose poleward gradient is markedly gentler than the one current Earth
+System Models carry.
 
 
 \bigskip
@@ -143,24 +139,32 @@ and the land carbon--climate feedback. The quantity that governs this balance is
 the mean transit time $\tau$ (the average time a carbon atom spends in the soil
 from input to loss \citep{Sierra2017,Sierra2018}). Because the total stock is so
 large, even modest shifts in $\tau$ over large areas move the global balance, so
-what controls $\tau$, and how it varies geographically, impacts directly whether
+what controls $\tau$, and how it varies geographically, bears directly on whether
 soils keep buffering anthropogenic emissions or begin to amplify them. Constraining
 that geographic variation from observations is an active goal, and recent work
 exploits the present-day spatial relationship between $\tau$ and temperature as an
 emergent constraint on the warming response of soil carbon \citep{Varney2020}, on
 the premise that the spatial $\tau$ gradient is predominantly climatic.
 
-That premise inherits a simplification on which most of the theory on soil C decomposition has been based since decades. Since the foundational
+That premise inherits a simplification on which most of the theory of soil-carbon
+decomposition has rested for decades. Since the foundational
 models of the 1970s--1990s \PH{[cite: Jenkinson; Parton/CENTURY; RothC lineage]},
 decomposition has been treated as first-order, the rate constant $k$ (and thus
 $\tau=1/k$) an intrinsic property of the substrate, spatially invariant once
 temperature and moisture scalars are applied; Earth System Models still inherit this
-architecture \PH{[cite: Todd-Brown 2013; Wieder 2013]}. 
+architecture \PH{[cite: Todd-Brown 2013; Wieder 2013]}. This description has endured
+for good reason. It is simple, and the first-order dependence of decomposition on
+temperature and moisture is real, so it captures much of the global variation in
+$\tau$ \PH{[cite: first-order/climate control of decomposition]}; the alternative, a
+behaviour that emerges from many interacting parts, is correspondingly harder to
+formalise and to implement. It does not, however, capture all of that variation, and
+it is the structured remainder that concerns us here.
 
-%we should also mention that the old theory kind of works, it does capture a lot of the variance. It has survived so long for reasons (on top of being simple, and the difficulties of implementing more complex theories due to complexity and emergence, the "reductionism doesn't work in SOC decay" pitch). But not all. Some refs here would be needed.
 Evidence accumulating over
 the past two decades revised it, and its synthesis \citep{Schmidt2011} recast
-persistence as a property of the whole soil system rather than of its molecules, set
+persistence (the tendency of soil carbon to resist loss, expressed at the
+whole-system scale as a longer transit time $\tau$) as a property of the whole soil
+system rather than of its molecules, set
 by organo-mineral associations and the decomposer community more than by substrate
 chemistry \PH{[cite: Kleber 2007; Lehmann \& Kleber 2015]}. That understanding,
 though, was built from the soil's internal processes (its minerals, aggregates and
@@ -173,30 +177,29 @@ arise from local soil context, then they must carry spatial structure. Soils are
 themselves organised zonally, their forming factors varying in coherent geographic
 patterns (the principle that has ordered soil science since Dokuchaev
 \PH{[cite: Dokuchaev; Jenny 1941]}). An emergent property of the soil system should
-therefore inherit that zonal organisation. In the present study we put to test this proposed framework, that the variation in turnover 
-%ius "turnover" the correct term?
-that climate does not
+therefore inherit that zonal organisation. In the present study we put this proposed
+framework to test, that the variation in transit time that climate does not
 explain is not noise but zonal geography, the large-scale signature of persistence
-%the term "persistence" can be used but must be made consistent with the whole framework. We define tau as transit time, how does it relate to persistence? Terminology on the main quantity we consider must be absolutely consistent.
 as an emergent property.
 
-We take a route complementary to mechanistic modelling.
-%here could be the place for a small, 1-2 lines, digression on the challenges of mechanistically defining persistence as an emergent ecosystem process (from complexity), also creating tension. Could be earlier if it fits better.
-Rather than prescribe how
+We take a route complementary to mechanistic modelling. Defining persistence
+mechanistically is genuinely hard: it is an emergent behaviour of many interacting
+components (minerals, aggregates, water and a diverse decomposer community), and such
+behaviour resists reconstruction from its parts \PH{[cite: emergence/complexity in
+soil systems]}. Rather than prescribe how
 non-climate context acts on a system whose processes are only partly known, we ask
 what spatial structure the observations already carry once climate is accounted for.
 Onto an existing global compilation of mineral-soil profiles
 \PH{[cite: source compilation]} we assemble climatic, edaphic, biological and
 land-use covariates, estimate steady-state transit times, and interrogate the
 variance beyond climate under spatial cross-validation: how much is attributable to
-each process class (climate, the edaphic matrix, the biological system that supplies
+each process class (climate, the edaphic environment, the biological system that supplies
 and processes carbon, and land use); whether that variance is organised or
-scattered; where localy ecology lengthens or shortens turnover; and how each driver acts.
-The beyond-climate signal we find is modest in size but coherently
-% what does it mean exactly "coherently" here?
-organised and
+scattered; where local ecology lengthens or shortens turnover; and how each driver acts.
+The beyond-climate signal we find is modest in size but spatially organised (rather
+than scattered) and
 ecologically interpretable (edaphic-led, with soil biology a distinct second axis);
-mapped, it forms a zonal pattern of turnover; and that pattern
+mapped, it forms a zonal pattern of transit time; and that pattern
 departs sharply from the one Earth System Models carry.
 
 
@@ -208,13 +211,17 @@ departs sharply from the one Earth System Models carry.
 % -----------------------------------------------------------------------------
 
 \paragraph{Climate leads, but explains only a third.}
-On the set of profiles complete across all four predictor groups ($n=150{,}863$), a
+Predicted across the globe, $\tau$ has the first-order structure the climate account
+expects (Fig.~\ref{fig:global_mrt}): a global mean near 23.5~yr that lengthens
+towards the poles. What that gradient leaves unexplained is the subject of this
+analysis. On the set of profiles complete across all four predictor groups
+($n=150{,}863$), a
 Random Forest of $\ln\tau$ predicted on held-out regions reaches a cross-validated
 $R^2=0.39$, against $0.32$ for climate alone (Methods); the non-climate predictors
 therefore add about seven percentage points of explained variance. Dividing that
 explained variance among the four groups in a way that does not depend on the order
 in which they enter the model (a Shapley decomposition; Methods,
-Fig.~\ref{fig:shapley}) places climate at 35\,\%, the edaphic matrix at 33\,\%, soil
+Fig.~\ref{fig:shapley}) places climate at 35\,\%, edaphic context at 33\,\%, soil
 biology at 22\,\% and land use at 10\,\%. Climate is the single largest control
 (temperature seasonality, snow cover and soil temperature lead every importance
 ranking), as the prevailing account expects; but the account holds only so far, and
@@ -227,15 +234,14 @@ That edaphic predictors could rival climate is, under the pedological reading, e
 rather than surprising, since climate is itself a primary soil-forming factor and
 soil properties partly encode the same zonal climate signal. The single-group scores
 sum to $0.98$, far above the full-model $0.39$; that overlap is the climate--soil
-coupling made visible, and it is why a zonal description of SOC transit times could be efficient rather than
-redundant, carrying the shared climate signal and adding organised structure
-% what does "organised structure" refers to? This should be more down to the core of what we are writing of, our proposal adds the variance emerging from other ecological interactions that climate alone cannot capture
-on top
-of it.
+coupling made visible, and it is why a zonal description of SOC transit times can be
+efficient rather than redundant: it carries the shared climate signal and adds the
+organised, non-climatic variance that edaphic and biological interactions contribute
+beyond it.
 
 \paragraph{The remainder is organised, not scattered.}
-%this means signal not noise, right? Might be a good way to say it. Otherwise: organized how?
-The variance climate leaves behind is spatially structured. The residual of the
+The variance climate leaves behind is signal, not noise: it is spatially structured.
+The residual of the
 climate-only model, aggregated to $2\textdegree$ blocks, has a Moran's $I$ of $0.25$
 ($p\ll0.001$; Fig.~\ref{fig:zonality}, Extended Data
 Figs~\ref{edfig:moran}--\ref{edfig:residmap}): neighbouring regions carry similar
@@ -260,9 +266,7 @@ This is the spatial signature the zonal reading anticipates.
 Repeating the variance decomposition separately within each latitude band (dividing
 the globe into contiguous $10\textdegree$ bands and refitting all groups inside each;
 Methods, Extended Data Fig.~\ref{edfig:latshapley}) turns the discrete zonation into
-a continuous 
-% it's not really continuous tho, we discretize. Might be fine, maybe, but it is imprecise, could be better
-profile of how the beyond-climate attribution changes from equator to
+a latitude-resolved profile of how the beyond-climate attribution changes from equator to
 pole. Edaphic context is the leading beyond-climate contributor at almost every
 latitude, close to half of the non-climate variance across the low and middle
 latitudes and highest in the subtropics. Soil biology strengthens at the two
@@ -277,14 +281,13 @@ latitude belt, not the overall change in turnover \emph{between} belts. Read tha
 the profile puts edaphic and, at the extremes, biological context at the centre of
 the organised beyond-climate signal.
 
-\paragraph{Soil biology is a distinct axis, not a restatement of the soil matrix.}
-% "Soil matrix" is hard to understand what it refers to, this throughout the manuscript. Is it edaphic haracteristics, or something like that, we refer to wqith "soil matrix"? In pedology soil matrix means soil granulometry, so it is wrong as term.
+\paragraph{Soil biology is a distinct axis, not a restatement of the edaphic one.}
 The edaphic and biological modulation fields look similar when mapped, but the
 resemblance is mostly the climate signal they share (each is measured relative to
 climate, so both inherit the same backbone). When biology is instead added on top of
 the climate-plus-edaphic model, its contribution is spatially uncorrelated with the
 abiotic field ($r\approx0$ between the two maps; Methods), so soil biology forms its
-own spatial axis rather than tracking the soil matrix. What that axis represents is
+own spatial axis rather than tracking the edaphic field. What that axis represents is
 not yet resolved: mycorrhizal richness and endemism lead the biological group
 (root-colonisation intensity adds negligible unique variance), which points to the
 biogeographic composition of mycorrhizal communities, rather than the amount of
@@ -396,6 +399,10 @@ hold, and the biome-dependent response shapes we recover indicate which classes 
 a scheme would need to distinguish. Soils are complex systems, and complex systems
 are seldom well served by purely reductionist description; letting turnover vary by
 zonal class captures that emergence directly rather than rebuilding it part by part.
+Whether soils keep buffering anthropogenic emissions or begin to amplify them depends
+on how $\tau$ responds region by region, and an observation-based benchmark and a
+biome-stratified calibration, both organised by zone, are a more faithful footing for
+that projection than a single global law.
 
 % =============================================================================
 % DISPLAY ITEMS (main text). 5 items, within the 4-6 Article budget. All reuse
