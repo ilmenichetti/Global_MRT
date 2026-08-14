@@ -90,7 +90,7 @@
 
 % --- Land cover and disturbance ----------------------------------------------
 
-@article{Zanaga2022,
+@misc{Zanaga2022,
   author  = {Zanaga, Daniele and Van De Kerchove, Ruben and Daems, Dirk and
              De Keersmaecker, Wanda and Brockmann, Carsten and Kirches, Grit
              and Wevers, Jan and Cartus, Oliver and Santoro, Maurizio and
@@ -99,7 +99,9 @@
              and Arino, Olivier},
   title   = {{ESA WorldCover} 10~m 2021 v200},
   year    = {2022},
-  doi     = {10.5281/zenodo.7254221}
+  publisher = {Zenodo},
+  doi     = {10.5281/zenodo.7254221},
+  url     = {https://doi.org/10.5281/zenodo.7254221}
 }
 
 @article{Hansen2013,
@@ -131,7 +133,7 @@
 
 % --- Productivity ------------------------------------------------------------
 
-@misc{Running2015,
+@misc{Running2021,
   author  = {Running, Steven W. and Zhao, Maosheng},
   title   = {{MOD17A3HGF MODIS/Terra} Net Primary Production Gap-Filled
             Yearly L4 Global 500m {SIN} Grid V061},
@@ -143,12 +145,8 @@
 % --- Microbiology ------------------------------------------------------------
 
 @article{Yu2022,
-  author  = {Yu, Haichao and Deng, Yixiong and He, Zhili and Pendall, Elise
-             and Carrillo, Yolima and Wang, Silong and Jin, Decai and
-             Wu, Liyou and Wang, Aohan and Luo, Yiqi and Schuur, Edward A. G.
-             and Konstantinidis, Konstantinos T. and Luo, Gejiao and
-             Tiedje, James M. and Zhou, Jizhong},
-  title   = {Global mapping of soil bacterial and fungal biomass carbon},
+  author  = {Yu, Kailiang and van den Hoogen, Johan and Wang, Zhiqiang and Averill, Colin and Routh, Devin and Smith, Gabriel Reuben and Drenovsky, Rebecca E. and Scow, Kate M. and Mo, Fei and Waldrop, Mark P. and Yang, Yuanhe and Tang, Weize and De Vries, Franciska T. and Bardgett, Richard D. and Manning, Peter and Bastida, Felipe and Baer, Sara G. and Bach, Elizabeth M. and Garc{\'i}a, Carlos and Wang, Qingkui and Ma, Linna and Chen, Baodong and He, Xianjing and Teurlincx, Sven and Heijboer, Amber and Bradley, James A. and Crowther, Thomas W.},
+  title   = {The biogeography of relative abundance of soil fungi versus bacteria in surface topsoil},
   journal = {Earth System Science Data},
   year    = {2022},
   volume  = {14},
@@ -307,13 +305,12 @@
 }
 
 @article{Schmidt2011,
-  author  = {Schmidt, Michael W. I. and Torn, Margaret S. and Abiven, Samuel
-             and Dold, Thorsten and Flenley, John and Manning,
-             David A. C. and Trumbore, Susan E.},
+  author  = {Schmidt, Michael W. I. and Torn, Margaret S. and Abiven, Samuel and Dittmar, Thorsten and Guggenberger, Georg and Janssens, Ivan A. and Kleber, Markus and K{\"o}gel-Knabner, Ingrid and Lehmann, Johannes and Manning, David A. C. and Nannipieri, Paolo and Rasse, Daniel P. and Weiner, Steve and Trumbore, Susan E.},
   title   = {Persistence of soil organic matter as an ecosystem property},
   journal = {Nature},
   year    = {2011},
   volume  = {478},
+  number  = {7367},
   pages   = {49--56},
   doi     = {10.1038/nature10386}
 }
@@ -334,16 +331,13 @@
 }
 
 @article{Varney2020,
-  author  = {Varney, Rebecca M. and Chadburn, Sarah E. and
-             Friedlingstein, Pierre and Burke, Eleanor J. and
-             Reich, Peter B. and Wieder, William R. and Cox, Peter M.},
-  title   = {A spatial emergent constraint on the sensitivity of soil
-             carbon turnover to global warming},
+  author  = {Varney, Rebecca M. and Chadburn, Sarah E. and Friedlingstein, Pierre and Burke, Eleanor J. and Koven, Charles D. and Hugelius, Gustaf and Cox, Peter M.},
+  title   = {A spatial emergent constraint on the sensitivity of soil carbon turnover to global warming},
   journal = {Nature Communications},
+  year    = {2020},
   volume  = {11},
   number  = {1},
   pages   = {5544},
-  year    = {2020},
   doi     = {10.1038/s41467-020-19208-8}
 }
 
@@ -367,4 +361,317 @@
                   The State of the World's Peatlands. Global Peatlands Initiative,
                   United Nations Environment Programme, Nairobi. Licence CC BY-NC-SA 4.0},
   howpublished = {\url{https://www.greifswaldmoor.de/global-peatland-database-en.html}}
+}
+
+
+
+% --- Classical soil-carbon models and their ESM inheritance --------------------
+
+@article{Jenkinson1990,
+  author  = {Jenkinson, David Stewart},
+  title   = {The turnover of organic carbon and nitrogen in soil},
+  journal = {Philosophical Transactions of the Royal Society of London. Series B: Biological Sciences},
+  year    = {1990},
+  volume  = {329},
+  number  = {1255},
+  pages   = {361--368},
+  doi     = {10.1098/rstb.1990.0177}
+}
+
+@incollection{Coleman1996,
+  author  = {Coleman, K. and Jenkinson, D. S.},
+  title   = {{RothC-26.3} - A Model for the turnover of carbon in soil},
+  booktitle = {Evaluation of Soil Organic Matter Models},
+  editor    = {Powlson, David S. and Smith, Pete and Smith, Jo U.},
+  series    = {{NATO ASI Series I}},
+  volume    = {38},
+  publisher = {Springer},
+  address   = {Berlin, Heidelberg},
+  year    = {1996},
+  pages   = {237--246},
+  doi     = {10.1007/978-3-642-61094-3_17}
+}
+
+@article{Parton1987,
+  author  = {Parton, W. J. and Schimel, D. S. and Cole, C. V. and Ojima, D. S.},
+  title   = {Analysis of Factors Controlling Soil Organic Matter Levels in {Great Plains} Grasslands},
+  journal = {Soil Science Society of America Journal},
+  year    = {1987},
+  volume  = {51},
+  number  = {5},
+  pages   = {1173--1179},
+  doi     = {10.2136/sssaj1987.03615995005100050015x}
+}
+
+@article{ToddBrown2013,
+  author  = {Todd-Brown, K. E. O. and Randerson, J. T. and Post, W. M. and Hoffman, F. M. and Tarnocai, C. and Schuur, E. A. G. and Allison, S. D.},
+  title   = {Causes of variation in soil carbon simulations from {CMIP5} {Earth} system models and comparison with observations},
+  journal = {Biogeosciences},
+  year    = {2013},
+  volume  = {10},
+  number  = {3},
+  pages   = {1717--1736},
+  doi     = {10.5194/bg-10-1717-2013}
+}
+
+@article{Wieder2013,
+  author  = {Wieder, William R. and Bonan, Gordon B. and Allison, Steven D.},
+  title   = {Global soil carbon projections are improved by modelling microbial processes},
+  journal = {Nature Climate Change},
+  year    = {2013},
+  volume  = {3},
+  number  = {10},
+  pages   = {909--912},
+  doi     = {10.1038/nclimate1951}
+}
+
+% --- Persistence as an ecosystem property: mechanistic lineage -----------------
+
+@article{Kleber2007,
+  author  = {Kleber, M. and Sollins, P. and Sutton, R.},
+  title   = {A conceptual model of organo-mineral interactions in soils: self-assembly of organic molecular fragments into zonal structures on mineral surfaces},
+  journal = {Biogeochemistry},
+  year    = {2007},
+  volume  = {85},
+  number  = {1},
+  pages   = {9--24},
+  doi     = {10.1007/s10533-007-9103-5}
+}
+
+@article{LehmannKleber2015,
+  author  = {Lehmann, Johannes and Kleber, Markus},
+  title   = {The contentious nature of soil organic matter},
+  journal = {Nature},
+  year    = {2015},
+  volume  = {528},
+  number  = {7580},
+  pages   = {60--68},
+  doi     = {10.1038/nature16069}
+}
+
+@article{Rasse2005,
+  author  = {Rasse, Daniel P. and Rumpel, Cornelia and Dignac, Marie-France},
+  title   = {Is soil carbon mostly root carbon? Mechanisms for a specific stabilisation},
+  journal = {Plant and Soil},
+  year    = {2005},
+  volume  = {269},
+  number  = {1-2},
+  pages   = {341--356},
+  doi     = {10.1007/s11104-004-0907-y}
+}
+
+@article{Jackson2017,
+  author  = {Jackson, Robert B. and Lajtha, Kate and Crow, Susan E. and Hugelius, Gustaf and Kramer, Marc G. and Pi{\~n}eiro, Gervasio},
+  title   = {The Ecology of Soil Carbon: Pools, Vulnerabilities, and Biotic and Abiotic Controls},
+  journal = {Annual Review of Ecology, Evolution, and Systematics},
+  year    = {2017},
+  volume  = {48},
+  number  = {1},
+  pages   = {419--445},
+  doi     = {10.1146/annurev-ecolsys-112414-054234}
+}
+
+% --- Pedological zonality (classical) ------------------------------------------
+
+@book{Jenny1941,
+  author    = {Jenny, Hans},
+  title     = {Factors of Soil Formation: A System of Quantitative Pedology},
+  publisher = {McGraw-Hill},
+  address   = {New York},
+  year      = {1941}
+}
+
+@book{Dokuchaev1883,
+  author    = {Dokuchaev, Vasily V.},
+  title     = {Russian Chernozem},
+  publisher = {Israel Program for Scientific Translations},
+  address   = {Jerusalem},
+  year      = {1967},
+  note      = {Originally published in Russian, St. Petersburg, 1883;
+               translated by N. Kaner}
+}
+
+% --- Edaphic and geochemical stabilisation -------------------------------------
+
+@article{Six2002,
+  author  = {Six, J. and Conant, R. T. and Paul, E. A. and Paustian, K.},
+  title   = {Stabilization mechanisms of soil organic matter: Implications for {C}-saturation of soils},
+  journal = {Plant and Soil},
+  year    = {2002},
+  volume  = {241},
+  number  = {2},
+  pages   = {155--176},
+  doi     = {10.1023/a:1016125726789}
+}
+
+@article{Hassink1997,
+  author  = {Hassink, Jan},
+  title   = {The capacity of soils to preserve organic {C} and {N} by their association with clay and silt particles},
+  journal = {Plant and Soil},
+  year    = {1997},
+  volume  = {191},
+  number  = {1},
+  pages   = {77--87},
+  doi     = {10.1023/a:1004213929699}
+}
+
+@article{Rasmussen2018,
+  author  = {Rasmussen, Craig and Heckman, Katherine and Wieder, William R. and Keiluweit, Marco and Lawrence, Corey R. and Berhe, Asmeret Asefaw and Blankinship, Joseph C. and Crow, Susan E. and Druhan, Jennifer L. and Hicks Pries, Caitlin E. and Marin-Spiotta, Erika and Plante, Alain F. and Sch{\"a}del, Christina and Schimel, Joshua P. and Sierra, Carlos A. and Thompson, Aaron and Wagai, Rota},
+  title   = {Beyond clay: towards an improved set of variables for predicting soil organic matter content},
+  journal = {Biogeochemistry},
+  year    = {2018},
+  volume  = {137},
+  number  = {3},
+  pages   = {297--306},
+  doi     = {10.1007/s10533-018-0424-3}
+}
+
+@article{Rowley2018,
+  author  = {Rowley, Mike C. and Grand, St{\'e}phanie and Verrecchia, {\'E}ric P.},
+  title   = {Calcium-mediated stabilisation of soil organic carbon},
+  journal = {Biogeochemistry},
+  year    = {2018},
+  volume  = {137},
+  number  = {1-2},
+  pages   = {27--49},
+  doi     = {10.1007/s10533-017-0410-1}
+}
+
+% --- Soil pH and microbial community composition -------------------------------
+
+@article{Rousk2010,
+  author  = {Rousk, Johannes and B{\aa}{\aa}th, Erland and Brookes, Philip C and Lauber, Christian L and Lozupone, Catherine and Caporaso, J Gregory and Knight, Rob and Fierer, Noah},
+  title   = {Soil bacterial and fungal communities across a {pH} gradient in an arable soil},
+  journal = {The ISME Journal},
+  year    = {2010},
+  volume  = {4},
+  number  = {10},
+  pages   = {1340--1351},
+  doi     = {10.1038/ismej.2010.58}
+}
+
+@article{Malik2018,
+  author  = {Malik, Ashish A. and Puissant, Jeremy and Buckeridge, Kate M. and Goodall, Tim and Jehmlich, Nico and Chowdhury, Somak and Gweon, Hyun Soon and Peyton, Jodey M. and Mason, Kelly E. and van Agtmaal, Maaike and Blaud, Aimeric and Clark, Ian M. and Whitaker, Jeanette and Pywell, Richard F. and Ostle, Nick and Gleixner, Gerd and Griffiths, Robert I.},
+  title   = {Land use driven change in soil {pH} affects microbial carbon cycling processes},
+  journal = {Nature Communications},
+  year    = {2018},
+  volume  = {9},
+  number  = {1},
+  pages   = {3591},
+  doi     = {10.1038/s41467-018-05980-1}
+}
+
+@article{Fierer2007,
+  author  = {Fierer, Noah and Bradford, Mark A. and Jackson, Robert B.},
+  title   = {Toward an ecological classification of soil bacteria},
+  journal = {Ecology},
+  year    = {2007},
+  volume  = {88},
+  number  = {6},
+  pages   = {1354--1364},
+  doi     = {10.1890/05-1839}
+}
+
+% --- Mycorrhizal and fungal controls on soil carbon ----------------------------
+
+@article{Averill2014,
+  author  = {Averill, Colin and Turner, Benjamin L. and Finzi, Adrien C.},
+  title   = {Mycorrhiza-mediated competition between plants and decomposers drives soil carbon storage},
+  journal = {Nature},
+  year    = {2014},
+  volume  = {505},
+  number  = {7484},
+  pages   = {543--545},
+  doi     = {10.1038/nature12901}
+}
+
+@article{Clemmensen2013,
+  author  = {Clemmensen, K. E. and Bahr, A. and Ovaskainen, O. and Dahlberg, A. and Ekblad, A. and Wallander, H. and Stenlid, J. and Finlay, R. D. and Wardle, D. A. and Lindahl, B. D.},
+  title   = {Roots and Associated Fungi Drive Long-Term Carbon Sequestration in Boreal Forest},
+  journal = {Science},
+  year    = {2013},
+  volume  = {339},
+  number  = {6127},
+  pages   = {1615--1618},
+  doi     = {10.1126/science.1231923}
+}
+
+@article{Tedersoo2014,
+  author  = {Tedersoo, Leho and Bahram, Mohammad and P{\~o}lme, Sergei and K{\~o}ljalg, Urmas and Yorou, Nourou S. and Wijesundera, Ravi and Ruiz, Luis Villarreal and Vasco-Palacios, A{\'i}da M. and Thu, Pham Quang and Suija, Ave and Smith, Matthew E. and Sharp, Cathy and Saluveer, Erki and Saitta, Alessandro and Rosas, Miguel and Riit, Taavi and Ratkowsky, David and Pritsch, Karin and P{\~o}ldmaa, Kadri and Piepenbring, Meike and Phosri, Cherdchai and Peterson, Marko and Parts, Kaarin and P{\"a}rtel, Kadri and Otsing, Eveli and Nouhra, Eduardo and Njouonkou, Andr{\'e} L. and Nilsson, R. Henrik and Morgado, Luis N. and Mayor, Jordan and May, Tom W. and Majuakim, Luiza and Lodge, D. Jean and Lee, Su See and Larsson, Karl-Henrik and Kohout, Petr and Hosaka, Kentaro and Hiiesalu, Indrek and Henkel, Terry W. and Harend, Helery and Guo, Liang-dong and Greslebin, Alina and Grelet, Gwen and Geml, Jozsef and Gates, Genevieve and Dunstan, William and Dunk, Chris and Drenkhan, Rein and Dearnaley, John and De Kesel, Andr{\'e} and Dang, Tan and Chen, Xin and Buegger, Franz and Brearley, Francis Q. and Bonito, Gregory and Anslan, Sten and Abell, Sandra and Abarenkov, Kessy},
+  title   = {Global diversity and geography of soil fungi},
+  journal = {Science},
+  year    = {2014},
+  volume  = {346},
+  number  = {6213},
+  pages   = {1256688},
+  doi     = {10.1126/science.1256688}
+}
+
+@article{Steidinger2019,
+  author  = {Steidinger, B. S. and Crowther, T. W. and Liang, J. and Van Nuland, M. E. and Werner, G. D. A. and Reich, P. B. and Nabuurs, G. J. and de-Miguel, S. and Zhou, M. and Picard, N. and Herault, B. and Zhao, X. and Zhang, C. and Routh, D. and Peay, K. G.},
+  title   = {Climatic controls of decomposition drive the global biogeography of forest-tree symbioses},
+  journal = {Nature},
+  year    = {2019},
+  volume  = {569},
+  number  = {7756},
+  pages   = {404--408},
+  doi     = {10.1038/s41586-019-1128-0}
+}
+
+% --- Forest management intensity -----------------------------------------------
+
+@article{Suvanto2025,
+  author  = {Suvanto, Susanne and Esquivel-Muelbert, Adriane and Schelhaas, Mart-Jan and Astigarraga, Julen and Astrup, Rasmus and Cienciala, Emil and Fridman, Jonas and Henttonen, Helena M. and Kunstler, Georges and K{\"a}ndler, Gerald and K{\"o}nig, Louis A. and Ruiz-Benito, Paloma and Senf, Cornelius and Stadelmann, Golo and Starcevic, Ajdin and Talarczyk, Andrzej and Zavala, Miguel A. and Pugh, Thomas A. M.},
+  title   = {Understanding {Europe's} Forest Harvesting Regimes},
+  journal = {Earth's Future},
+  year    = {2025},
+  volume  = {13},
+  number  = {2},
+  pages   = {e2024EF005225},
+  doi     = {10.1029/2024EF005225}
+}
+
+% --- First-order climate control, emergence, fungal:bacterial dominance ------
+@article{Frey2019,
+  author  = {Frey, Serita D.},
+  title   = {Mycorrhizal Fungi as Mediators of Soil Organic Matter Dynamics},
+  journal = {Annual Review of Ecology, Evolution, and Systematics},
+  year    = {2019},
+  volume  = {50},
+  number  = {1},
+  pages   = {237--259},
+  doi     = {10.1146/annurev-ecolsys-110617-062331}
+}
+
+@article{Davidson2006,
+  author  = {Davidson, Eric A. and Janssens, Ivan A.},
+  title   = {Temperature sensitivity of soil carbon decomposition and feedbacks to climate change},
+  journal = {Nature},
+  year    = {2006},
+  volume  = {440},
+  number  = {7081},
+  pages   = {165--173},
+  doi     = {10.1038/nature04514}
+}
+
+@article{Levin1998,
+  author  = {Levin, Simon A.},
+  title   = {Ecosystems and the Biosphere as Complex Adaptive Systems},
+  journal = {Ecosystems},
+  year    = {1998},
+  volume  = {1},
+  number  = {5},
+  pages   = {431--436},
+  doi     = {10.1007/s100219900037}
+}
+
+@article{StricklandRousk2010,
+  author  = {Strickland, Michael S. and Rousk, Johannes},
+  title   = {Considering fungal:bacterial dominance in soils -- Methods, controls, and ecosystem implications},
+  journal = {Soil Biology and Biochemistry},
+  year    = {2010},
+  volume  = {42},
+  number  = {9},
+  pages   = {1385--1395},
+  doi     = {10.1016/j.soilbio.2010.05.007}
 }
