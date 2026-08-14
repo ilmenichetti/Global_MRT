@@ -69,40 +69,57 @@ are NOT equal weight:
 
 ## 2. Manuscript placeholders to fill
 
-- [ ] **Conclusions section** is a stub (four bullet drafts exist) and needs to
-  be written into prose.
-- [ ] **Zonality map (Fig.)** flagged "draft figure --- to refine together";
-  finalise design.
-- [ ] **Authors / affiliations:** author list slot 3, affiliations 2 and 3.
-- [ ] **Data / code availability DOIs** and repository link.
-- [ ] **Acknowledgements** and **Author contributions (CRediT)**.
-- [ ] **Figure in-panel labels still say "MRT".** After standardising the text on
-  transit time (tau), figure titles/axes baked into the PNGs are now inconsistent
-  (e.g. step_18 ALE panels: "Global Mean MRT", "ALE effect on MRT (years)"; likely
-  the map figures too). Sweep the plotting scripts' labels to transit time / tau
-  and regenerate. (Deferred to avoid repeated heavy re-runs; batch with the next
-  pipeline pass.)
+The live target is now `main_Nature.tex` (+ `main_Nature_SI.tex`);
+`manuscript.tex` is the superseded long-format draft.
 
-## 3. Missing citations (\PH{[cite: ...]})
+- [ ] **Front/back matter**, the only `\PH` left in `main_Nature.tex`:
+  additional authors + affiliation 4, `[DOI]` (data), `[DOI/repository]` (code),
+  further acknowledgements, CRediT.
+- [ ] **Author list.** Candidates noted on the draft: Todd-Brown, Lim, Abramoff,
+  Schwarz, Mäkipää. Bruni's affiliation still to confirm with her.
+- [ ] **AI-use disclosure** required by Springer Nature (see target-journal note).
+- [ ] **Prose/narrative polish** of the restored arc, plus Lorenzo's note asking
+  the synthesis to state more openly that the framework avoids treating emergent
+  properties reductionistically.
+- [x] **Conclusions.** No longer a stub: the Nature format ends on the synthesis
+  and modelling-consequence beats.
+- [x] **Zonality map.** Finalised as the combined three-panel Fig. 3; the
+  "draft figure" marker is gone.
+- [x] **Figure in-panel labels.** MRT -> tau sweep done and re-rendered
+  (17/18/13e/20, 15b C/D); nothing says "MRT" in a label now.
 
-Grouped by location:
+## 3. Missing citations (\PH{[cite: ...]}) --- DONE 2026-08-14
 
-- [ ] Intro, classical models: Jenkinson; Parton/CENTURY; RothC lineage.
-- [ ] Intro, ESM inheritance: Todd-Brown 2013; Wieder 2013.
-- [ ] Intro, persistence-as-ecosystem-property: Kleber 2007/2021; Lehmann &
-  Kleber 2015; Kallenbach 2016; Cotrufo (MEMS); Averill 2014.
-- [ ] Discussion, edaphic mechanisms: Six 2002; Hassink 1997; Rasmussen 2018;
-  Kleber 2007.
-- [ ] Discussion, pH / microbial: Rousk 2010; Malik 2018; Fierer 2006.
-- [ ] Discussion, geochemical (Ca-OM): Rowley 2018; Rasmussen 2018; Rothe 2019.
-- [ ] Discussion, mycorrhizal / high-latitude: Averill 2014; Clemmensen 2013;
-  Tedersoo 2014; Steidinger 2019.
+All 14 citation placeholders in `main_Nature.tex` are wired; `references.bib`
+went 27 -> 55 entries, every new entry generated from Crossref rather than typed.
+Three pre-existing entries had wrong metadata and were corrected (Schmidt2011
+author list, Yu2022 title/authors, Varney2020 authors).
+
+- [x] Intro, classical models: Jenkinson1990; Parton1987; Coleman1996 (RothC).
+- [x] Intro, ESM inheritance: ToddBrown2013; Wieder2013.
+- [x] Intro, persistence-as-ecosystem-property: Kleber2007; LehmannKleber2015.
+- [x] Intro, pedological zonality: Dokuchaev1883; Jenny1941.
+- [x] Methods, root-derived carbon: Rasse2005; Jackson2017.
+- [x] Results, edaphic mechanisms: Hassink1997; Kleber2007; Rasmussen2018.
+- [x] Results, pH / microbial: Rousk2010; Malik2018.
+- [x] Results, mycorrhizal / high-latitude: Averill2014; Clemmensen2013;
+  Frey2019; Tedersoo2014; Steidinger2019.
+- [x] Discussion, forest-management intensity: Suvanto2025.
+
+Open for Lorenzo's approval (my picks, not from the placeholders):
+Davidson2006 + Carvalhais2014 (first-order climate control); Levin1998
+(emergence resists reconstruction); StricklandRousk2010 + Frey2019 (higher
+fungal proportion shortens tau --- the one that cuts against the conventional
+"fungi = slower turnover" reading).
+
+In the bib but uncited, deliberately: Batjes2024 (WoSIS --- must stay uncited,
+it is not our data source), Hijmans2024 (terra; could go in Methods software),
+Six2002, Rowley2018 (Ca-OM; no carbonate paragraph in the Nature format),
+Fierer2007.
 
 ## 4. Decisions / notes
 
-- [ ] **Title.** Body now standardised on mean transit time (tau); title still
-  reads "mean residence time." Lorenzo is fine with this for now; revisit only if
-  a reviewer flags the mismatch.
+- [x] **Title.** Changed to "transit times" for consistency with the body.
 
 ---
 
