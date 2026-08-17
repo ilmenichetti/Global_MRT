@@ -133,7 +133,7 @@ Table~1 of the article).
 to mean 2-m temperature, temperature seasonality, depth-weighted soil temperature and
 moisture (weights 0.35/0.65 for layers 1/2), snow cover, and potential evaporation;
 plus the 30-class K\"oppen--Geiger classification of \citet{Beck2023} resampled to
-$0.1\textdegree$ by mode.
+$0.1^{\circ}$ by mode.
 \emph{Edaphic}: SoilGrids 250\,m v2.0 \citep{Poggio2021} depth-weighted to 0--20~cm
 (clay, sand, bulk density, coarse fragments, pH, CEC, nitrogen), converted from integer
 encoding with published \texttt{d\_factor} divisors identically at points and grids;
@@ -153,7 +153,7 @@ default set used throughout ($\geq96\,\%$ coverage); the three \citet{Barcelo202
 root-colonisation layers sharply reduce coverage (${\sim}61\,\%$) while adding
 negligible unique skill and enter only the nine-layer sensitivity
 (Sec.~\ref{sec:si_robust}).
-All covariates were resampled to a common $0.1\textdegree$ ($\sim$11~km) WGS84 grid
+All covariates were resampled to a common $0.1^{\circ}$ ($\sim$11~km) WGS84 grid
 (set by the coarsest, climatic, layers), continuous by bilinear interpolation and
 categorical by mode.
 
@@ -172,13 +172,13 @@ through M7 (full model); unless noted every model uses the six-layer biological 
 All models were fitted with \texttt{ranger} \citep{Wright2017} (500 trees, minimum node
 size 5, $m_\text{try}=\lfloor\sqrt{p}\rfloor$) on $\ln\tau$. Predictive performance is
 the spatially cross-validated $R^2$, estimated by partitioning the globe into
-$2\textdegree$ ($\sim$200~km) blocks, assigning blocks to ten folds, and predicting each
+$2^{\circ}$ ($\sim$200~km) blocks, assigning blocks to ten folds, and predicting each
 fold from a model trained on the other nine. Holding out whole blocks prevents a site
 near a fold boundary from being predicted by an almost-coincident training neighbour, so
-the reported $R^2$ measures generalisation to unseen regions. The $2\textdegree$ block is
+the reported $R^2$ measures generalisation to unseen regions. The $2^{\circ}$ block is
 far wider than the residual's correlation range ($\approx16$~km;
 Sec.~\ref{sec:si_map}). The attribution is insensitive to block size: repeating the
-decomposition at $1\textdegree$ and $5\textdegree$ shifts each group's share by at most
+decomposition at $1^{\circ}$ and $5^{\circ}$ shifts each group's share by at most
 2 percentage points, leaving the ranking and the climate-versus-non-climate split
 unchanged (Fig.~\ref{sfig:blocksize}).
 
@@ -213,7 +213,7 @@ climate-only prediction, aggregate it to block means, and compute
 \end{equation}
 where the spatial lag is each block's average over its eight nearest neighbouring blocks
 (row-standardised $k=8$ weights). Significance is assessed against 999 random spatial
-permutations. We evaluate $I$ at $2\textdegree$ and $5\textdegree$ aggregation (with
+permutations. We evaluate $I$ at $2^{\circ}$ and $5^{\circ}$ aggregation (with
 $k=8$ held fixed).
 
 \subsection{Mapping the zonality, and choosing the scale}
@@ -222,7 +222,7 @@ The modulation field is the log-ratio of model predictions
 $\ln[\hat\tau_\text{context}/\hat\tau_\text{climate}]$, computed symmetrically (each
 domain relative to climate) to match the order-independent attribution; abiotic and
 biological panels are shown separately. From the same fields we derive a discrete
-zonation: at each $2\textdegree$ block we weight each domain's log-ratio by its Shapley
+zonation: at each $2^{\circ}$ block we weight each domain's log-ratio by its Shapley
 share and label the block by the largest, or as "climate alone" where none exceeds a
 small threshold. The noise floor is characterised by the residual variogram
 (nugget/sill $\approx0.56$, range $\approx16$~km); this range reflects the effective
@@ -232,7 +232,7 @@ autocorrelation. The mapping scale is set by an out-of-sample skill curve: agree
 between the mapped and observed residual rises from $\approx0.11$ at the native pixel to
 $\approx0.22$ at 1--2\textdegree{} and is flat across 1--7\textdegree{}
 (Fig.~\ref{sfig:mapskill}); a purely linear version declines with scale, so the
-meso-scale choice rests on the nonlinear, map-faithful metric. We map at $2\textdegree$.
+meso-scale choice rests on the nonlinear, map-faithful metric. We map at $2^{\circ}$.
 
 \subsection{Mechanism: marginal responses (ALE)}
 \label{sec:si_ale}
@@ -270,7 +270,7 @@ combining source databases by measuring the between-source share of residual var
 \emph{Biological parsimony.} We compared per-layer coverage, collinearity, and unique
 skill to justify the six-layer set (Fig.~\ref{sfig:parsimony}).
 \emph{Block-size sensitivity.} We repeated the Shapley decomposition at $1$, $2$, and
-$5\textdegree$ blocks (Fig.~\ref{sfig:blocksize}).
+$5^{\circ}$ blocks (Fig.~\ref{sfig:blocksize}).
 \emph{Carbon-input convention.} Because the input is set by a coefficient on one NPP
 field (Eq.~\ref{eq:c_input_si}), a spatially uniform change rescales $\tau$ and leaves
 every scale-invariant quantity (block-CV $R^2$, Shapley shares, Moran's $I$) unchanged;
@@ -300,7 +300,7 @@ source-specific measurement or laboratory offset could in principle masquerade a
 large-scale (zonal) structure. We tested whether the beyond-climate signal (the residual
 of the spatial-block cross-validated climate model) is carried by provenance rather than
 ecology. Only \textbf{2.4\,\%} of the residual variance lies between source databases
-($\eta^2_\text{source}=0.024$, versus $\eta^2=0.067$ for $5\textdegree$ spatial blocks).
+($\eta^2_\text{source}=0.024$, versus $\eta^2=0.067$ for $5^{\circ}$ spatial blocks).
 Removing each source's mean residual leaves the coarse-scale organisation essentially
 intact and the covariate skill on the block-mean residual barely changed
 (Table~\ref{stab:provenance}). Because source membership is itself confounded with
@@ -313,7 +313,7 @@ removal is unambiguously ecological.
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.8\textwidth]{../plots/step_13c_commonality/13h_blocksize_shapley.png}
-\caption{\textbf{Block-size invariance.} Shapley shares across $1/2/5\textdegree$
+\caption{\textbf{Block-size invariance.} Shapley shares across $1/2/5^{\circ}$
 cross-validation blocks; maximum spread $\le2$~pp.}
 \label{sfig:blocksize}
 \end{figure}
@@ -353,7 +353,7 @@ proxy (grey) declines.}
 \includegraphics[width=0.8\textwidth]{../plots/step_15b_zonality/zonality_map_dual.png}
 \caption{\textbf{Zonality map (nested).} The two domains taken sequentially rather than
 symmetrically: (a)~abiotic modulation relative to climate and (b)~biological modulation
-added on top of the abiotic model (order-dependent), at meso ($2\textdegree$) scale.
+added on top of the abiotic model (order-dependent), at meso ($2^{\circ}$) scale.
 Red/green~=~longer turnover, blue/purple~=~shorter.}
 \label{sfig:nestedmap}
 \end{figure}
@@ -426,7 +426,7 @@ article; absolute values are not compared across products.}
 \begin{table}[h!]
   \centering\small
   \caption{\textbf{Magnitude-free measures of spatial dispersion in $\tau$ across
-  products.} Computed over all valid land pixels on the common $1\textdegree$ grid.
+  products.} Computed over all valid land pixels on the common $1^{\circ}$ grid.
   CV~=~coefficient of variation; $\tau_{95}/\tau_{5}$~=~95th/5th percentile ratio;
   SD$_{\ln\tau}$~=~standard deviation of $\ln\tau$.}
   \label{stab:esm_dispersion}

@@ -23,6 +23,18 @@ DONE and pushed to `main` (peat-excluded results + comment round + Fig 3). Below
 
 ---
 
+## 0b. Open item from the 2026-08-17 comment round
+
+- [ ] **Verify `Henin1945` bibliographic details.** H\'enin \& Dupuis (1945), "Essai
+  de bilan de la mati\`ere organique du sol", *Annales Agronomiques*. Entered as
+  vol. 15, pp. 17--29 (the form in which it is usually cited) but NOT verifiable:
+  the journal predates Crossref coverage, so volume/pages could not be confirmed
+  automatically. A red `\PH{}` flag sits next to the citation in `main_Nature.tex`
+  (intro, first-order history) — delete it once confirmed against a copy.
+  Olson1963 and SierraMuller2015, added in the same round, ARE Crossref-verified.
+
+---
+
 ## 1. Reviewer comments needing data rework (Bucket 3)
 
 **RESOLVED 2026-07-07** without a pipeline rebuild. The input-term critique was
