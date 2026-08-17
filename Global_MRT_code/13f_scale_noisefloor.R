@@ -54,6 +54,8 @@ cat("===============================================================\n\n")
 
 # ---- Data prep + residual (same as 13e/13g) ---------------------------------
 d <- readRDS(file.path(OUTPUT_DIR, "12b_model_ready.rds"))
+source("./Global_MRT_code/peat_filter.R")   # MAIN: drop peat (GPM 2.0); see 08b
+d <- apply_peat_filter(d, OUTPUT_DIR)
 g <- readRDS(file.path(OUTPUT_DIR, "13_var_groups.rds"))
 CLIM <- g$CLIMATE
 COVS <- c(g$CLIMATE, g$EDAPHIC, g$LANDUSE, BIO_MAIN)
@@ -228,7 +230,8 @@ cat("OK  ", file.path(PLOT_DIR, "scale_covariate_skill.png"), "\n")
 cat("OK  outputs/13f_scale_noisefloor.csv + .rds\n")
 cat(sprintf("\nVerdict: ~%.0f%% of the beyond-climate residual is unstructured noise (nugget),\n",
             100 * nug_sill))
-cat("structured only at short range (~15 km). Coarse organisation (obs/null) grows\n")
+cat(sprintf("structured only at short range (~%s km). Coarse organisation (obs/null) grows\n",
+            ifelse(is.na(rng), "n/a", round(rng))))
 cat("with scale, but the OUT-OF-SAMPLE linear skill of block-mean covariates on the\n")
 cat(sprintf("block-mean residual is weak (max CV R2 ~ %.2f, near %g deg) and turns negative\n",
             max(spectrum$block_cov_R2, na.rm = TRUE), peak_scale))

@@ -176,7 +176,7 @@ $2^{\circ}$ ($\sim$200~km) blocks, assigning blocks to ten folds, and predicting
 fold from a model trained on the other nine. Holding out whole blocks prevents a site
 near a fold boundary from being predicted by an almost-coincident training neighbour, so
 the reported $R^2$ measures generalisation to unseen regions. The $2^{\circ}$ block is
-far wider than the residual's correlation range ($\approx16$~km;
+far wider than the residual's correlation range ($\approx24$~km;
 Sec.~\ref{sec:si_map}). The attribution is insensitive to block size: repeating the
 decomposition at $1^{\circ}$ and $5^{\circ}$ shifts each group's share by at most
 2 percentage points, leaving the ranking and the climate-versus-non-climate split
@@ -225,12 +225,12 @@ biological panels are shown separately. From the same fields we derive a discret
 zonation: at each $2^{\circ}$ block we weight each domain's log-ratio by its Shapley
 share and label the block by the largest, or as "climate alone" where none exceeds a
 small threshold. The noise floor is characterised by the residual variogram
-(nugget/sill $\approx0.56$, range $\approx16$~km); this range reflects the effective
+(nugget/sill $\approx0.53$, range $\approx24$~km); this range reflects the effective
 resolution of the gridded predictor stack (MODIS NPP, climate reanalysis, SoilGrids),
 which are smooth at hundreds of metres to kilometres, not intrinsic soil
 autocorrelation. The mapping scale is set by an out-of-sample skill curve: agreement
-between the mapped and observed residual rises from $\approx0.11$ at the native pixel to
-$\approx0.22$ at 1--2\textdegree{} and is flat across 1--7\textdegree{}
+between the mapped and observed residual rises from $\approx0.10$ at the native pixel to
+$\approx0.23$ at 1--2\textdegree{} and is flat across 1--7\textdegree{}
 (Fig.~\ref{sfig:mapskill}); a purely linear version declines with scale, so the
 meso-scale choice rests on the nonlinear, map-faithful metric. We map at $2^{\circ}$.
 
@@ -295,12 +295,14 @@ outputs are archived at \PH{[DOI]}.
 \section{Provenance control on the beyond-climate signal}
 \label{sec:si_provenance}
 % =============================================================================
-Because the soil compendium aggregates 44 geographically clustered source databases, a
+Because the soil compendium aggregates geographically clustered source databases (41 in
+the common row set used here), a
 source-specific measurement or laboratory offset could in principle masquerade as
 large-scale (zonal) structure. We tested whether the beyond-climate signal (the residual
 of the spatial-block cross-validated climate model) is carried by provenance rather than
-ecology. Only \textbf{2.4\,\%} of the residual variance lies between source databases
-($\eta^2_\text{source}=0.024$, versus $\eta^2=0.067$ for $5^{\circ}$ spatial blocks).
+ecology. Only \textbf{2.5\,\%} of the residual variance lies between source databases
+($\eta^2_\text{source}=0.025$, versus $\eta^2=0.072$ for the same residual grouped by
+$5^{\circ}$ spatial blocks).
 Removing each source's mean residual leaves the coarse-scale organisation essentially
 intact and the covariate skill on the block-mean residual barely changed
 (Table~\ref{stab:provenance}). Because source membership is itself confounded with
@@ -336,15 +338,15 @@ profiles used for training, by latitude.}
 \begin{figure}[H]\centering
 \includegraphics[width=0.95\textwidth]{../plots/appendix/scale_noisefloor.png}
 \caption{\textbf{Scale spectrum and noise floor.} (a)~Residual variogram (nugget/sill
-$\approx0.56$, range $\approx16$~km); (b)~coarse organisation grows with block size.}
+$\approx0.53$, range $\approx24$~km); (b)~coarse organisation grows with block size.}
 \label{sfig:noisefloor}
 \end{figure}
 
 \begin{figure}[H]\centering
 \includegraphics[width=0.85\textwidth]{../plots/appendix/scale_rf_mapping_skill.png}
 \caption{\textbf{RF mapping skill versus scale.} Agreement of the native beyond-climate
-map with the observed residual when aggregated to each block size: $R^2\approx0.11$
-native, $\approx0.22$ by 1--2\textdegree, plateau across 1--7\textdegree; the linear
+map with the observed residual when aggregated to each block size: $R^2\approx0.10$
+native, $\approx0.23$ by 1--2\textdegree, plateau across 1--7\textdegree; the linear
 proxy (grey) declines.}
 \label{sfig:mapskill}
 \end{figure}
@@ -390,11 +392,12 @@ article; absolute values are not compared across products.}
     \toprule
     Metric & Before & After source de-meaning \\
     \midrule
-    Between-source variance share ($\eta^2_\text{source}$) & \multicolumn{2}{c}{0.024 (2.4\,\%)} \\
-    Organisation @\,2\textdegree{} (obs/null)   & $5.3\times$  & $5.1\times$ \\
-    Organisation @\,5\textdegree{} (obs/null)   & $7.2\times$  & $6.4\times$ \\
-    Organisation @\,10\textdegree{} (obs/null)  & $11.6\times$ & $10.1\times$ \\
-    Block-mean covariate $R^2$ @\,5\textdegree{} & 0.188 & 0.152 \\
+    Between-source variance share ($\eta^2_\text{source}$) & 0.025 (2.5\,\%) & $<0.001$ \\
+    Variance share by $5^{\circ}$ spatial block ($\eta^2$) & 0.072 & 0.064 \\
+    Organisation @\,2\textdegree{} (obs/null)   & $5.5\times$  & $5.3\times$ \\
+    Organisation @\,5\textdegree{} (obs/null)   & $7.3\times$  & $6.5\times$ \\
+    Organisation @\,10\textdegree{} (obs/null)  & $12.3\times$ & $10.4\times$ \\
+    Block-mean covariate $R^2$ @\,5\textdegree{} & 0.211 & 0.175 \\
     \bottomrule
   \end{tabular}
 \end{table}

@@ -268,12 +268,12 @@ Figs~\ref{edfig:moran}--\ref{edfig:residmap}): neighbouring regions carry simila
 beyond-climate residuals far more often than a random arrangement would produce, and
 this holds across all the major climate zones, not in one alone. That organisation
 appears only once the data are averaged over some distance. At the scale of
-individual profiles most of the variation is short-range: about 56\,\% of the
+individual profiles most of the variation is short-range: about 53\,\% of the
 residual variance is already present between the closest pairs of points, which is
 local variability rather than geographic pattern. Averaging over blocks removes much
 of it and leaves the organised part, and the agreement between the mapped and the
-observed residual roughly doubles from the native pixel ($R^2\approx0.11$) to
-$\approx0.22$ at blocks of 1--2\textdegree{} before plateauing, which is why we map
+observed residual roughly doubles from the native pixel ($R^2\approx0.10$) to
+$\approx0.23$ at blocks of 1--2\textdegree{} before plateauing, which is why we map
 at $2^{\circ}$ (Methods). At that resolution the modulation of $\tau$ by non-climate
 context (the log-ratio of the full-model to the climate-only prediction, one value
 per block) is itself zonally arranged (Fig.~\ref{fig:zonality},
@@ -292,7 +292,8 @@ Methods, Extended Data Fig.~\ref{edfig:latshapley}) turns the discrete zonation 
 a latitude-resolved profile of how the beyond-climate attribution changes from equator to
 pole. Edaphic context is the leading beyond-climate contributor at almost every
 latitude, close to half of the non-climate variance across the low and middle
-latitudes and highest in the subtropics. Soil biology strengthens at the two
+latitudes and highest in the southern extratropics and the equatorial belt. Soil
+biology strengthens at the two
 ecological extremes, rising in the humid equatorial belt and dominating the boreal,
 where it carries about two thirds of the non-climate variance at 50--60\textdegree N.
 Land use contributes throughout the low and middle latitudes but does not lead in any
@@ -311,7 +312,8 @@ resemblance follows from how they are defined: each is measured as a departure f
 the same climate-only prediction, so both carry the same climatic backbone. Removing
 that shared reference changes the picture. When biology is added on top of a model
 that already contains climate and edaphic properties, its contribution is spatially
-uncorrelated with the abiotic one ($r\approx0$ between the two maps; Methods), so
+uncorrelated with the abiotic one ($r=-0.06$ between the two maps at the native
+resolution and $-0.11$ at the $2^{\circ}$ mapping scale; Methods), so
 soil biology occupies its own spatial axis rather than restating the edaphic one. What that axis represents is
 not yet resolved: mycorrhizal richness and endemism lead the biological group
 (root-colonisation intensity adds negligible unique variance), which points to the
@@ -342,14 +344,22 @@ a mechanism: coarse (sandy) texture shortens turnover, as
 expected where organo-mineral stabilisation is weaker \citep{Hassink1997,Kleber2007,Rasmussen2018}; rising pH lengthens it to a peak near 7.5--8 \citep{Rousk2010,Malik2018}; snow cover lengthens it monotonically; and a higher fungal
 proportion shortens it \citep{StricklandRousk2010,Frey2019}. More informative than
 the individual functions is that several of them change with latitude rather than
-following a single global curve: the temperature-seasonality response is strongest
-in the boreal/Arctic zone and near-zero in the tropics, and the pH response is
-steepest in northern soils, whereas the biological responses are comparatively
-uniform across bands (Extended Data Fig.~\ref{edfig:ale_latband}). That latitude
-dependence is one of the clearest results of this analysis: turnover behaves as a
+following a single global curve (Extended Data Fig.~\ref{edfig:ale_latband}). The
+temperature-seasonality response is largest in the tropics (a range of about
+11~yr in $\tau$ across the band, against about 5~yr in the boreal/Arctic) and the pH
+response is steepest in the boreal/Arctic and flattest in northern temperate soils;
+the biological responses are consistently the smallest in magnitude, but they differ
+between bands as much as the climatic ones do. One qualification applies to the
+climatic curves in particular: latitude bands occupy largely different parts of
+climate space (the bands share only about a sixth of the temperature-seasonality
+range, and none of the snow-cover range), so part of their apparent
+biome-dependence is that each band samples a different portion of the driver. The
+edaphic and biological predictors overlap much more between bands, which makes the
+contrast there a genuine difference in response. Read with that qualification,
+turnover behaves as a
 collection of region-specific sensitivities rather than as a single climate-scaled
-law. The functions we recover indicate what biome-specific formulations might look
-like; they are not ready-made ones.
+law, and the functions we recover indicate what biome-specific formulations might
+look like; they are not ready-made ones.
 
 \paragraph{A gentler gradient than Earth System Models carry.}
 Because our estimate of $\tau$ rests on observations, and on a statistical model
@@ -385,7 +395,8 @@ chiefly through the carbon inputs it governs; conversion between forest, grassla
 and cropland changes stocks by tens of percent \citep{GuoGifford2002,Sanderman2017}.
 Its faint share in the present analysis is therefore a statement about scale, not
 about importance. It produces the largest per-pixel adjustments to
-$\tau$ (mean $\sim$7.6~yr) at cropland mosaics, deforestation fronts and burn scars, yet
+$\tau$ (mean $\sim$7.2~yr, against $\sim$4.6~yr for edaphic and $\sim$4.5~yr for
+biological context) at cropland mosaics, deforestation fronts and burn scars, yet
 adds almost no unique variance once edaphic and biological context are present
 (attributed share $\sim$10\,\%, unique $\approx0$), because those shifts are largely
 predictable from the soil and microbial signatures that accompany land-use change.
@@ -416,7 +427,7 @@ The beyond-climate signal is modest (about seven percentage points of variance),
 it belongs to the soils rather than to the way the data were assembled: the profiles
 come from several source databases, each with its own sampling and laboratory
 practice and its own geographic footprint, so an artefact of compilation would show
-up as variance between databases, and only 2.4\,\% of the residual variance does
+up as variance between databases, and only 2.5\,\% of the residual variance does
 (Methods). The signal is also interpretable, through the biome-dependent response
 functions described above. This has a direct consequence for Earth System Models,
 and one that does not require adding mechanistic complexity. Because each
@@ -542,7 +553,7 @@ Root-derived carbon is preferentially stabilised in persistent SOC
 \citep{Rasse2005,Jackson2017}, so the belowground input is a deliberate,
 conservative boundary; sensitivity to this choice is examined below. After excluding
 $\tau<1$ or $>1000$~yr and trimming the 1st/99th percentiles, 181{,}887 profiles
-remained ($\tau$ range 1.9--143.9~yr). Observations on peat in the Global Peatland
+remained ($\tau$ range 1.9--143.8~yr). Observations on peat in the Global Peatland
 Map 2.0 \citep{GreifswaldGPM2022} (both tiers; 6{,}922 profiles, 3.5\,\%) were
 excluded from the fit, and peat and open water were masked on all maps.
 
@@ -555,8 +566,8 @@ ESA WorldCover \citep{Zanaga2022}, Hansen forest change \citep{Hansen2013}, MODI
 burned area \citep{Giglio2018}, and mycorrhizal maps \citep{Yu2022,Barcelo2023,VanNuland2025}.
 Productivity variables were excluded by design to avoid circularity with the
 NPP-derived input. The biological group uses a six-layer set ($\geq96\,\%$ coverage);
-three root-colonisation layers that add negligible unique skill while halving
-coverage enter only a sensitivity check. All models were fitted with \texttt{ranger}
+three root-colonisation layers that add negligible unique skill while cutting
+coverage to ${\sim}62\,\%$ enter only a sensitivity check. All models were fitted with \texttt{ranger}
 \citep{Wright2017} on $\ln\tau$.
 
 \paragraph{Spatially-honest skill and attribution.}
@@ -564,7 +575,7 @@ Predictive skill is reported as spatial-block cross-validated $R^2$: the globe w
 partitioned into $2^{\circ}$ ($\sim$200~km) blocks assigned to ten folds, each
 fold predicted from a model trained on the others, so that a held-out region is not
 propped up by an almost-coincident training neighbour (the residual stays correlated
-only to $\approx16$~km). Enlarging the block to $1^{\circ}$ or $5^{\circ}$ lowers absolute
+only to $\approx24$~km). Enlarging the block to $1^{\circ}$ or $5^{\circ}$ lowers absolute
 skill but shifts each group's attributed share by at most 2 percentage points. To
 attribute the explained variance among the four correlated groups we use a Shapley
 decomposition: fitting all $2^4=16$ group subsets on a common row set and averaging
@@ -592,9 +603,9 @@ $\ln[\hat\tau_\text{context}/\hat\tau_\text{climate}]$, computed symmetrically f
 the abiotic and biological domains; the discrete zonation labels each block by its
 largest Shapley-weighted modulation, or "climate alone" below a small threshold. The
 mapping scale ($2^{\circ}$) was set by an out-of-sample skill curve (agreement of
-mapped with observed residual rising from $\approx0.11$ native to $\approx0.22$ and
+mapped with observed residual rising from $\approx0.10$ native to $\approx0.23$ and
 plateauing across 1--7\textdegree) and by the residual variogram (nugget/sill
-$\approx0.56$, range $\approx16$~km). Marginal responses use ALE \citep{Apley2020}
+$\approx0.53$, range $\approx24$~km). Marginal responses use ALE \citep{Apley2020}
 on the full model (40 quantile bins), computed globally and within four latitude
 bands.
 
@@ -603,7 +614,7 @@ We compared the normalised spatial structure of our $\tau$ against six CMIP6 mod
 \citep{Varney2022} with $\tau_\text{ESM}=\text{cSoil}/\text{rh}$
 \citep{Koven2017,Carvalhais2014} over 1980--2014, treating no product as truth and
 reporting magnitude-free dispersion and a polar-to-tropical ratio. Robustness checks
-(Supplementary Information) bound the main claims: a provenance control (only 2.4\,\%
+(Supplementary Information) bound the main claims: a provenance control (only 2.5\,\%
 of residual variance between source databases), biological parsimony, block-size
 invariance, and a carbon-input convention sweep. Because the input is set by a
 coefficient on one NPP field, a spatially uniform change only rescales $\tau$ and
@@ -713,8 +724,11 @@ export fraction $h$ is swept across its literature range.}
 \caption{\textbf{Marginal responses by latitude band.} ALE curves for $\tau$,
 computed globally and within four latitude bands (southern temperate, tropics,
 northern temperate, boreal/Arctic). These underlie the biome-dependence noted in the
-main text: the temperature-seasonality and pH responses steepen towards the poles
-while the biological responses stay comparatively uniform.}
+main text: the temperature-seasonality response is largest in the tropics, the pH
+response steepest in the boreal/Arctic, and the biological responses smallest in
+magnitude throughout. Bands cover different parts of each driver's range (curves are
+drawn only where a band has data), so the climatic curves in particular should be
+compared over the interval the bands share.}
 \label{edfig:ale_latband}
 \end{figure}
 

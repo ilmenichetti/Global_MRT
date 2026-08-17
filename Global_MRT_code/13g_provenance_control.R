@@ -93,10 +93,16 @@ cv$resid_dm <- cv$resid - ave(cv$resid, cv$source_db)
 # =============================================================================
 # METRICS
 # =============================================================================
-eta2_source <- function(r) {
+eta2_group <- function(r, g) {
   ss_tot <- sum((r - mean(r))^2)
-  ss_b   <- sum(tapply(r, cv$source_db, function(x) length(x) * (mean(x) - mean(r))^2))
+  ss_b   <- sum(tapply(r, g, function(x) length(x) * (mean(x) - mean(r))^2))
   ss_b / ss_tot
+}
+eta2_source <- function(r) eta2_group(r, cv$source_db)
+# Same variance share, but grouped by geography instead of provenance: the
+# reference the source share is compared against in the text.
+eta2_block <- function(r, deg) {
+  eta2_group(r, paste(floor(cv$lon / deg), floor(cv$lat / deg)))
 }
 
 # observed between-block variance of block means / permutation null
@@ -123,7 +129,8 @@ scales <- c(2, 5, 10)
 res <- data.frame(
   metric = c("eta2_source",
              paste0("organisation_obs_null_", scales, "deg"),
-             "block_mean_covariate_R2_5deg"),
+             "block_mean_covariate_R2_5deg",
+             "eta2_spatial_blocks_5deg"),
   before = NA_real_, after = NA_real_)
 
 res$before[1] <- eta2_source(cv$resid)
@@ -134,6 +141,8 @@ for (i in seq_along(scales)) {
 }
 res$before[5] <- block_cov_R2(cv$resid,    5)
 res$after[5]  <- block_cov_R2(cv$resid_dm, 5)
+res$before[6] <- eta2_block(cv$resid,    5)
+res$after[6]  <- eta2_block(cv$resid_dm, 5)
 
 cat("===============================================================\n")
 cat("  RESULTS (before vs after source de-meaning)\n")
